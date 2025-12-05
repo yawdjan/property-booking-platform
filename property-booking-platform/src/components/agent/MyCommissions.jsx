@@ -1,0 +1,300 @@
+import React, { useState, useEffect } from 'react';
+import { useApp } from '../../context/AppContext';
+import { websocket } from '../../services/websocket';
+import { DollarSign, TrendingUp, Clock, CheckCircle, XCircle, Send } from 'lucide-react';
+import { bookingsAPI, commissionsAPI, propertiesAPI } from '../../services/api.js';
+
+export default function MyCommissions() {
+  const { currentUser } = useApp();
+  const [payoutRequests, setPayoutRequests] = useState([]);
+  const [comissions, setComissions] = useState([]);
+  const [showRequestModal, setShowRequestModal] = useState(false);
+  const [requestAmount, setRequestAmount] = useState('');
+  const [requestDescription, setRequestDescription] = useState('');
+  const [bookings, setBookings] = useState([]);
+  const [properties, setProperties] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const agentBookings = bookings.filter(b =>
+    b.agentId === currentUser.id && b.status === 'Confirmed'
+  );
+
+  const loadData = async () => {
+    try {
+      setLoading(true);
+      const response = await bookingsAPI.getByAgent(currentUser.id);
+      setBookings(response.data);
+      const propResponse = await propertiesAPI.getAll();
+      setProperties(propResponse.data);
+      const payoutResponse = await commissionsAPI.getMyPayouts();
+      setPayoutRequests(payoutResponse.data);
+      const comissionResponse = await commissionsAPI.getByAgent(currentUser.id);
+      setComissions(comissionResponse.data);
+    } catch (err) {
+      setError('Failed to load bookings: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRequestPayout = () => {
+    // Handle payout request submission
+    // Add API call here
+    try {
+      // Example API call
+      commissionsAPI.requestPayout(
+        currentUser.id,
+        requestAmount,
+        requestDescription
+      );
+      alert('Payout request submitted!');
+    } catch (err) {
+      alert('Failed to submit payout request: ' + err.message);
+    } finally {
+      setShowRequestModal(false);
+      setRequestAmount('');
+      setRequestDescription('');
+      loadData();
+    }
+  };
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'paid':
+      case 'approved':
+        return 'bg-blue-100 text-blue-800';
+      case 'pending':
+        return 'bg-amber-100 text-amber-800';
+      case 'denied':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getStatusIcon = (status) => {
+    switch (status) {
+      case 'paid':
+      case 'approved':
+        return <CheckCircle className="w-4 h-4" />;
+      case 'pending':
+        return <Clock className="w-4 h-4" />;
+      case 'denied':
+        return <XCircle className="w-4 h-4" />;
+      default:
+        return null;
+    }
+  };
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div className="text-red-600">{error}</div>;
+
+  const totalEarned = agentBookings
+    .filter(b => b.status === 'Confirmed')
+    .reduce((sum, b) => sum + parseFloat(b.commissionAmount || 0), 0);
+  // TODO: add this logic to both front and backend
+  const paid = Array.isArray(payoutRequests)
+    ? payoutRequests
+      .filter(b => b.status === 'approved' || b.status === 'completed')
+      .reduce((sum, b) => sum + parseFloat(b.approvedAmount), 0)
+    : 0;
+  const pendingPayout = totalEarned - paid;
+
+  const requestPayout = () => {
+    websocket.emit('notification', {
+      id: Date.now(),
+      type: 'info',
+      message: `Commission payout requested by ${currentUser.name} - $${pendingPayout}`,
+      time: new Date().toISOString()
+    });
+    alert('Payout request submitted! Admin will process it shortly.');
+  };
+
+
+  return (
+    <div>
+      <h2 className="text-2xl font-bold mb-6">My Commissions</h2>
+      {/* Page Header */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <p className="text-amber-700">Track your earnings and request payouts</p>
+        </div>
+        <button
+          onClick={() => setShowRequestModal(true)}
+          className="flex items-center gap-2 px-6 py-3 bg-blue-700 text-white rounded-xl font-semibold hover:bg-blue-600 transition-all shadow-lg"
+        >
+          <Send className="w-5 h-5" />
+          Request Payout
+        </button>
+      </div>
+
+      {/* Statistics */}
+      <div className="grid md:grid-cols-3 gap-6 mb-8">
+        <div className="bg-white rounded-lg shadow p-6">
+          <h3 className="text-sm text-gray-600 mb-2">Total Earned</h3>
+          <p className="text-3xl font-bold text-blue-600">${totalEarned.toLocaleString()}</p>
+        </div>
+        <div className="bg-white rounded-lg shadow p-6">
+          <h3 className="text-sm text-gray-600 mb-2">Paid Out</h3>
+          <p className="text-3xl font-bold text-green-600">${paid.toLocaleString()}</p>
+        </div>
+        <div className="bg-white rounded-lg shadow p-6">
+          <h3 className="text-sm text-gray-600 mb-2">Pending Payout</h3>
+          <p className="text-3xl font-bold text-orange-600">${pendingPayout.toLocaleString()}</p>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-lg shadow p-6">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-xl font-semibold">Booking History</h3>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b bg-gray-50">
+                <th className="text-left py-3 px-4">Booking ID</th>
+                <th className="text-left py-3 px-4">Property</th>
+                <th className="text-left py-3 px-4">Total Amount</th>
+                <th className="text-left py-3 px-4">Commission Rate</th>
+                <th className="text-left py-3 px-4">Commission Earned</th>
+                <th className="text-left py-3 px-4">Payment Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {agentBookings.map(booking => {
+                const property = properties.find(p => p.id === booking.propertyId);
+                return (
+                  <tr key={booking.id} className="border-b">
+                    <td className="py-3 px-4">#{booking.id}</td>
+                    <td className="py-3 px-4">{property?.name}</td>
+                    <td className="py-3 px-4">${booking.totalAmount}</td>
+                    <td className="py-3 px-4">{booking.commissionRate}%</td>
+                    <td className="py-3 px-4 font-semibold">${booking.commissionAmount}</td>
+                    <td className="py-3 px-4">
+                      <span className={`px-2 py-1 rounded-full text-xs ${booking.status === 'Confirmed'
+                        ? 'bg-green-100 text-green-800'
+                        : booking.status === 'Pending Payment'
+                          ? 'bg-yellow-100 text-yellow-800'
+                          : 'bg-gray-100 text-gray-800'
+                        }`}>
+                        {booking.status}
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+
+          {/* Commission History */}
+          <div className="bg-white rounded-2xl mt-10 shadow-lg border-2 border-amber-100 overflow-hidden">
+            <div className="bg-gradient-to-r from-amber-50 to-orange-50 px-6 py-4 border-b-2 border-amber-200">
+              <h2 className="text-xl font-bold text-amber-950">Commission History</h2>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-amber-50 border-b-2 border-amber-200">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-amber-900">Comission ID</th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-amber-900">Amount</th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-amber-900">Earned Date</th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-amber-900">Status</th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-amber-900">Last Updated At</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-amber-100">
+                  {payoutRequests.map(c => {
+                    return (
+                      <tr key={c.id} className="hover:bg-amber-50 transition-colors">
+                        <td className="px-6 py-4 text-sm font-medium text-amber-950">#{c.id}</td>
+                        <td className="px-6 py-4 text-sm font-bold text-blue-700">${c.requestedAmount}</td>
+                        <td className="px-6 py-4 text-sm text-amber-700">{new Date(c.createdAt).toLocaleDateString()}</td>
+                        <td className="px-6 py-4">
+                          <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(c.status)}`}>
+                            {getStatusIcon(c.status)}
+                            {c.status.charAt(0).toUpperCase() + c.status.slice(1)}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 text-sm text-amber-700">
+                          {c.updatedAt ? new Date(c.updatedAt).toLocaleDateString() : '-'}
+                        </td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Request Payout Modal */}
+          {showRequestModal && (
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+              <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full">
+                <div className="bg-gradient-to-r from-blue-700 to-blue-600 px-6 py-4 rounded-t-2xl">
+                  <h3 className="text-xl font-bold text-white">Request Payout</h3>
+                </div>
+                <div className="p-6 space-y-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-amber-900 mb-2">
+                      Available Balance
+                    </label>
+                    <p className="text-3xl font-bold text-blue-700">${pendingPayout}</p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-amber-900 mb-2">
+                      Request Amount
+                    </label>
+                    <input
+                      type="number"
+                      value={requestAmount}
+                      onChange={(e) => setRequestAmount(e.target.value)}
+                      placeholder="Enter amount"
+                      className="w-full px-4 py-3 border-2 border-amber-300 rounded-lg focus:border-blue-600 outline-none"
+                      max={pendingPayout}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-amber-900 mb-2">
+                      Description
+                    </label>
+                    <textarea
+                      value={requestDescription}
+                      onChange={(e) => setRequestDescription(e.target.value)}
+                      placeholder="Add a note about this payout request..."
+                      rows={3}
+                      className="w-full px-4 py-3 border-2 border-amber-300 rounded-lg focus:border-blue-600 outline-none resize-none"
+                    />
+                  </div>
+
+                  <div className="flex gap-3 pt-4">
+                    <button
+                      onClick={() => setShowRequestModal(false)}
+                      className="flex-1 px-4 py-3 border-2 border-amber-300 text-amber-900 rounded-lg font-semibold hover:bg-amber-50 transition-colors"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleRequestPayout}
+                      className="flex-1 px-4 py-3 bg-blue-700 text-white rounded-lg font-semibold hover:bg-blue-600 transition-colors"
+                    >
+                      Submit Request
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
