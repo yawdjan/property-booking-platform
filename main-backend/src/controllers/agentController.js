@@ -83,8 +83,8 @@ export const approveAgent = async (req, res) => {
     // Send approval email
     await sendEmail({
       to: agent.email,
-      subject: 'Account Approved - PropBooking',
-      text: `Hello ${agent.name},\n\nYour agent account has been approved! You can now log in and start booking properties.\n\nBest regards,\nPropBooking Team`
+      subject: 'Account Approved - Omarey',
+      text: `Hello ${agent.name},\n\nYour agent account has been approved! You can now log in and start booking properties.\n\nBest regards,\nOmarey Team`
     });
 
     res.status(200).json({
@@ -155,5 +155,56 @@ export const updateCommissionRate = async (req, res) => {
       success: false,
       message: error.message
     });
+  }
+};
+
+export const getAgentStats = async (req, res) => {
+  try {
+    const { startDate, endDate } = req.query;
+
+    // Build booking where clause (only confirmed bookings by default)
+    const where = { status: 'Confirmed' };
+
+    if (startDate && endDate) {
+      const { Op } = await import('sequelize');
+      where[Op.or] = [
+        { checkIn: { [Op.between]: [startDate, endDate] } },
+        { checkOut: { [Op.between]: [startDate, endDate] } },
+        { [Op.and]: [{ checkIn: { [Op.lte]: startDate } }, { checkOut: { [Op.gte]: endDate } }] }
+      ];
+    }
+
+    // Fetch bookings with associated agent data
+    const bookings = await Booking.findAll({
+      where,
+      include: [{ model: User, as: 'agent', attributes: ['id', 'name', 'email'] }]
+    });
+
+    // Include all agents even if they have zero bookings so frontend charts show every agent
+    const agents = await User.findAll({ where: { role: 'agent' }, attributes: ['id', 'name', 'email'] });
+
+    // Aggregate per-agent totals and counts, seeded with all agents at zero
+    const map = new Map();
+    agents.forEach(a => map.set(a.id, { agentId: a.id, name: a.name || a.email || a.id, totalAmount: 0, bookingCount: 0 }));
+
+    bookings.forEach(b => {
+      const agent = b.agent;
+      const id = agent?.id || b.agentId || 'unknown';
+      const name = agent?.name || agent?.email || 'Unknown';
+      const total = parseFloat(b.totalAmount ?? 0) || 0;
+
+      if (!map.has(id)) map.set(id, { agentId: id, name, totalAmount: 0, bookingCount: 0 });
+      const cur = map.get(id);
+      cur.totalAmount += total;
+      cur.bookingCount += 1;
+      map.set(id, cur);
+    });
+
+    const stats = Array.from(map.values()).sort((a, b) => b.totalAmount - a.totalAmount);
+
+    res.status(200).json({ success: true, data: stats });
+  } catch (error) {
+    console.error('Error building agent stats:', error);
+    res.status(500).json({ success: false, message: error.message });
   }
 };

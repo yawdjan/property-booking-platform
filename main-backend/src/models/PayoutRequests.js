@@ -1,21 +1,12 @@
-// models/Commission.js (Updated)
+// models/PayoutRequest.js (New)
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
 
-const Commission = sequelize.define('Commission', {
+const PayoutRequest = sequelize.define('PayoutRequest', {
   id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true
-  },
-  bookingId: {
-    type: DataTypes.UUID,
-    allowNull: false,
-    unique: true,
-    references: {
-      model: 'Bookings',
-      key: 'id'
-    }
   },
   agentId: {
     type: DataTypes.UUID,
@@ -25,46 +16,41 @@ const Commission = sequelize.define('Commission', {
       key: 'id'
     }
   },
-  amount: {
+  requestedAmount: {
     type: DataTypes.DECIMAL(10, 2),
     allowNull: false
   },
-  percentage: {
-    type: DataTypes.DECIMAL(5, 2),
-    allowNull: true,
-    defaultValue: 10.00
+  approvedAmount: {
+    type: DataTypes.DECIMAL(10, 2),
+    allowNull: true
   },
   status: {
-    type: DataTypes.ENUM('pending', 'paid', 'cancelled'),
+    type: DataTypes.ENUM('pending', 'approved', 'denied', 'processing', 'completed'),
     defaultValue: 'pending'
   },
-  earnedDate: {
+  description: {
+    type: DataTypes.TEXT,
+    allowNull: true
+  },
+  adminNote: {
+    type: DataTypes.TEXT,
+    allowNull: true
+  },
+  requestDate: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW
   },
-  paidAt: {
+  processedDate: {
     type: DataTypes.DATE,
     allowNull: true
   },
-  paidBy: {
+  processedBy: {
     type: DataTypes.UUID,
     allowNull: true,
     references: {
       model: 'Users',
       key: 'id'
     }
-  },
-  propertyId: {
-    type: DataTypes.UUID,
-    allowNull: true,
-    references: {
-      model: 'Properties',
-      key: 'id'
-    }
-  },
-  clientName: {
-    type: DataTypes.STRING,
-    allowNull: true
   },
   paymentMethod: {
     type: DataTypes.STRING,
@@ -73,14 +59,10 @@ const Commission = sequelize.define('Commission', {
   paymentReference: {
     type: DataTypes.STRING,
     allowNull: true
-  },
-  notes: {
-    type: DataTypes.TEXT,
-    allowNull: true
   }
 }, {
   timestamps: true,
-  tableName: 'Commissions'
+  tableName: 'PayoutRequests'
 });
 
-export default Commission;
+export default PayoutRequest;

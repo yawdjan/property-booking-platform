@@ -4,7 +4,7 @@ import { protect, authorize } from '../middleware/auth.js';
 
 const router = express.Router();
 
-router.get('/availability', getAvailability);
+router.get('/availability', protect, authorize('admin'), getAvailability);
 router.post('/block', protect, authorize('admin'), blockDates);
 
 export default router;

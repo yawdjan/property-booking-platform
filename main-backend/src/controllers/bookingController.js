@@ -259,6 +259,122 @@ export const updateBooking = async (req, res) => {
   }
 };
 
+export const unavailableBookingDates = async (req, res) => {
+  try {
+    const { propertyId } = req.params;
+    const { startDate, endDate } = req.query;
+
+    console.log('Fetching unavailable dates for property:', propertyId);
+
+    // Build the Sequelize query
+    let whereClause = {
+      propertyId,
+      status: { [Op.in]: ['Confirmed', 'Pending Payment'] }
+    };
+
+    // Add date range filter if provided
+    if (startDate && endDate) {
+      whereClause[Op.or] = [
+        // Booking starts within range
+        { checkIn: { [Op.between]: [startDate, endDate] } },
+        // Booking ends within range
+        { checkOut: { [Op.between]: [startDate, endDate] } },
+        // Booking spans the entire range
+        {
+          [Op.and]: [
+            { checkIn: { [Op.lte]: startDate } },
+            { checkOut: { [Op.gte]: endDate } }
+          ]
+        }
+      ];
+    }
+
+    console.log('Query where clause:', JSON.stringify(whereClause, null, 2));
+
+    // Execute the query using Sequelize
+    const bookings = await Booking.findAll({
+      where: whereClause,
+      attributes: ['checkIn', 'checkOut'],
+      order: [['checkIn', 'ASC']]
+    });
+
+    console.log('Found bookings:', bookings.length);
+
+    // Generate array of unavailable dates
+    const unavailableDates = [];
+
+    bookings.forEach(booking => {
+      const start = new Date(booking.checkIn);
+      const end = new Date(booking.checkOut);
+
+      // Include all dates from check-in to check-out (inclusive)
+      for (let date = new Date(start); date <= end; date.setDate(date.getDate() + 1)) {
+        unavailableDates.push(date.toISOString().split('T')[0]);
+      }
+    });
+
+    // Remove duplicates
+    const uniqueDates = [...new Set(unavailableDates)];
+
+    console.log('Unavailable dates count:', uniqueDates.length);
+
+    res.json({
+      success: true,
+      propertyId,
+      unavailableDates: uniqueDates,
+      bookingCount: bookings.length
+    });
+
+  } catch (error) {
+    console.error('Error fetching unavailable dates:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch unavailable dates',
+      error: error.message
+    });
+  }
+};
+
+export const unavailableBookingRanges = async (req, res) => {
+  try {
+    const { propertyId } = req.params;
+
+    console.log('Fetching unavailable ranges for property:', propertyId);
+
+    // Execute the query using Sequelize
+    const bookings = await Booking.findAll({
+      where: {
+        propertyId,
+        status: { [Op.in]: ['Confirmed', 'Pending Payment'] }
+      },
+      attributes: ['checkIn', 'checkOut', 'clientEmail'],
+      order: [['checkIn', 'ASC']]
+    });
+
+    console.log('Found bookings:', bookings.length);
+
+    const unavailableRanges = bookings.map(booking => ({
+      start: booking.checkIn,
+      end: booking.checkOut,
+      clientEmail: booking.clientEmail
+    }));
+
+    res.json({
+      success: true,
+      propertyId,
+      unavailableRanges
+    });
+
+  } catch (error) {
+    console.error('Error fetching unavailable ranges:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch unavailable ranges',
+      error: error.message
+    });
+  }
+};
+
 export const cancelBooking = async (req, res) => {
   try {
     const booking = await Booking.findByPk(req.params.id);

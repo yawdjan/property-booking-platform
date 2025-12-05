@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
 
 export const sendEmail = async (options) => {
   const mailOptions = {
-    from: `PropBooking <${config.email.user}>`,
+    from: `Omarey <${config.email.user}>`,
     to: options.to,
     subject: options.subject,
     text: options.text,

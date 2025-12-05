@@ -1,4 +1,4 @@
-import { Booking } from '../models/index.js';
+import { Booking, User } from '../models/index.js';
 import { Op } from 'sequelize';
 
 export const getAvailability = async (req, res) => {
@@ -24,14 +24,41 @@ export const getAvailability = async (req, res) => {
           }
         ]
       },
-      attributes: ['checkIn', 'checkOut', 'status']
+      attributes: ['id', 'checkIn', 'checkOut', 'status', 'agentId', 'clientEmail'],
+      include: [
+        { model: User, as: 'agent', attributes: ['id', 'name', 'email'] }
+      ]
+    });
+
+    // Expand each booking into individual per-day entries (date + agent info)
+    const perDay = [];
+    bookings.forEach(b => {
+      const start = new Date(b.checkIn);
+      const end = new Date(b.checkOut);
+      for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+        perDay.push({
+          date: d.toISOString().split('T')[0],
+          bookingId: b.id,
+          status: b.status,
+          clientEmail: b.clientEmail,
+          agent: b.agent ? { id: b.agent.id, name: b.agent.name, email: b.agent.email } : null
+        });
+      }
+    });
+
+    // Remove duplicate dates (keep first occurrence)
+    const seen = new Set();
+    const uniquePerDay = perDay.filter(entry => {
+      if (seen.has(entry.date)) return false;
+      seen.add(entry.date);
+      return true;
     });
 
     res.status(200).json({
       success: true,
-      data: {
-        bookedDates: bookings
-      }
+      propertyId,
+      bookedDates: uniquePerDay,
+      bookingCount: bookings.length
     });
   } catch (error) {
     res.status(500).json({

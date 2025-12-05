@@ -15,6 +15,7 @@ build/
 .out/
 .next/
 .nuxt/
+uploads/
 
 # ────────────────
 # Env and secrets
