@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client';
 
-const WS_URL = process.env.REACT_APP_WS_URL || 'http://localhost:3001';
+const WS_URL = process.env.REACT_APP_WS_URL || 'http://72.61.192.33:3001';
 
 let socket = null;
 

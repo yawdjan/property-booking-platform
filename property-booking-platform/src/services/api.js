@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
-const PAYMENT_API_URL = process.env.REACT_APP_PAYMENT_API_URL || 'http://localhost:3005/api';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://72.61.192.33:3001/api';
+const PAYMENT_API_URL = process.env.REACT_APP_PAYMENT_API_URL || 'http://72.61.192.33:3005/api';
 
 // Create axios instance with interceptors
 const apiClient = axios.create({

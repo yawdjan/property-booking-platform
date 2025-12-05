@@ -103,7 +103,7 @@ Start MongoDB (local or using a hosted service). Then run:
 npm run dev
 ```
 
-Open `http://localhost:3000` (or the `PORT` you configured) and use an API client (Postman / Insomnia) to test endpoints.
+Open `http://72.61.192.33:3000` (or the `PORT` you configured) and use an API client (Postman / Insomnia) to test endpoints.
 
 ## WebSocket Notifications
 The server includes WebSocket support to push real-time updates (e.g., booking confirmed, new commission). The socket handler lives in `src/websocket/socketHandler.js`. When a payment is confirmed by the Payment Backend, this service expects to receive a notification (HTTP) and will broadcast appropriate socket events to relevant connected clients.

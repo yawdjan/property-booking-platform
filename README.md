@@ -32,7 +32,7 @@ ngrok http 3005
 ```
 Session Status                online
 Account                       your-email@example.com
-Forwarding                    https://abc123.ngrok.io -> http://localhost:3005
+Forwarding                    https://abc123.ngrok.io -> http://72.61.192.33:3005
 ```
 
 ## Notes & Tips
