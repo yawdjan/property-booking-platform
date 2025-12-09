@@ -68,7 +68,7 @@
 //       clientEmail: 'client1@email.com', 
 //       checkIn: '2025-11-10', 
 //       checkOut: '2025-11-15', 
-//       status: 'Confirmed', 
+//       status: 'Booked', 
 //       totalAmount: 1325, 
 //       commission: 159, 
 //       paymentStatus: 'Pending Payout' 
@@ -92,7 +92,7 @@
 //       clientEmail: 'client3@email.com', 
 //       checkIn: '2025-12-01', 
 //       checkOut: '2025-12-05', 
-//       status: 'Confirmed', 
+//       status: 'Booked', 
 //       totalAmount: 1075, 
 //       commission: 129, 
 //       paymentStatus: 'Paid on 2025-11-01' 

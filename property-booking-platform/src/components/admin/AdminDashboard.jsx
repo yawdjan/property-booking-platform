@@ -30,11 +30,11 @@ export default function AdminDashboard() {
   if (loading) return <div>Loading...</div>;
 
   const totalRevenue = bookings
-    .filter(b => b.status === 'Confirmed')
+    .filter(b => b.status === 'Booked')
     .reduce((sum, b) => sum + parseFloat(b.totalAmount), 0);
     
   const totalCommissions = bookings
-    .filter(b => b.status === 'Confirmed')
+    .filter(b => b.status === 'Booked')
     .reduce((sum, b) => sum + parseFloat(b.commissionAmount), 0);
     
   const activeAgents = agents.filter(a => a.status === 'Active').length;

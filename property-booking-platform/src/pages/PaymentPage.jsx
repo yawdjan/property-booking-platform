@@ -44,7 +44,7 @@ export default function PaymentPage() {
 
       setPaymentLink(paymentUrl);
 
-      if (bookingData.status === 'Confirmed') {
+      if (bookingData.status === 'Booked') {
         setError('This booking has already been paid.');
       }
     } catch (err) {

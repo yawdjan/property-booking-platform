@@ -94,7 +94,7 @@ export default function MyBookings() {
                     <td className="py-4 px-6">{booking.checkIn}</td>
                     <td className="py-4 px-6">{booking.checkOut}</td>
                     <td className="py-4 px-6">
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${booking.status === 'Confirmed' ? 'bg-green-100 text-green-800' :
+                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${booking.status === 'Booked' ? 'bg-green-100 text-green-800' :
                         booking.status === 'Pending Payment' ? 'bg-yellow-100 text-yellow-800' :
                           'bg-gray-100 text-gray-800'
                         }`}>
@@ -113,8 +113,8 @@ export default function MyBookings() {
                           <Edit2 className="w-4 h-4" />
                         </button>
 
-                        {/* Delete only if NOT confirmed */}
-                        {booking.status !== 'Confirmed' && (
+                        {/* Delete only if NOT Booked */}
+                        {booking.status !== 'Booked' && (
                           <button
                             onClick={() => handleDelete(booking.id)}
                             className="p-2 text-red-600 hover:bg-red-50 rounded"

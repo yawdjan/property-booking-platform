@@ -42,7 +42,7 @@ function buildAgentStats(bookings, agents) {
   const map = new Map();
   agents.forEach(a => map.set(a.id, { id: a.id, name: a.name || a.email || a.id, amount: 0, count: 0 }));
 
-  bookings.filter(b => b.status === 'Confirmed').forEach(b => {
+  bookings.filter(b => b.status === 'Booked').forEach(b => {
     const agentId = b.agentId || b.agent?.id;
     if (!agentId) return;
     const amt = Number(b.totalAmount ?? 0) || 0;
@@ -170,11 +170,11 @@ export default function FinancialReports() {
   }
 
   const totalRevenue = bookings
-    .filter(b => b.status === 'Confirmed')
+    .filter(b => b.status === 'Booked')
     .reduce((sum, b) => sum + parseFloat(b.totalAmount), 0);
     
   const totalCommissions = bookings
-    .filter(b => b.status === 'Confirmed')
+    .filter(b => b.status === 'Booked')
     .reduce((sum, b) => sum + parseFloat(b.commission ?? b.commissionAmount ?? 0), 0);
     
   const pendingPayouts = bookings
@@ -239,7 +239,7 @@ export default function FinancialReports() {
               </tr>
             </thead>
             <tbody>
-              {bookings.filter(b => b.status === 'Confirmed').map(booking => {
+              {bookings.filter(b => b.status === 'Booked').map(booking => {
                 const agent = agents.find(a => a.id === booking.agentId);
                 return (
                   <tr key={booking.id} className="border-b">
@@ -249,7 +249,7 @@ export default function FinancialReports() {
                     <td className="py-3 px-4">${(booking.commission ?? booking.commissionAmount ?? 0)}</td>
                     <td className="py-3 px-4">
                       <span className={`px-2 py-1 rounded-full text-xs ${
-                        booking.paymentStatus?.includes('Confirmed') 
+                        booking.paymentStatus?.includes('Booked') 
                           ? 'bg-green-100 text-green-800' 
                           : 'bg-yellow-100 text-yellow-800'
                       }`}>

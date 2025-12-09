@@ -44,7 +44,7 @@ export const isDateBooked = (date, bookings, propertyId) => {
   const dateStr = date.toISOString().split('T')[0];
   return bookings.some(b => 
     b.propertyId === propertyId &&
-    b.status === 'Confirmed' &&
+    b.status === 'Booked' &&
     dateStr >= b.checkIn && dateStr < b.checkOut
   );
 };
