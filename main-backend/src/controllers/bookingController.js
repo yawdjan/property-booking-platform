@@ -436,7 +436,7 @@ export const confirmPayment = async (req, res) => {
     console.log('📋 Current booking status:', booking.status);
 
     // ✅ Check if already confirmed
-    if (booking.status === 'Confirmed') {
+    if (booking.status === 'Confirmed' || booking.status === 'Completed' || booking.status === 'Booked') {
       console.log('ℹ️ Booking already confirmed');
       return res.status(200).json({
         success: true,
@@ -446,28 +446,11 @@ export const confirmPayment = async (req, res) => {
 
     // Update booking status
     const updatedBooking = await booking.update({
-      status: 'Confirmed',
+      status: 'Booked',
       paymentId
     });
 
     console.log('✅ Booking status updated to Confirmed:', updatedBooking.id);
-
-    // ✅ Check if commission already exists
-    const existingCommission = await Commission.findOne({
-      where: { bookingId: booking.id }
-    });
-
-    if (existingCommission) {
-      console.log('ℹ️ Commission already exists for this booking');
-    } else {
-      const commission = await Commission.create({
-        bookingId: booking.id,
-        agentId: booking.agentId,
-        amount: booking.commissionAmount,
-        status: 'Pending Payout'
-      });
-      console.log('✅ Commission created successfully:', commission.id);
-    }
 
     res.status(200).json({
       success: true,
