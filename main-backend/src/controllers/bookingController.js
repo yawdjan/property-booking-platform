@@ -109,7 +109,7 @@ export const createBooking = async (req, res) => {
     const conflictingBooking = await Booking.findOne({
       where: {
         propertyId,
-        status: { [Op.in]: ['Pending Payment', 'Confirmed'] },
+        status: { [Op.in]: ['Pending Payment', 'Booked'] },
         [Op.or]: [
           {
             checkIn: { [Op.between]: [checkIn, checkOut] }
@@ -269,7 +269,7 @@ export const unavailableBookingDates = async (req, res) => {
     // Build the Sequelize query
     let whereClause = {
       propertyId,
-      status: { [Op.in]: ['Confirmed', 'Pending Payment'] }
+      status: { [Op.in]: ['Booked', 'Pending Payment'] }
     };
 
     // Add date range filter if provided
@@ -345,7 +345,7 @@ export const unavailableBookingRanges = async (req, res) => {
     const bookings = await Booking.findAll({
       where: {
         propertyId,
-        status: { [Op.in]: ['Confirmed', 'Pending Payment'] }
+        status: { [Op.in]: ['Booked', 'Pending Payment'] }
       },
       attributes: ['checkIn', 'checkOut', 'clientEmail'],
       order: [['checkIn', 'ASC']]

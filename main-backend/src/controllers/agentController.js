@@ -163,8 +163,8 @@ export const getAgentStats = async (req, res) => {
   try {
     const { startDate, endDate } = req.query;
 
-    // Build booking where clause (only confirmed bookings by default)
-    const where = { status: 'Confirmed' };
+    // Build booking where clause (only Booked bookings by default)
+    const where = { status: 'Booked' };
 
     if (startDate && endDate) {
       const { Op } = await import('sequelize');

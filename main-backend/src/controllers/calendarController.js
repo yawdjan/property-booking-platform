@@ -8,7 +8,7 @@ export const getAvailability = async (req, res) => {
     const bookings = await Booking.findAll({
       where: {
         propertyId,
-        status: { [Op.in]: ['Pending Payment', 'Confirmed'] },
+        status: { [Op.in]: ['Pending Payment', 'Booked'] },
         [Op.or]: [
           {
             checkIn: { [Op.between]: [start, end] }
@@ -85,7 +85,7 @@ export const blockDates = async (req, res) => {
       totalAmount: 0,
       commissionRate: 0,
       commissionAmount: 0,
-      status: 'Confirmed'
+      status: 'Booked'
     }));
 
     await Booking.bulkCreate(blockedBookings);
