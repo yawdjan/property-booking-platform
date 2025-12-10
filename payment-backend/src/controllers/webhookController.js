@@ -56,8 +56,8 @@ export const handlePaystackWebhook = async (req, res) => {
 
           // Notify main backend
           try {
-            console.log(`🌐 Calling main backend at ${mainBackendUrl}/api/bookings/confirm-payment`);
-            const response = await axios.post(`${mainBackendUrl}/api/bookings/confirm-payment`, {
+            console.log(`🌐 Calling main backend at ${mainBackendUrl}/bookings/confirm-payment`);
+            const response = await axios.post(`${mainBackendUrl}/bookings/confirm-payment`, {
               bookingId: payment.bookingId,
               paymentId: payment.paymentId
             }, {
