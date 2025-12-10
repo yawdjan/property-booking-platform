@@ -19,6 +19,7 @@ export default function PaymentPage() {
       return;
     }
     fetchBookingDetails();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bookingId]);
 
   const fetchBookingDetails = async () => {
