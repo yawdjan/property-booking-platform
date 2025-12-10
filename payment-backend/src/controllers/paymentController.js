@@ -153,7 +153,7 @@ export const verifyPayment = async (req, res) => {
     await PaymentLink.findOneAndUpdate(
       { reference },
       {
-        status: 'Paid',
+        status: 'Booked',
         paidAt: new Date()
       }
     );

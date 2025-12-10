@@ -42,7 +42,7 @@ const paymentLinkSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['Active', 'Paid', 'Expired', 'Cancelled'],
+    enum: ['Active', 'Booked', 'Expired', 'Cancelled'],
     default: 'Active'
   },
   expiresAt: {
