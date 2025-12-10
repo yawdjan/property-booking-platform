@@ -39,7 +39,7 @@ export const getAgent = async (req, res) => {
     // Get agent statistics
     const bookings = await Booking.findAll({ where: { agentId: agent.id } });
     const commissions = await Commission.findAll({ where: { agentId: agent.id } });
-    
+
     const totalBookings = bookings.length;
     const totalEarnings = commissions.reduce((sum, c) => sum + parseFloat(c.amount), 0);
     const pendingPayout = commissions
@@ -84,7 +84,8 @@ export const approveAgent = async (req, res) => {
     await sendEmail({
       to: agent.email,
       subject: 'Account Approved - Omarey',
-      text: `Hello ${agent.name},\n\nYour agent account has been approved! You can now log in and start booking properties.\n\nBest regards,\nOmarey Team`
+      text: `Hello ${agent.name},\n\nWelcome aboard! Your agent account is now live and ready for action.\n\nLog in to start exploring and booking our exclusive portfolio of short-let properties. Your next exceptional find is just a click away.
+\n\nLet’s get started!\nThe Omarey Team.`
     });
 
     res.status(200).json({
@@ -131,7 +132,7 @@ export const suspendAgent = async (req, res) => {
 export const updateCommissionRate = async (req, res) => {
   try {
     const { commissionRate } = req.body;
-    
+
     const agent = await User.findOne({
       where: { id: req.params.id, role: 'agent' }
     });

@@ -126,7 +126,7 @@ export default function BookingManagement() {
                   </td>
                   <td className="py-4 px-6">
                     <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                      booking.status === 'Booked' || booking.payment_status === 'paid'
+                      booking.status === 'Booked' || booking.payment_status === 'paid' || booking.payment_status === 'Paid' || booking.payment_status === 'Booked'
                         ? 'bg-green-100 text-green-800' 
                         : booking.status === 'pending_payment' || booking.payment_status === 'pending'
                         ? 'bg-yellow-100 text-yellow-800' 
