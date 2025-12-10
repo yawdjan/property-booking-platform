@@ -421,17 +421,23 @@ export const confirmPayment = async (req, res) => {
   try {
     const { bookingId, paymentId } = req.body;
 
+    console.log('💳 Payment confirmation received for booking:', bookingId, 'payment:', paymentId);
+
     const booking = await Booking.findByPk(bookingId);
 
     if (!booking) {
+      console.error('❌ Booking not found:', bookingId);
       return res.status(404).json({
         success: false,
         message: 'Booking not found'
       });
     }
 
+    console.log('📋 Current booking status:', booking.status);
+
     // ✅ Check if already confirmed
     if (booking.status === 'Confirmed') {
+      console.log('ℹ️ Booking already confirmed');
       return res.status(200).json({
         success: true,
         message: 'Payment already confirmed'
@@ -439,10 +445,12 @@ export const confirmPayment = async (req, res) => {
     }
 
     // Update booking status
-    await booking.update({
+    const updatedBooking = await booking.update({
       status: 'Confirmed',
       paymentId
     });
+
+    console.log('✅ Booking status updated to Confirmed:', updatedBooking.id);
 
     // ✅ Check if commission already exists
     const existingCommission = await Commission.findOne({
@@ -452,20 +460,25 @@ export const confirmPayment = async (req, res) => {
     if (existingCommission) {
       console.log('ℹ️ Commission already exists for this booking');
     } else {
-      await Commission.create({
+      const commission = await Commission.create({
         bookingId: booking.id,
         agentId: booking.agentId,
         amount: booking.commissionAmount,
         status: 'Pending Payout'
       });
-      console.log('✅ Commission created successfully');
+      console.log('✅ Commission created successfully:', commission.id);
     }
 
     res.status(200).json({
       success: true,
-      message: 'Payment confirmed successfully'
+      message: 'Payment confirmed successfully',
+      booking: {
+        id: updatedBooking.id,
+        status: updatedBooking.status
+      }
     });
   } catch (error) {
+    console.error('❌ Error confirming payment:', error);
     res.status(500).json({
       success: false,
       message: error.message
