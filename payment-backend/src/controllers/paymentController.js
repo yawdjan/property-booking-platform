@@ -161,7 +161,7 @@ export const verifyPayment = async (req, res) => {
     // Notify main backend
     try {
       await axios.post(`${mainBackendUrl}/api/bookings/confirm-payment`, {
-        bookingId: payment.bookingId,
+        bookingId: payment.b-+ookingId,
         paymentId: payment.paymentId
       });
     } catch (error) {
