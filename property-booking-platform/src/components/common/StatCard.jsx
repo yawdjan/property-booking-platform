@@ -3,7 +3,7 @@ import React from 'react';
 export default function StatCard({ title, value, icon: Icon, color }) {
   const colorClasses = {
     green: 'bg-green-50 text-green-600',
-    blue: 'bg-blue-50 text-blue-600',
+    blue: 'bg-blue-50 text-primary-400',
     purple: 'bg-purple-50 text-purple-600',
     orange: 'bg-orange-50 text-orange-600'
   };

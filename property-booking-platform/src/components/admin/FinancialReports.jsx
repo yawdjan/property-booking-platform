@@ -192,7 +192,7 @@ export default function FinancialReports() {
         </div>
         <div className="bg-white rounded-lg shadow p-6">
           <h3 className="text-sm text-gray-600 mb-2">Total Commissions Paid</h3>
-          <p className="text-3xl font-bold text-blue-600">
+          <p className="text-3xl font-bold text-primary-400">
             ${(totalCommissions - pendingPayouts).toLocaleString()}
           </p>
         </div>
@@ -222,7 +222,7 @@ export default function FinancialReports() {
               onChange={(e) => setSelectedMonth(e.target.value)}
               className="px-2 py-1 border rounded"
             />
-            <button onClick={exportReportCSV} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+            <button onClick={exportReportCSV} className="px-4 py-2 bg-primary-400 text-white rounded-lg hover:bg-secondary-500">
               Export CSV
             </button>
           </div>

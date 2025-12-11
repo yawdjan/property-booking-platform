@@ -127,7 +127,7 @@ export default function MyCommissions() {
         </div>
         <button
           onClick={() => setShowRequestModal(true)}
-          className="flex items-center gap-2 px-6 py-3 bg-blue-700 text-white rounded-xl font-semibold hover:bg-blue-600 transition-all shadow-lg"
+          className="flex items-center gap-2 px-6 py-3 bg-secondary-500 text-white rounded-xl font-semibold hover:bg-primary-400 transition-all shadow-lg"
         >
           <Send className="w-5 h-5" />
           Request Payout
@@ -138,7 +138,7 @@ export default function MyCommissions() {
       <div className="grid md:grid-cols-3 gap-6 mb-8">
         <div className="bg-white rounded-lg shadow p-6">
           <h3 className="text-sm text-gray-600 mb-2">Total Earned</h3>
-          <p className="text-3xl font-bold text-blue-600">${totalEarned.toLocaleString()}</p>
+          <p className="text-3xl font-bold text-primary-400">${totalEarned.toLocaleString()}</p>
         </div>
         <div className="bg-white rounded-lg shadow p-6">
           <h3 className="text-sm text-gray-600 mb-2">Paid Out</h3>
@@ -214,7 +214,7 @@ export default function MyCommissions() {
                     return (
                       <tr key={c.id} className="hover:bg-amber-50 transition-colors">
                         <td className="px-6 py-4 text-sm font-medium text-amber-950">#{c.id}</td>
-                        <td className="px-6 py-4 text-sm font-bold text-blue-700">${c.requestedAmount}</td>
+                        <td className="px-6 py-4 text-sm font-bold text-secondary-500">${c.requestedAmount}</td>
                         <td className="px-6 py-4 text-sm text-amber-700">{new Date(c.createdAt).toLocaleDateString()}</td>
                         <td className="px-6 py-4">
                           <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(c.status)}`}>
@@ -237,7 +237,7 @@ export default function MyCommissions() {
           {showRequestModal && (
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
               <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full">
-                <div className="bg-gradient-to-r from-blue-700 to-blue-600 px-6 py-4 rounded-t-2xl">
+                <div className="bg-gradient-to-r from-secondary-500 to-primary-400 px-6 py-4 rounded-t-2xl">
                   <h3 className="text-xl font-bold text-white">Request Payout</h3>
                 </div>
                 <div className="p-6 space-y-4">
@@ -245,7 +245,7 @@ export default function MyCommissions() {
                     <label className="block text-sm font-semibold text-amber-900 mb-2">
                       Available Balance
                     </label>
-                    <p className="text-3xl font-bold text-blue-700">${pendingPayout}</p>
+                    <p className="text-3xl font-bold text-secondary-500">${pendingPayout}</p>
                   </div>
 
                   <div>
@@ -257,7 +257,7 @@ export default function MyCommissions() {
                       value={requestAmount}
                       onChange={(e) => setRequestAmount(e.target.value)}
                       placeholder="Enter amount"
-                      className="w-full px-4 py-3 border-2 border-amber-300 rounded-lg focus:border-blue-600 outline-none"
+                      className="w-full px-4 py-3 border-2 border-amber-300 rounded-lg focus:border-primary-400 outline-none"
                       max={pendingPayout}
                     />
                   </div>
@@ -271,7 +271,7 @@ export default function MyCommissions() {
                       onChange={(e) => setRequestDescription(e.target.value)}
                       placeholder="Add a note about this payout request..."
                       rows={3}
-                      className="w-full px-4 py-3 border-2 border-amber-300 rounded-lg focus:border-blue-600 outline-none resize-none"
+                      className="w-full px-4 py-3 border-2 border-amber-300 rounded-lg focus:border-primary-400 outline-none resize-none"
                     />
                   </div>
 
@@ -284,7 +284,7 @@ export default function MyCommissions() {
                     </button>
                     <button
                       onClick={handleRequestPayout}
-                      className="flex-1 px-4 py-3 bg-blue-700 text-white rounded-lg font-semibold hover:bg-blue-600 transition-colors"
+                      className="flex-1 px-4 py-3 bg-secondary-500 text-white rounded-lg font-semibold hover:bg-primary-400 transition-colors"
                     >
                       Submit Request
                     </button>

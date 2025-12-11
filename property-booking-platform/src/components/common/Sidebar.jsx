@@ -71,7 +71,7 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
                 onClick={() => handleMenuClick(item.id)}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                   activeTab === item.id 
-                    ? 'bg-blue-600 text-white shadow-lg' 
+                    ? 'bg-primary-400 text-white shadow-lg' 
                     : 'text-amber-100 hover:bg-amber-800/50'
                 }`}
               >

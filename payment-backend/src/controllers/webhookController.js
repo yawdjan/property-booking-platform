@@ -56,10 +56,17 @@ export const handlePaystackWebhook = async (req, res) => {
 
           // Notify main backend
           try {
+            const bookingId = payment.bookingId || event.data.metadata?.bookingId;
+            const paymentId = payment.paymentId;
+            
+            if (!bookingId) {
+              throw new Error('bookingId not found in payment or metadata');
+            }
+            
             console.log(`🌐 Calling main backend at ${mainBackendUrl}/bookings/confirm-payment`);
             const response = await axios.post(`${mainBackendUrl}/bookings/confirm-payment`, {
-              bookingId: payment.bookingId,
-              paymentId: payment.paymentId
+              bookingId,
+              paymentId
             }, {
               headers: {
                 'Content-Type': 'application/json'
@@ -72,7 +79,7 @@ export const handlePaystackWebhook = async (req, res) => {
               message: error.message,
               status: error.response?.status,
               data: error.response?.data,
-              url: `${mainBackendUrl}/api/bookings/confirm-payment`
+              url: `${mainBackendUrl}/bookings/confirm-payment`
             });
           }
         } else {

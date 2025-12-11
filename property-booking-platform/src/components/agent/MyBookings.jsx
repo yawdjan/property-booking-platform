@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Edit2, Trash2 } from 'lucide-react';
+import { Copy, Trash2 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { bookingsAPI, propertiesAPI } from '../../services/api.js';
 
@@ -104,17 +104,19 @@ export default function MyBookings() {
                     <td className="py-4 px-6">${booking.totalAmount}</td>
                     <td className="py-4 px-6">
                       <div className="flex gap-2">
-                        {/* Edit → Copy Payment Link */}
-                        <button
-                          onClick={() => copyPaymentLink(booking)}
-                          className="p-2 text-blue-600 hover:bg-blue-50 rounded"
-                          title="Copy payment link"
-                        >
-                          <Edit2 className="w-4 h-4" />
-                        </button>
+                        {/* Copy Payment Link - Show only for Pending Payment */}
+                        {booking.status === 'Pending Payment' && (
+                          <button
+                            onClick={() => copyPaymentLink(booking)}
+                            className="p-2 text-primary-400 hover:bg-blue-50 rounded"
+                            title="Copy payment link"
+                          >
+                            <Copy className="w-4 h-4" />
+                          </button>
+                        )}
 
-                        {/* Delete only if NOT Booked */}
-                        {booking.status !== 'Booked' && (
+                        {/* Delete - Hide for Cancelled status */}
+                        {booking.status !== 'Cancelled' && (
                           <button
                             onClick={() => handleDelete(booking.id)}
                             className="p-2 text-red-600 hover:bg-red-50 rounded"

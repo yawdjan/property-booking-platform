@@ -81,7 +81,7 @@ export default function AgentDashboard({ setActiveTab }) {
                 key={action.label}
                 onClick={() => setActiveTab(action.tab)}
                 className={`w-full px-4 py-3 rounded-lg text-left ${action.style === 'primary'
-                    ? 'bg-blue-600 text-white hover:bg-blue-700'
+                    ? 'bg-primary-400 text-white hover:bg-secondary-500'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
               >
@@ -90,7 +90,7 @@ export default function AgentDashboard({ setActiveTab }) {
             ))}
           </div>
           {/* <div className="mt-6 space-y-3">
-            <button className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-left">
+            <button className="w-full px-4 py-3 bg-primary-400 text-white rounded-lg hover:bg-secondary-500 text-left">
               Create New Booking
             </button>
             <button className="w-full px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-left">

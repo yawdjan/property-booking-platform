@@ -46,7 +46,7 @@ export default function BookingManagement() {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-400 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading bookings...</p>
         </div>
       </div>
@@ -140,7 +140,7 @@ export default function BookingManagement() {
                   </td>
                   <td className="py-4 px-6">
                     <button 
-                      className="p-2 text-blue-600 hover:bg-blue-50 rounded"
+                      className="p-2 text-primary-400 hover:bg-blue-50 rounded"
                       title="View Details"
                     >
                       <Eye className="w-4 h-4" />

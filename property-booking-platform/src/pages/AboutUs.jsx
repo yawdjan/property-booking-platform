@@ -177,7 +177,7 @@ export default function AboutUs() {
                     <button
                         key={i}
                         onClick={() => setIndex(i)}
-                        className={`w-3 h-10 rounded-full transition-all duration-300 ${i === index ? 'bg-blue-400 scale-110 shadow-lg' : 'bg-amber-200/50 hover:bg-amber-200'
+                        className={`w-3 h-10 rounded-full transition-all duration-300 ${i === index ? 'bg-primary-400 scale-110 shadow-lg' : 'bg-amber-200/50 hover:bg-amber-200'
                             }`}
                         aria-label={`Go to section ${i + 1}`}
                     />

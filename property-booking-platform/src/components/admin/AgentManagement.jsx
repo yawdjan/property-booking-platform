@@ -107,7 +107,7 @@ export default function AgentManagement() {
                         setEditingAgent(agent); 
                         setEditCommissionRate(agent.commissionRate || ''); 
                       }} 
-                      className="p-2 text-blue-600 hover:bg-blue-50 rounded"
+                      className="p-2 text-primary-400 hover:bg-blue-50 rounded"
                     >
                       <Edit2 className="w-4 h-4" />
                     </button>
@@ -142,7 +142,7 @@ export default function AgentManagement() {
               </button>
               <button 
                 onClick={saveCommissionRate} 
-                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                className="flex-1 px-4 py-2 bg-primary-400 text-white rounded-lg hover:bg-secondary-500"
               >
                 Save
               </button>

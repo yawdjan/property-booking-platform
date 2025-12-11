@@ -1,7 +1,10 @@
 import React from 'react';
 import { Home, Key, Users, TrendingUp, Shield, Award, Clock, DollarSign } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
-export default function Services( { setCurrentView } ) {
+export default function Services() {
+    const navigate = useNavigate();
+    
     const services = [
         {
             icon: <Key className="w-12 h-12" />,
@@ -95,20 +98,17 @@ export default function Services( { setCurrentView } ) {
                     <h2 className="text-4xl font-bold text-amber-950 mb-6 text-center">Welcome To Omarey</h2>
                     <div className="prose prose-lg max-w-none text-amber-900 leading-relaxed space-y-4">
                         <p>
-                            To our <span className="font-bold text-blue-700">Users</span>, we are more than just a booking portal—we are a dynamic ecosystem designed for two key players: discerning property owners and ambitious booking agents.
+                            To our <span className="font-bold text-secondary-500">Users</span>, we are more than just a booking portal—we are a dynamic ecosystem designed for two key players: discerning property owners and ambitious booking agents.
                         </p>
                         <p>
                             Our platform was born from a simple observation: the process for agents to discover and book exceptional short-let properties was fragmented, and property owners struggled to gain consistent, high-quality exposure. We bridge this gap.
                         </p>
                         <p>
-                            <span className="font-semibold text-blue-700">For Property Owners</span>, we provide a streamlined, powerful dashboard to list your property, manage availability, and connect directly with a network of vetted agents who can fill your calendar with reliable bookings. Maximize your occupancy and revenue with ease.
+                            <span className="font-semibold text-secondary-500">For Property Owners</span>, we provide a streamlined, powerful dashboard to list your property, manage availability, and connect directly with a network of vetted agents who can fill your calendar with reliable bookings. Maximize your occupancy and revenue with ease.
                         </p>
                         <p>
-                            <span className="font-semibold text-blue-700">For Booking Agents</span>, we offer a curated portfolio of verified, high-quality short-let properties. Our tools simplify search, comparison, and booking, freeing you to focus on what you do best—serving your clients and growing your business.
+                            <span className="font-semibold text-secondary-500">For Booking Agents</span>, we offer a curated portfolio of verified, high-quality short-let properties. Our tools simplify search, comparison, and booking, freeing you to focus on what you do best—serving your clients and growing your business.
                         </p>
-                        {/* <p className="text-lg font-semibold text-amber-950">
-                            At Omarey, our mission is to empower success on both sides of the transaction through technology, trust, and a shared commitment to excellence. Join us in building the future of short-let rentals.
-                        </p> */}
                     </div>
                 </div>
             </div>
@@ -126,7 +126,7 @@ export default function Services( { setCurrentView } ) {
                             key={index}
                             className="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-amber-100 group"
                         >
-                            <div className={`p-8 ${service.color === 'blue' ? 'bg-gradient-to-br from-blue-700 to-blue-600' : 'bg-gradient-to-br from-amber-800 to-amber-700'}`}>
+                            <div className={`p-8 ${service.color === 'blue' ? 'bg-gradient-to-br from-secondary-500 to-primary-400' : 'bg-gradient-to-br from-amber-800 to-amber-700'}`}>
                                 <div className="text-white mb-4">
                                     {service.icon}
                                 </div>
@@ -141,13 +141,13 @@ export default function Services( { setCurrentView } ) {
                                 <ul className="space-y-3">
                                     {service.features.map((feature, idx) => (
                                         <li key={idx} className="flex items-start gap-3">
-                                            <span className={`mt-1 w-2 h-2 rounded-full flex-shrink-0 ${service.color === 'blue' ? 'bg-blue-600' : 'bg-amber-600'}`}></span>
+                                            <span className={`mt-1 w-2 h-2 rounded-full flex-shrink-0 ${service.color === 'blue' ? 'bg-primary-400' : 'bg-amber-600'}`}></span>
                                             <span className="text-amber-900">{feature}</span>
                                         </li>
                                     ))}
                                 </ul>
                                 <button className={`w-full mt-6 py-3 rounded-xl font-semibold transition-all shadow-lg ${service.color === 'blue'
-                                        ? 'bg-blue-700 text-white hover:bg-blue-600'
+                                        ? 'bg-secondary-500 text-white hover:bg-primary-400'
                                         : 'bg-amber-700 text-white hover:bg-amber-600'
                                     }`}>
                                     Learn More
@@ -185,17 +185,20 @@ export default function Services( { setCurrentView } ) {
 
             {/* CTA Section */}
             <div className="max-w-7xl mx-auto px-4 py-20">
-                <div className="bg-gradient-to-r from-blue-700 to-blue-600 rounded-3xl shadow-2xl p-12 text-center text-white">
+                <div className="bg-gradient-to-r from-secondary-500 to-primary-400 rounded-3xl shadow-2xl p-12 text-center text-white">
                     <h2 className="text-4xl font-bold mb-4">Ready to Get Started?</h2>
                     <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
                         Join our ecosystem today and experience the future of short-let property management
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <button disabled className="px-8 py-4 bg-white text-blue-700 rounded-full font-semibold text-lg hover:bg-amber-50 transition-all shadow-lg ">
+                        <button disabled className="px-8 py-4 bg-white text-secondary-500 rounded-full font-semibold text-lg hover:bg-amber-50 transition-all shadow-lg ">
                              Email Us To List Your Property
                         </button>
                         <div className='ml-5 mr-5 self-center text-amber-200 text-xl'><h2 className=''>or</h2></div>
-                        <button  onClick={() => setCurrentView('register')} className="px-8 py-4 bg-amber-700 text-white rounded-full font-semibold text-lg hover:bg-amber-600 transition-all shadow-lg hover:shadow-xl transform hover:scale-105">
+                        <button  
+                            onClick={() => navigate('/register')} // <--- 4. Fix: Use navigate to go to the register route
+                            className="px-8 py-4 bg-amber-700 text-white rounded-full font-semibold text-lg hover:bg-amber-600 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
+                        >
                             Become an Agent
                         </button>
                     </div>

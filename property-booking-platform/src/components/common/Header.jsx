@@ -41,7 +41,7 @@ export default function Header({ isSidebarOpen, setIsSidebarOpen}) {
           >
             <Bell className="w-5 h-5 md:w-6 md:h-6" />
             {notifications.length > 0 && (
-              <span className="absolute top-1 right-1 w-2 h-2 bg-blue-400 rounded-full ring-2 ring-amber-900"></span>
+              <span className="absolute top-1 right-1 w-2 h-2 bg-primary-400 rounded-full ring-2 ring-amber-900"></span>
             )}
           </button>
           

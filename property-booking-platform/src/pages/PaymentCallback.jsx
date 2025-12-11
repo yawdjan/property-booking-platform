@@ -53,7 +53,7 @@ export default function PaymentCallback() {
       <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
         {status === 'verifying' && (
           <>
-            <Loader className="w-16 h-16 text-blue-600 mx-auto mb-4 animate-spin" />
+            <Loader className="w-16 h-16 text-primary-400 mx-auto mb-4 animate-spin" />
             <h2 className="text-2xl font-bold text-gray-800 mb-2">Verifying Payment</h2>
             <p className="text-gray-600">{message}</p>
           </>
@@ -75,7 +75,7 @@ export default function PaymentCallback() {
             <p className="text-gray-600 mb-6">{message}</p>
             <button
               onClick={() => navigate('/agent/bookings')}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="px-6 py-3 bg-primary-400 text-white rounded-lg hover:bg-secondary-500"
             >
               Go to Dashboard
             </button>

@@ -211,7 +211,7 @@ export default function PropertySettings() {
         <h2 className="text-2xl font-bold">Property Management</h2>
         <button 
           onClick={openAddModal}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          className="flex items-center gap-2 px-4 py-2 bg-primary-400 text-white rounded-lg hover:bg-secondary-500"
         >
           <Plus className="w-5 h-5" />
           Add New Property
@@ -229,7 +229,7 @@ export default function PropertySettings() {
           <p className="text-gray-500 text-lg mb-4">No properties yet</p>
           <button 
             onClick={openAddModal}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            className="px-6 py-3 bg-primary-400 text-white rounded-lg hover:bg-secondary-500"
           >
             Add Your First Property
           </button>
@@ -268,7 +268,7 @@ export default function PropertySettings() {
                 <div className="flex gap-2">
                   <button 
                     onClick={() => openEditModal(property)}
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-primary-400 text-white rounded-lg hover:bg-secondary-500"
                   >
                     <Edit2 className="w-4 h-4" />
                     Edit
@@ -462,7 +462,7 @@ export default function PropertySettings() {
                   type="button"
                   onClick={handleSubmit}
                   disabled={saving}
-                  className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg"
+                  className="flex-1 px-4 py-3 bg-primary-400 text-white rounded-lg"
                 >
                   {saving ? 'Saving...' : (editingProperty ? 'Update' : 'Create')}
                 </button>

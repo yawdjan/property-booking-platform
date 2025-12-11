@@ -116,7 +116,7 @@ export default function PropertyListings() {
               <ChevronDown size={18} />
             </button>
 
-            <button className="px-8 py-3 bg-blue-700 text-white rounded-xl font-semibold hover:bg-blue-600 transition shadow-lg">
+            <button className="px-8 py-3 bg-secondary-500 text-white rounded-xl font-semibold hover:bg-primary-400 transition shadow-lg">
               Search
             </button>
           </div>
@@ -183,7 +183,7 @@ export default function PropertyListings() {
             <button
               onClick={() => setViewMode('grid')}
               className={`px-4 py-2 rounded-lg font-medium transition ${viewMode === 'grid'
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-primary-400 text-white'
                   : 'bg-white text-gray-600 hover:bg-gray-100'
                 }`}
             >
@@ -192,7 +192,7 @@ export default function PropertyListings() {
             <button
               onClick={() => setViewMode('list')}
               className={`px-4 py-2 rounded-lg font-medium transition ${viewMode === 'list'
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-primary-400 text-white'
                   : 'bg-white text-gray-600 hover:bg-gray-100'
                 }`}
             >
@@ -222,7 +222,7 @@ export default function PropertyListings() {
                 {/* Status Badge */}
                 <div className="absolute top-4 left-4">
                   <span className={`px-3 py-1 rounded-full text-sm font-semibold ${property.status === 'Available'
-                      ? 'bg-blue-600 text-white'
+                      ? 'bg-primary-400 text-white'
                       : 'bg-amber-500 text-white'
                     }`}>
                     {property.status}
@@ -251,11 +251,11 @@ export default function PropertyListings() {
               {/* Content */}
               <div className="p-6">
                 <div className="flex justify-between items-start mb-3">
-                  <h3 className="text-xl font-bold text-amber-700 group-hover:text-blue-700 transition">
+                  <h3 className="text-xl font-bold text-amber-700 group-hover:text-secondary-500 transition">
                     {property.title}
                   </h3>
                   <div className="text-right">
-                    <div className="text-2xl font-bold text-blue-600">
+                    <div className="text-2xl font-bold text-primary-400">
                       ${property.price.toLocaleString()}
                     </div>
                     <div className="text-sm text-amber-700">per month</div>
@@ -284,7 +284,7 @@ export default function PropertyListings() {
                 </div>
 
                 {/* CTA Button */}
-                <button className="w-full mt-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-indigo-800 transition shadow-lg">
+                <button className="w-full mt-4 py-3 bg-gradient-to-r from-primary-400 to-indigo-600 text-white rounded-xl font-semibold hover:from-secondary-500 hover:to-indigo-800 transition shadow-lg">
                   View Details
                 </button>
               </div>

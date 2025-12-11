@@ -4,11 +4,12 @@ import HomePage from './HomePage';
 import AboutUs from './AboutUs';
 import PropertyListings from './ListingsPage';
 import Services from './Services';
+import { useNavigate } from 'react-router-dom';
 
 export default function LandingPage() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { setCurrentView } = useApp();
 
   const links = [
     { id: 'home', label: 'Home' },
@@ -98,21 +99,21 @@ export default function LandingPage() {
               {links.map(link => (
                 <button
                   key={link.id}
-                  className="text-amber-100 px-4 py-2 hover:text-blue-400 transition-colors drop-shadow font-medium"
+                  className="text-amber-100 px-4 py-2 hover:text-primary-400 transition-colors drop-shadow font-medium"
                   onClick={() => setActiveTab(link.id)}
                 >
                   {link.label}
                 </button>
               ))}
               <button
-                onClick={() => setCurrentView('login')}
+                onClick={() => navigate('/login')}
                 className="px-4 py-2 text-amber-100 hover:text-blue-300 transition-colors drop-shadow font-medium"
               >
                 Login
               </button>
               <button
-                onClick={() => setCurrentView('register')}
-                className="px-10 py-4 bg-blue-700 text-white rounded-full hover:bg-blue-600 transition-all shadow-lg hover:shadow-xl border border-blue-600/50 font-semibold drop-shadow"
+                onClick={() => navigate('/register')}
+                className="px-10 py-4 bg-secondary-500 text-white rounded-full hover:bg-primary-400 transition-all shadow-lg hover:shadow-xl border border-primary-400/50 font-semibold drop-shadow"
               >
                 Sign Up
               </button>
@@ -151,7 +152,7 @@ export default function LandingPage() {
               ))}
               <button
                 onClick={() => {
-                  setCurrentView('login');
+                   navigate('/login');
                   setMobileMenuOpen(false);
                 }}
                 className="block w-full text-left text-white px-4 py-3 hover:bg-white/10 rounded-lg transition-colors"
@@ -160,10 +161,10 @@ export default function LandingPage() {
               </button>
               <button
                 onClick={() => {
-                  setCurrentView('register');
+                  navigate('register');
                   setMobileMenuOpen(false);
                 }}
-                className="block w-full text-center bg-cyan-600/20 backdrop-blur text-white px-4 py-3 rounded-lg hover:bg-cyan-600/30 transition-all border border-white/30 mt-2"
+                className="block w-full text-center  bg-primary-400/20 backdrop-blur text-white px-4 py-3 rounded-lg hover: bg-primary-400/30 transition-all border border-white/30 mt-2"
               >
                 Sign Up
               </button>
@@ -211,7 +212,7 @@ export default function LandingPage() {
         </div>
       </div>
       {activeTab === 'home' && <HomePage />}
-      {activeTab === 'services' && <Services setCurrentView={setCurrentView} />}
+      {activeTab === 'services' && <Services />}
       {activeTab === 'aboutus' && <AboutUs />}
       {activeTab === 'listings' && <PropertyListings />}
       <Footer />
@@ -226,7 +227,7 @@ function Footer() {
 
         {/* Company */}
         <div>
-          <h3 className="text-white text-xl font-semibold mb-4">PropertyBook</h3>
+          <h3 className="text-white text-xl font-semibold mb-4">Omarey</h3>
           <p className="text-gray-400 leading-relaxed">
             All-in-one platform to manage bookings, payments, clients, and
             properties with ease.
@@ -260,8 +261,8 @@ function Footer() {
           <h4 className="text-white text-lg font-semibold mb-4">Contact</h4>
           <ul className="space-y-2 text-gray-400">
             <li>Accra, Ghana</li>
-            <li>support@propertybook.com</li>
-            <li>+233 55 000 0000</li>
+            <li>support@Omarey.com</li>
+            <li>+233 53 340 1119</li>
           </ul>
 
           <div className="flex gap-4 mt-6">
@@ -275,7 +276,7 @@ function Footer() {
 
       {/* Bottom row */}
       <div className="border-t border-gray-700 mt-16 pt-8 text-center text-gray-500">
-        <p>© {new Date().getFullYear()} PropertyBook. All rights reserved.</p>
+        <p>© {new Date().getFullYear()} Omarey. All rights reserved.</p>
       </div>
     </footer>
   );

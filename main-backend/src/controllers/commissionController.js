@@ -66,7 +66,7 @@ export const requestPayout = async (req, res) => {
       agentId,
       requestedAmount: payoutAmount,
       description: description || null,
-      status: "processing",
+      status: "pending",
       requestDate: new Date(),
     });
 

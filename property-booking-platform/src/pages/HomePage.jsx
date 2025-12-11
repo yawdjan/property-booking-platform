@@ -21,22 +21,22 @@ function firstContent() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                     <div className="bg-transparent p-8 rounded-xl hover:shadow-md transition-shadow">
-                        <Calendar className="w-12 h-12 text-blue-600 mb-4" />
+                        <Calendar className="w-12 h-12 text-primary-400 mb-4" />
                         <h3 className="text-xl font-semibold mb-2">Easy Booking</h3>
                         <p className="text-amber-100">Check availability and create bookings in seconds</p>
                     </div>
                     <div className="bg-transparent p-8 rounded-xl hover:shadow-md transition-shadow">
-                        <DollarSign className="w-12 h-12 text-blue-600 mb-4" />
+                        <DollarSign className="w-12 h-12 text-primary-400 mb-4" />
                         <h3 className="text-xl font-semibold mb-2">Automatic Commissions</h3>
                         <p className="text-amber-100">Earn commissions on every successful booking</p>
                     </div>
                     <div className="bg-transparent p-8 rounded-xl hover:shadow-md transition-shadow">
-                        <Users className="w-12 h-12 text-blue-600 mb-4" />
+                        <Users className="w-12 h-12 text-primary-400 mb-4" />
                         <h3 className="text-xl font-semibold mb-2">Client Management</h3>
                         <p className="text-amber-100">Generate payment links and track all your bookings</p>
                     </div>
                     <div className="bg-transparent p-8 rounded-xl hover:shadow-md transition-shadow">
-                        <Users className="w-12 h-12 text-blue-600 mb-4" />
+                        <Users className="w-12 h-12 text-primary-400 mb-4" />
                         <h3 className="text-xl font-semibold mb-2">Client Management</h3>
                         <p className="text-amber-100">Generate payment links and track all your bookings</p>
                     </div>
@@ -48,7 +48,7 @@ function firstContent() {
                     {/* Building Illustrations (simple geometric shapes) */}
                     <div className="absolute bottom-0 left-0 right-0 flex justify-center items-end gap-4 px-8 pb-8">
                         <div className="w-32 h-48 bg-white/90 rounded-t-lg relative">
-                            <div className="absolute top-0 w-full h-8 bg-blue-400 rounded-t-lg"></div>
+                            <div className="absolute top-0 w-full h-8 bg-primary-400 rounded-t-lg"></div>
                             <div className="grid grid-cols-3 gap-2 p-3 mt-8">
                                 {[...Array(9)].map((_, i) => (
                                     <div key={i} className="w-full h-6 bg-blue-200/50 rounded"></div>
@@ -162,10 +162,10 @@ function thirdContent() {
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4">
-                        <button className="px-6 py-3 bg-blue-600 text-white rounded-full font-semibold hover:bg-blue-500 transition">
+                        <button className="px-6 py-3 bg-primary-400 text-white rounded-full font-semibold hover:bg-blue-500 transition">
                             Get Started
                         </button>
-                        <button className="px-6 py-3 bg-transparent border border-blue-600 text-blue-600 rounded-full font-semibold hover:bg-blue-50 transition">
+                        <button className="px-6 py-3 bg-transparent border border-primary-400 text-primary-400 rounded-full font-semibold hover:bg-blue-50 transition">
                             See Demo
                         </button>
                     </div>

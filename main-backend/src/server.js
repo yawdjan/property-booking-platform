@@ -14,6 +14,7 @@ import config from './config/config.js';
 import sequelize from './config/database.js';
 import { initializeWebSocket } from './websocket/socketHandler.js';
 import { errorHandler } from './middleware/errorHandler.js';
+import { initializeScheduler } from './services/scheduler.js';
 
 // Import models
 import './models/index.js';
@@ -66,6 +67,10 @@ const PORT = config.port;
 sequelize.sync({ alter: true })
   .then(() => {
     console.log('✅ Database synced');
+    
+    // Initialize scheduler
+    initializeScheduler();
+    
     server.listen(PORT, () => {
       console.log(`🚀 Main Backend running on port ${PORT}`);
       console.log(`🔌 WebSocket ready on port ${PORT}`);

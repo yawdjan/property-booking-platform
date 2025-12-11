@@ -69,8 +69,8 @@ export default function PaymentPage() {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center">
         <div className="text-center">
           <div className="relative">
-            <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-100 border-t-blue-600 mx-auto mb-4"></div>
-            <Lock className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-blue-600" size={24} />
+            <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-100 border-t-primary-400 mx-auto mb-4"></div>
+            <Lock className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-primary-400" size={24} />
           </div>
           <p className="text-gray-700 font-medium">Loading booking details...</p>
           <p className="text-sm text-gray-500 mt-1">Booking #{bookingId}</p>
@@ -92,7 +92,7 @@ export default function PaymentPage() {
           <div className="flex gap-3">
             <button
               onClick={fetchBookingDetails}
-              className="flex-1 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 font-medium transition-all"
+              className="flex-1 py-3 bg-primary-400 text-white rounded-xl hover:bg-secondary-500 font-medium transition-all"
             >
               Retry
             </button>
@@ -119,7 +119,7 @@ export default function PaymentPage() {
           <p className="text-gray-600 mb-6">We couldn't find a booking with this ID.</p>
           <button
             onClick={() => navigate('/')}
-            className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 font-medium transition-all"
+            className="px-6 py-3 bg-primary-400 text-white rounded-xl hover:bg-secondary-500 font-medium transition-all"
           >
             Go Home
           </button>
@@ -141,7 +141,7 @@ export default function PaymentPage() {
 
         <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100">
           {/* Compact Header */}
-          <div className="bg-gradient-to-r from-blue-600 via-blue-600 to-indigo-600 px-6 py-5">
+          <div className="bg-gradient-to-r from-primary-400 via-primary-400 to-indigo-600 px-6 py-5">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
@@ -167,7 +167,7 @@ export default function PaymentPage() {
                 <div className="bg-gradient-to-br from-gray-50 to-blue-50/30 rounded-2xl p-6 border border-gray-200">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <Home className="text-blue-600" size={24} />
+                      <Home className="text-primary-400" size={24} />
                     </div>
                     <div className="flex-1">
                       <h2 className="text-xl font-bold text-gray-900 mb-2">
@@ -202,7 +202,7 @@ export default function PaymentPage() {
                   {/* Price Breakdown */}
                   <div className="bg-gradient-to-br from-slate-50 to-blue-50/50 rounded-2xl p-6 border border-gray-200">
                     <h3 className="font-bold text-lg mb-4 text-gray-900 flex items-center gap-2">
-                      <CreditCard size={20} className="text-blue-600" />
+                      <CreditCard size={20} className="text-primary-400" />
                       Price Details
                     </h3>
                     <div className="space-y-3 text-sm">
@@ -223,7 +223,7 @@ export default function PaymentPage() {
                       <div className="border-t border-gray-300 pt-3 mt-3">
                         <div className="flex justify-between items-center">
                           <span className="text-gray-900 font-bold text-base">Total</span>
-                          <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                          <span className="text-2xl font-bold bg-gradient-to-r from-primary-400 to-indigo-600 bg-clip-text text-transparent">
                             ${Number(booking.totalAmount).toFixed(2)}
                           </span>
                         </div>
@@ -235,7 +235,7 @@ export default function PaymentPage() {
                   <button
                     onClick={handlePayNow}
                     disabled={!paymentLink}
-                    className="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-bold text-base hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed flex items-center justify-center gap-2 group"
+                    className="w-full py-4 bg-gradient-to-r from-primary-400 to-indigo-600 text-white rounded-xl font-bold text-base hover:from-secondary-500 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed flex items-center justify-center gap-2 group"
                   >
                     <Lock size={20} className="group-hover:scale-110 transition-transform" />
                     Proceed to Payment
@@ -323,7 +323,7 @@ function PropertyGallery({ booking }) {
               onClick={() => setSelectedIndex(idx)}
               className={`h-20 rounded-xl overflow-hidden border-2 transition-all ${
                 idx === selectedIndex 
-                  ? 'border-blue-600 ring-2 ring-blue-600 ring-offset-2' 
+                  ? 'border-primary-400 ring-2 ring-primary-400 ring-offset-2' 
                   : 'border-gray-200 hover:border-gray-300'
               } focus:outline-none`}
               aria-label={`Show image ${idx + 1}`}

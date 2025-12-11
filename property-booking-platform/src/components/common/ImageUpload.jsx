@@ -107,7 +107,7 @@ export default function ImageUpload({ images, onChange, maxImages = 10, maxSizeM
       {/* Upload Area */}
       <div
         className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
-          dragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-blue-400'
+          dragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-primary-400'
         } ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}
         onDragEnter={handleDrag}
         onDragLeave={handleDrag}
@@ -129,7 +129,7 @@ export default function ImageUpload({ images, onChange, maxImages = 10, maxSizeM
         
         {uploading ? (
           <div>
-            <Loader className="w-8 h-8 mx-auto mb-4 text-blue-600 animate-spin" />
+            <Loader className="w-8 h-8 mx-auto mb-4 text-primary-400 animate-spin" />
             <p className="text-lg font-medium mb-2">Uploading images...</p>
             <div className="space-y-2 max-w-md mx-auto">
               {Object.entries(uploadProgress).map(([filename, progress]) => (
@@ -140,7 +140,7 @@ export default function ImageUpload({ images, onChange, maxImages = 10, maxSizeM
                   </div>
                   <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
                     <div 
-                      className="h-full bg-blue-600 transition-all duration-300"
+                      className="h-full bg-primary-400 transition-all duration-300"
                       style={{ width: `${progress}%` }}
                     ></div>
                   </div>
@@ -159,7 +159,7 @@ export default function ImageUpload({ images, onChange, maxImages = 10, maxSizeM
             <p className="text-sm text-gray-500">
               Maximum file size: {maxSizeMB}MB per image
             </p>
-            <p className="text-xs text-blue-600 font-medium mt-2">
+            <p className="text-xs text-primary-400 font-medium mt-2">
               ✨ Full quality preserved - No compression
             </p>
           </div>
@@ -187,7 +187,7 @@ export default function ImageUpload({ images, onChange, maxImages = 10, maxSizeM
                 <X className="w-4 h-4" />
               </button>
               {index === 0 && (
-                <div className="absolute bottom-2 left-2 px-2 py-1 bg-blue-600 text-white text-xs rounded shadow">
+                <div className="absolute bottom-2 left-2 px-2 py-1 bg-primary-400 text-white text-xs rounded shadow">
                   Cover Photo
                 </div>
               )}

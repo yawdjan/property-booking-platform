@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { initializeWebSocket, disconnectWebSocket, websocket } from '../services/websocket';
 import { authAPI } from '../services/api';
 
@@ -6,7 +7,6 @@ const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
-  const [currentView, setCurrentView] = useState('landing');
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -20,7 +20,6 @@ export const AppProvider = ({ children }) => {
         try {
           const response = await authAPI.getMe();
           setCurrentUser(response.data);
-          setCurrentView(response.data.role === 'admin' ? 'admin-dashboard' : 'agent-dashboard');
           
           // Initialize WebSocket
           initializeWebSocket(token);
@@ -49,7 +48,6 @@ export const AppProvider = ({ children }) => {
     setCurrentUser(userData.user);
     localStorage.setItem('token', userData.token);
     localStorage.setItem('user', JSON.stringify(userData.user));
-    setCurrentView(userData.user.role === 'admin' ? 'admin-dashboard' : 'agent-dashboard');
     
     // Initialize WebSocket
     initializeWebSocket(userData.token);
@@ -69,19 +67,10 @@ export const AppProvider = ({ children }) => {
     
     disconnectWebSocket();
     setCurrentUser(null);
-    setCurrentView('landing');
     setNotifications([]);
     localStorage.removeItem('token');
     localStorage.removeItem('user');
   };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl">Loading...</div>
-      </div>
-    );
-  }
 
   return (
     <AppContext.Provider value={{ 
@@ -89,9 +78,8 @@ export const AppProvider = ({ children }) => {
       login, 
       logout, 
       notifications, 
-      setNotifications, 
-      setCurrentView,
-      currentView 
+      setNotifications,
+      loading
     }}>
       {children}
     </AppContext.Provider>

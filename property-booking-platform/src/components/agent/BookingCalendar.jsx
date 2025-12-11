@@ -287,7 +287,7 @@ export default function BookingCalendar() {
             <button
               onClick={generatePaymentLink}
               disabled={!checkIn || !checkOut || !clientEmail}
-              className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
+              className="w-full px-4 py-3 bg-primary-400 text-white rounded-lg hover:bg-secondary-500 disabled:bg-gray-300 disabled:cursor-not-allowed"
             >
               Generate Payment Link
             </button>
@@ -312,7 +312,7 @@ export default function BookingCalendar() {
             <div className="flex gap-2">
               <button
                 onClick={copyToClipboard}
-                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                className="flex-1 px-4 py-2 bg-primary-400 text-white rounded-lg hover:bg-secondary-500"
               >
                 Copy Link
               </button>

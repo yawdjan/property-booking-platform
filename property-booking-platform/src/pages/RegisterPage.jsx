@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { useApp } from '../context/AppContext';
+import { useNavigate } from 'react-router-dom';
 import { authAPI } from '../services/api';
 
 export default function RegisterPage() {
-  const { setCurrentView } = useApp();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({ 
     name: '', 
     email: '', 
@@ -33,7 +33,7 @@ export default function RegisterPage() {
     try {
       await authAPI.register(formData);
       alert('Registration submitted! You will receive an email once approved by an administrator.');
-      setCurrentView('landing');
+      navigate('/');
     } catch (error) {
       setError(error.message || 'Registration failed. Please try again.');
     } finally {
@@ -42,62 +42,62 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-xl shadow-lg max-w-md w-full">
-        <h2 className="text-3xl font-bold mb-6">Agent Registration</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 via-secondary-50 to-accent-50">
+      <div className="bg-white p-8 rounded-2xl shadow-2xl max-w-md w-full border border-gray-200">
+        <h2 className="text-3xl font-bold mb-6 bg-gradient-to-r from-primary-400 to-secondary-500 bg-clip-text text-transparent">Agent Registration</h2>
         
         {error && (
-          <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg">
             {error}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1">Full Name *</label>
+            <label className="block text-sm font-medium mb-1 text-gray-700">Full Name *</label>
             <input 
               type="text" 
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" 
+              className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400 outline-none" 
               value={formData.name}
               onChange={(e) => setFormData({...formData, name: e.target.value})}
               disabled={loading}
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">Email *</label>
+            <label className="block text-sm font-medium mb-1 text-gray-700">Email *</label>
             <input 
               type="email" 
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" 
+              className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400 outline-none" 
               value={formData.email}
               onChange={(e) => setFormData({...formData, email: e.target.value})}
               disabled={loading}
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">Phone Number *</label>
+            <label className="block text-sm font-medium mb-1 text-gray-700">Phone Number *</label>
             <input 
               type="tel" 
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" 
+              className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400 outline-none" 
               value={formData.phone}
               onChange={(e) => setFormData({...formData, phone: e.target.value})}
               disabled={loading}
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">Company (Optional)</label>
+            <label className="block text-sm font-medium mb-1 text-gray-700">Company (Optional)</label>
             <input 
               type="text" 
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" 
+              className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400 outline-none" 
               value={formData.company}
               onChange={(e) => setFormData({...formData, company: e.target.value})}
               disabled={loading}
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">Password *</label>
+            <label className="block text-sm font-medium mb-1 text-gray-700">Password *</label>
             <input 
               type="password" 
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" 
+              className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400 outline-none" 
               value={formData.password}
               onChange={(e) => setFormData({...formData, password: e.target.value})}
               disabled={loading}
@@ -107,7 +107,7 @@ export default function RegisterPage() {
           <button 
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400"
+            className="w-full py-3 bg-gradient-to-r from-primary-400 to-secondary-500 text-white rounded-lg hover:from-primary-500 hover:to-secondary-600 disabled:from-gray-400 disabled:to-gray-500 font-semibold transition-all shadow-lg"
           >
             {loading ? 'Registering...' : 'Register'}
           </button>
@@ -116,8 +116,8 @@ export default function RegisterPage() {
         <p className="mt-4 text-center text-sm text-gray-600">
           Already have an account?{' '}
           <button 
-            onClick={() => setCurrentView('login')} 
-            className="text-blue-600 hover:underline"
+            onClick={() => navigate('/login')} 
+            className="text-primary-400 hover:text-primary-500 font-semibold"
             disabled={loading}
           >
             Login
