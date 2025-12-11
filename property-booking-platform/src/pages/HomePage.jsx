@@ -13,32 +13,32 @@ export default function HomePage() {
 
 function firstContent() {
     return (
-        <div className="-mt-24 py-16" style={{ background: 'linear-gradient(180deg, #A8866A 0%, #CBB59A 50%, #A8866A 100%)' }}>
+        <div className="-mt-24 py-16 from-primary-100 via-secondary-100 to-secondary-200 bg-gradient-to-b">
             <div className="max-w-7xl mx-auto px-4">
                 <div className="text-center mb-12">
-                    <p className="text-lg font-bold mt-12 mb-8 text-amber-100">WHY CHOOSE PROP BOOKINGS FOR AGENTS</p>
-                    <h2 className="text-3xl mb-4 text-white">To manage bookings and earn commissions with ease</h2>
+                    <p className="text-lg font-bold mt-12 mb-8 text-gray-900">WHY CHOOSE OMAREY FOR AGENTS</p>
+                    <h2 className="text-3xl mb-4 text-gray-600">Manage Bookings & Maximize Earnings Effortlessly</h2>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                     <div className="bg-transparent p-8 rounded-xl hover:shadow-md transition-shadow">
                         <Calendar className="w-12 h-12 text-primary-400 mb-4" />
                         <h3 className="text-xl font-semibold mb-2">Easy Booking</h3>
-                        <p className="text-amber-100">Check availability and create bookings in seconds</p>
+                        <p className="text-primary-50">Check availability and create bookings in seconds</p>
                     </div>
                     <div className="bg-transparent p-8 rounded-xl hover:shadow-md transition-shadow">
                         <DollarSign className="w-12 h-12 text-primary-400 mb-4" />
                         <h3 className="text-xl font-semibold mb-2">Automatic Commissions</h3>
-                        <p className="text-amber-100">Earn commissions on every successful booking</p>
+                        <p className="text-primary-50">Earn commissions on every successful booking</p>
                     </div>
                     <div className="bg-transparent p-8 rounded-xl hover:shadow-md transition-shadow">
                         <Users className="w-12 h-12 text-primary-400 mb-4" />
                         <h3 className="text-xl font-semibold mb-2">Client Management</h3>
-                        <p className="text-amber-100">Generate payment links and track all your bookings</p>
+                        <p className="text-primary-50">Generate payment links and track all your bookings</p>
                     </div>
                     <div className="bg-transparent p-8 rounded-xl hover:shadow-md transition-shadow">
                         <Users className="w-12 h-12 text-primary-400 mb-4" />
                         <h3 className="text-xl font-semibold mb-2">Client Management</h3>
-                        <p className="text-amber-100">Generate payment links and track all your bookings</p>
+                        <p className="text-primary-50">Generate payment links and track all your bookings</p>
                     </div>
                 </div>
                 <div className="relative text-center h-screen w-full overflow-hidden flex items-center justify-center bg-transparent">
@@ -83,13 +83,13 @@ function firstContent() {
                     {/* Decorative Plants */}
                     <div className="absolute bottom-8 left-20">
                         <div className="w-16 h-24 relative">
-                            <div className="absolute bottom-0 w-2 h-16 bg-green-600 left-1/2 transform -translate-x-1/2"></div>
+                            <div className="absolute bottom-0 w-2 h-16 bg-primary-400 left-1/2 transform -translate-x-1/2"></div>
                             <div className="absolute top-0 w-12 h-16 bg-green-500 rounded-full opacity-80"></div>
                         </div>
                     </div>
                     <div className="absolute bottom-8 right-20">
                         <div className="w-16 h-24 relative">
-                            <div className="absolute bottom-0 w-2 h-16 bg-green-600 left-1/2 transform -translate-x-1/2"></div>
+                            <div className="absolute bottom-0 w-2 h-16 bg-primary-400 left-1/2 transform -translate-x-1/2"></div>
                             <div className="absolute top-0 w-12 h-16 bg-green-500 rounded-full opacity-80"></div>
                         </div>
                     </div>
@@ -97,7 +97,7 @@ function firstContent() {
                         <h1 className="text-6xl text-left font-bold mt-32 text-white mb-6 drop-shadow-lg">
                             Streamline Your Property Bookings
                         </h1>
-                        <p className="text-2xl text-left text-amber-100 mb-8 drop-shadow-md w-full mx-auto">
+                        <p className="text-2xl text-left text-primary-50 mb-8 drop-shadow-md w-full mx-auto">
                             Book properties for your clients and earn commissions effortlessly
                         </p>
                         <button className="px-12 py-5 bg-green-400 text-gray-900 rounded-full text-xl font-semibold hover:bg-green-300 transition-all shadow-lg hover:shadow-xl transform hover:scale-105">

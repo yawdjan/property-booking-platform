@@ -97,7 +97,7 @@ export default function AgentManagement() {
                     {agent.status === 'Pending' && (
                       <button 
                         onClick={() => approveAgent(agent.id)} 
-                        className="p-2 text-green-600 hover:bg-green-50 rounded"
+                        className="p-2 text-primary-400 hover:bg-green-50 rounded"
                       >
                         <Check className="w-4 h-4" />
                       </button>

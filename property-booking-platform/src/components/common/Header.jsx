@@ -8,64 +8,55 @@ export default function Header({ isSidebarOpen, setIsSidebarOpen}) {
   const [showNotifications, setShowNotifications] = useState(false);
 
   return (
-    <header className="bg-gradient-to-r from-amber-900 to-amber-800 shadow-lg px-4 md:px-6 py-4 flex justify-between items-center">
+    // Clean white header with subtle shadow
+    <header className="bg-white border-b border-gray-200 px-4 md:px-6 py-4 flex justify-between items-center shadow-sm">
       <div className="flex items-center gap-3">
-        {/* Hamburger menu for mobile */}
         <button 
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-          className="p-2 hover:bg-amber-700 rounded-lg md:hidden text-amber-100"
+          className="p-2 hover:bg-gray-100 rounded-lg md:hidden text-gray-700"
         >
           <Menu className="w-6 h-6" />
         </button>
         
-        {/* Desktop hamburger */}
-        <button 
-          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-          className="hidden md:hidden p-2 hover:bg-amber-700 rounded-lg text-amber-100"
-        >
-          <Menu className="w-6 h-6" />
-        </button>
-        
-        <h2 className="text-lg md:text-xl font-semibold text-amber-50">
+        <h2 className="text-lg md:text-xl font-semibold text-gray-900">
           <span className="hidden sm:inline">Welcome, </span>
           {currentUser?.name}
         </h2>
       </div>
       
       <div className="flex items-center gap-2 md:gap-4">
-        {/* Notifications */}
+        {/* Minimalistic notification bell */}
         <div className="relative">
           <button 
             onClick={() => setShowNotifications(!showNotifications)} 
-            className="relative p-2 hover:bg-amber-700 rounded-lg text-amber-100"
+            className="relative p-2 hover:bg-gray-100 rounded-lg text-gray-700"
           >
             <Bell className="w-5 h-5 md:w-6 md:h-6" />
             {notifications.length > 0 && (
-              <span className="absolute top-1 right-1 w-2 h-2 bg-primary-400 rounded-full ring-2 ring-amber-900"></span>
+              <span className="absolute top-1 right-1 w-2 h-2 bg-primary-400 rounded-full"></span>
             )}
           </button>
           
           {showNotifications && (
             <>
-              {/* Backdrop for mobile */}
               <div 
                 className="fixed inset-0 z-40 md:hidden"
                 onClick={() => setShowNotifications(false)}
               />
               
-              {/* Notification dropdown */}
-              <div className="absolute right-0 mt-2 w-80 max-w-[calc(100vw-2rem)] bg-white rounded-lg shadow-xl border-2 border-amber-200 z-50">
-                <div className="p-4 border-b border-amber-200 bg-gradient-to-r from-amber-50 to-orange-50">
-                  <h3 className="font-semibold text-amber-950">Notifications</h3>
+              {/* Clean white notification dropdown */}
+              <div className="absolute right-0 mt-2 w-80 max-w-[calc(100vw-2rem)] bg-white rounded-lg shadow-xl border border-gray-200 z-50">
+                <div className="p-4 border-b border-gray-200">
+                  <h3 className="font-semibold text-gray-900">Notifications</h3>
                 </div>
                 <div className="max-h-96 overflow-y-auto">
                   {notifications.length === 0 ? (
-                    <p className="p-4 text-amber-700 text-center">No notifications</p>
+                    <p className="p-4 text-gray-500 text-center text-sm">No notifications</p>
                   ) : (
                     notifications.map(notif => (
-                      <div key={notif.id} className="p-4 border-b border-amber-100 hover:bg-amber-50">
-                        <p className="text-sm text-amber-950">{notif.message}</p>
-                        <p className="text-xs text-amber-700 mt-1">
+                      <div key={notif.id} className="p-4 border-b border-gray-100 hover:bg-gray-50">
+                        <p className="text-sm text-gray-900">{notif.message}</p>
+                        <p className="text-xs text-gray-500 mt-1">
                           {new Date(notif.time).toLocaleString()}
                         </p>
                       </div>
@@ -77,13 +68,13 @@ export default function Header({ isSidebarOpen, setIsSidebarOpen}) {
           )}
         </div>
         
-        {/* Logout button */}
+        {/* Minimalistic logout button */}
         <button 
           onClick={logout} 
-          className="flex items-center gap-2 px-3 md:px-4 py-2 text-amber-100 hover:bg-amber-700 rounded-lg transition-colors"
+          className="flex items-center gap-2 px-3 md:px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
         >
           <LogOut className="w-4 h-4 md:w-5 md:h-5" />
-          <span className="hidden sm:inline">Logout</span>
+          <span className="hidden sm:inline text-sm">Logout</span>
         </button>
       </div>
     </header>

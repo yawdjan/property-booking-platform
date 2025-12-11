@@ -141,7 +141,7 @@ export default function PayoutManagement() {
             case 'approved':
                 return 'bg-blue-100 text-blue-800 border-blue-300';
             case 'pending':
-                return 'bg-amber-100 text-amber-800 border-amber-300';
+                return 'bg-primary-50 text-amber-800 border-amber-300';
             case 'denied':
                 return 'bg-red-100 text-red-800 border-red-300';
             default:
@@ -231,13 +231,13 @@ export default function PayoutManagement() {
             </div>
 
             {/* Pending Requests */}
-            <div className="bg-white rounded-2xl shadow-lg border-2 border-amber-100 overflow-hidden">
-                <div className="bg-gradient-to-r from-amber-50 to-orange-50 px-6 py-4 border-b-2 border-amber-200">
+            <div className="bg-white rounded-2xl shadow-lg border-2 border-primary-50 overflow-hidden">
+                <div className="bg-gradient-to-r from-gray-50 to-orange-50 px-6 py-4 border-b-2 border-amber-200">
                     <h2 className="text-xl font-bold text-amber-950">Pending Requests</h2>
                 </div>
                 <div className="overflow-x-auto">
                     <table className="w-full">
-                        <thead className="bg-amber-50 border-b-2 border-amber-200">
+                        <thead className="bg-gray-50 border-b-2 border-amber-200">
                             <tr>
                                 <th className="px-6 py-3 text-left text-sm font-semibold text-amber-900">Request ID</th>
                                 <th className="px-6 py-3 text-left text-sm font-semibold text-amber-900">Agent</th>
@@ -248,7 +248,7 @@ export default function PayoutManagement() {
                                 <th className="px-6 py-3 text-left text-sm font-semibold text-amber-900">Actions</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-amber-100">
+                        <tbody className="divide-y divide-primary-50">
                             {pendingRequests.length === 0 ? (
                                 <tr>
                                     <td colSpan="7" className="px-6 py-8 text-center text-amber-600">
@@ -257,7 +257,7 @@ export default function PayoutManagement() {
                                 </tr>
                             ) : (
                                 pendingRequests.map((request) => (
-                                    <tr key={request.id} className="hover:bg-amber-50 transition-colors">
+                                    <tr key={request.id} className="hover:bg-gray-50 transition-colors">
                                         <td className="px-6 py-4 text-sm font-medium text-amber-950">
                                             PR-{request.id.slice(0, 8)}
                                         </td>
@@ -301,7 +301,7 @@ export default function PayoutManagement() {
                                                         setActionType('modify');
                                                         setModifiedAmount(request.requestedAmount.toString());
                                                     }}
-                                                    className="p-2 bg-amber-100 text-amber-700 rounded-lg hover:bg-amber-200 transition-colors"
+                                                    className="p-2 bg-primary-50 text-amber-700 rounded-lg hover:bg-amber-200 transition-colors"
                                                     title="Modify Amount"
                                                 >
                                                     <Edit2 className="w-5 h-5" />
@@ -327,13 +327,13 @@ export default function PayoutManagement() {
             </div>
 
             {/* Processed Requests */}
-            <div className="bg-white rounded-2xl shadow-lg border-2 border-amber-100 overflow-hidden">
-                <div className="bg-gradient-to-r from-amber-50 to-orange-50 px-6 py-4 border-b-2 border-amber-200">
+            <div className="bg-white rounded-2xl shadow-lg border-2 border-primary-50 overflow-hidden">
+                <div className="bg-gradient-to-r from-gray-50 to-orange-50 px-6 py-4 border-b-2 border-amber-200">
                     <h2 className="text-xl font-bold text-amber-950">Request History</h2>
                 </div>
                 <div className="overflow-x-auto">
                     <table className="w-full">
-                        <thead className="bg-amber-50 border-b-2 border-amber-200">
+                        <thead className="bg-gray-50 border-b-2 border-amber-200">
                             <tr>
                                 <th className="px-6 py-3 text-left text-sm font-semibold text-amber-900">Request ID</th>
                                 <th className="px-6 py-3 text-left text-sm font-semibold text-amber-900">Agent</th>
@@ -343,7 +343,7 @@ export default function PayoutManagement() {
                                 <th className="px-6 py-3 text-left text-sm font-semibold text-amber-900">Admin Note</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-amber-100">
+                        <tbody className="divide-y divide-primary-50">
                             {processedRequests.length === 0 ? (
                                 <tr>
                                     <td colSpan="6" className="px-6 py-8 text-center text-amber-600">
@@ -352,7 +352,7 @@ export default function PayoutManagement() {
                                 </tr>
                             ) : (
                                 processedRequests.map((request) => (
-                                    <tr key={request.id} className="hover:bg-amber-50 transition-colors">
+                                    <tr key={request.id} className="hover:bg-gray-50 transition-colors">
                                         <td className="px-6 py-4 text-sm font-medium text-amber-950">
                                             PR-{request.id.slice(0, 8)}
                                         </td>
@@ -421,7 +421,7 @@ export default function PayoutManagement() {
                             </h3>
                         </div>
                         <div className="p-6 space-y-4">
-                            <div className="bg-amber-50 rounded-lg p-4 border-2 border-amber-200">
+                            <div className="bg-gray-50 rounded-lg p-4 border-2 border-amber-200">
                                 <p className="text-sm text-amber-700 mb-1">Agent</p>
                                 <p className="font-semibold text-amber-950">
                                     {selectedRequest.agent?.name || 'Unknown Agent'}
@@ -435,7 +435,7 @@ export default function PayoutManagement() {
                                 </p>
                             </div>
 
-                            <div className="bg-amber-50 rounded-lg p-4 border-2 border-amber-200">
+                            <div className="bg-gray-50 rounded-lg p-4 border-2 border-amber-200">
                                 <p className="text-sm text-amber-700 mb-1">Available Balance</p>
                                 <p className="text-xl font-bold text-amber-950">
                                     ${parseFloat(selectedRequest.availableBalance || 0).toFixed(2)}
@@ -479,7 +479,7 @@ export default function PayoutManagement() {
                                         setAdminNote('');
                                         setModifiedAmount('');
                                     }}
-                                    className="flex-1 px-4 py-3 border-2 border-amber-300 text-amber-900 rounded-lg font-semibold hover:bg-amber-50 transition-colors"
+                                    className="flex-1 px-4 py-3 border-2 border-amber-300 text-amber-900 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
                                 >
                                     Cancel
                                 </button>

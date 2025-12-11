@@ -61,8 +61,8 @@ export default function PaymentCallback() {
 
         {status === 'success' && (
           <>
-            <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-green-600 mb-2">Payment Successful!</h2>
+            <CheckCircle className="w-16 h-16 text-primary-400 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold text-primary-400 mb-2">Payment Successful!</h2>
             <p className="text-gray-600 mb-4">{message}</p>
             <p className="text-sm text-gray-500">Redirecting to dashboard...</p>
           </>

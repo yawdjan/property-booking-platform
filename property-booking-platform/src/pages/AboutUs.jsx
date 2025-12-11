@@ -163,8 +163,8 @@ export default function AboutUs() {
                                 className={`max-w-3xl text-center transform transition-all duration-700 ${active ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
                                     }`}
                             >
-                                <h1 className="text-5xl font-bold mb-6 text-amber-100 drop-shadow-lg">{s.title}</h1>
-                                <p className="text-xl text-amber-50 leading-relaxed">{s.body}</p>
+                                <h1 className="text-5xl font-bold mb-6 text-primary-50 drop-shadow-lg">{s.title}</h1>
+                                <p className="text-xl text-gray-50 leading-relaxed">{s.body}</p>
                             </div>
                         </section>
                     );

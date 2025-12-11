@@ -88,13 +88,13 @@ export default function PropertyListings() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-orange-50 to-primary-50">
 
       {/* Hero Search Section */}
       <div className="bg-gradient-to-r from-amber-900 to-amber-800 text-white py-16 px-4">
         <div className="max-w-7xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Find Your Perfect Property</h1>
-          <p className="text-xl text-amber-100 mb-8">Discover amazing places to call home</p>
+          <p className="text-xl text-primary-50 mb-8">Discover amazing places to call home</p>
 
           {/* Search Bar */}
           <div className="bg-white rounded-2xl shadow-2xl p-4 flex flex-col md:flex-row gap-4">
@@ -109,7 +109,7 @@ export default function PropertyListings() {
 
             <button
               onClick={() => setFilterOpen(!filterOpen)}
-              className="flex items-center gap-2 px-6 py-3 bg-amber-50 rounded-xl hover:bg-amber-100 transition text-amber-900"
+              className="flex items-center gap-2 px-6 py-3 bg-gray-50 rounded-xl hover:bg-primary-50 transition text-amber-900"
             >
               <Filter size={20} />
               <span>Filters</span>
@@ -223,7 +223,7 @@ export default function PropertyListings() {
                 <div className="absolute top-4 left-4">
                   <span className={`px-3 py-1 rounded-full text-sm font-semibold ${property.status === 'Available'
                       ? 'bg-primary-400 text-white'
-                      : 'bg-amber-500 text-white'
+                      : 'bg-gray-500 text-white'
                     }`}>
                     {property.status}
                   </span>
@@ -242,7 +242,7 @@ export default function PropertyListings() {
 
                 {/* Property Type */}
                 <div className="absolute bottom-4 left-4">
-                  <span className="px-3 py-1 bg-amber-900/90 backdrop-blur rounded-full text-sm font-semibold text-amber-50">
+                  <span className="px-3 py-1 bg-amber-900/90 backdrop-blur rounded-full text-sm font-semibold text-gray-50">
                     {property.type}
                   </span>
                 </div>

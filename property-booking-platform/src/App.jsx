@@ -48,10 +48,13 @@ function AppContent() {
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
+      <Route path="/listings" element={<LandingPage defaultTab="listings" />} />
+      <Route path="/services" element={<LandingPage defaultTab="services" />} />
+      <Route path="/aboutus" element={<LandingPage defaultTab="aboutus" />} />
       <Route path="/pay/:paymentId" element={<PaymentPage />} />
       <Route path="/payment/callback" element={<PaymentCallback />} />
 
-      {/* Admin Routes */}
+      {/* Admin Routes with nested paths */}
       <Route
         path="/admin/*"
         element={
@@ -61,7 +64,7 @@ function AppContent() {
         }
       />
 
-      {/* Agent Routes */}
+      {/* Agent Routes with nested paths */}
       <Route
         path="/agent/*"
         element={

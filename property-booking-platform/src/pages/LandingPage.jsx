@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { useApp } from '../context/AppContext';
 import HomePage from './HomePage';
 import AboutUs from './AboutUs';
 import PropertyListings from './ListingsPage';
 import Services from './Services';
 import { useNavigate } from 'react-router-dom';
 
-export default function LandingPage() {
+export default function LandingPage({ defaultTab = 'home' }) {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('home');
+  const [activeTab, setActiveTab] = useState(defaultTab);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const links = [
     { id: 'home', label: 'Home' },
-    // { id: 'Agents', label: 'Agents' },
     { id: 'listings', label: 'Listings' },
     { id: 'services', label: 'Services' },
     { id: 'aboutus', label: 'About Us' }
@@ -22,38 +20,27 @@ export default function LandingPage() {
   useEffect(() => {
     window.scrollTo(0, 0);
     if (activeTab !== 'home') {
-      // animate hero container to move from -mt-20 to mt-10 and get a rounder rectangle shape
       const heroHeading = document.querySelector('h1');
       if (heroHeading) {
-        // find the nearest parent that matches the hero container
         const hero = Array.from(document.querySelectorAll('div')).find(d =>
           d.contains(heroHeading) && d.classList && d.classList.contains('relative') && d.classList.contains('text-center')
         );
 
         if (hero) {
-          // set up smooth transition for margin and border-radius
           hero.style.transition = 'margin-top 600ms cubic-bezier(.2,.9,.2,1), border-radius 600ms cubic-bezier(.2,.9,.2,1)';
-          // ensure current computed margin-top is applied inline so transition starts from the visible value
           const comp = getComputedStyle(hero);
           hero.style.marginTop = comp.marginTop;
 
-          // perform the animated change on the next frame
           requestAnimationFrame(() => {
-            // Tailwind mt-10 => 2.5rem
             hero.style.marginTop = '2.5rem';
             hero.style.marginBottom = '2.5rem';
             hero.style.marginRight = '1.5rem';
             hero.style.marginLeft = '1.5rem';
-            // a more rounded rectangle; tweak as desired
             hero.style.borderRadius = '1.25rem';
-            // if you want to limit the hero height so rounding is visible, you can also change height/maxHeight:
-            // hero.style.maxHeight = '80vh';
-            // hero.style.overflow = 'hidden';
           });
         }
       }
     } else {
-      // animate back to original values (-mt-20, mb-16, no rounding)
       const heroHeading = document.querySelector('h1');
       if (heroHeading) {
         const hero = Array.from(document.querySelectorAll('div')).find(d =>
@@ -61,10 +48,8 @@ export default function LandingPage() {
         );
 
         if (hero) {
-          // include all margin sides + border-radius in the transition so the revert animates smoothly
           hero.style.transition = 'margin-top 600ms cubic-bezier(.2,.9,.2,1), margin-bottom 600ms cubic-bezier(.2,.9,.2,1), margin-left 600ms cubic-bezier(.2,.9,.2,1), margin-right 600ms cubic-bezier(.2,.9,.2,1), border-radius 600ms cubic-bezier(.2,.9,.2,1)';
 
-          // ensure current computed values are applied inline so transition starts from the visible value
           const comp = getComputedStyle(hero);
           hero.style.marginTop = comp.marginTop;
           hero.style.marginBottom = comp.marginBottom;
@@ -72,9 +57,7 @@ export default function LandingPage() {
           hero.style.marginRight = comp.marginRight;
           hero.style.borderRadius = comp.borderRadius;
 
-          // animate back to the original Tailwind values
           requestAnimationFrame(() => {
-            // -mt-20 => -5rem, mb-16 => 4rem
             hero.style.marginTop = '-5rem';
             hero.style.marginBottom = '4rem';
             hero.style.marginLeft = '0';
@@ -86,28 +69,37 @@ export default function LandingPage() {
     }
   }, [activeTab]);
 
+  // Handle navigation with URL updates
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+    if (tabId === 'home') {
+      navigate('/');
+    } else {
+      navigate(`/${tabId}`);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-800 via-amber-900 to-amber-950">
+    <div className="min-h-screen bg-gradient-to-b from-primary-100 via-secondary-100 to-secondary-200">
       <nav className="sticky top-0 z-10 backdrop-blur-lg bg-amber-950/60 border-b border-amber-800/30 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 py-4">
-          {/* Desktop & Mobile Header */}
           <div className="flex justify-between items-center">
-            <div className="text-2xl font-bold text-amber-100 drop-shadow-lg">Omarey</div>
+            <div className="text-2xl font-bold text-primary-50 drop-shadow-lg">Omarey</div>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex space-x-4 items-center">
               {links.map(link => (
                 <button
                   key={link.id}
-                  className="text-amber-100 px-4 py-2 hover:text-primary-400 transition-colors drop-shadow font-medium"
-                  onClick={() => setActiveTab(link.id)}
+                  className="text-primary-50 px-4 py-2 hover:text-primary-400 transition-colors drop-shadow font-medium"
+                  onClick={() => handleTabChange(link.id)}
                 >
                   {link.label}
                 </button>
               ))}
               <button
                 onClick={() => navigate('/login')}
-                className="px-4 py-2 text-amber-100 hover:text-blue-300 transition-colors drop-shadow font-medium"
+                className="px-4 py-2 text-primary-50 hover:text-secondary-500 transition-colors drop-shadow font-medium"
               >
                 Login
               </button>
@@ -143,7 +135,7 @@ export default function LandingPage() {
                   key={link.id}
                   className="block w-full text-left text-white px-4 py-3 hover:bg-white/10 rounded-lg transition-colors"
                   onClick={() => {
-                    setActiveTab(link.id);
+                    handleTabChange(link.id);
                     setMobileMenuOpen(false);
                   }}
                 >
@@ -152,7 +144,7 @@ export default function LandingPage() {
               ))}
               <button
                 onClick={() => {
-                   navigate('/login');
+                  navigate('/login');
                   setMobileMenuOpen(false);
                 }}
                 className="block w-full text-left text-white px-4 py-3 hover:bg-white/10 rounded-lg transition-colors"
@@ -161,10 +153,10 @@ export default function LandingPage() {
               </button>
               <button
                 onClick={() => {
-                  navigate('register');
+                  navigate('/register');
                   setMobileMenuOpen(false);
                 }}
-                className="block w-full text-center  bg-primary-400/20 backdrop-blur text-white px-4 py-3 rounded-lg hover: bg-primary-400/30 transition-all border border-white/30 mt-2"
+                className="block w-full text-center bg-primary-400/20 backdrop-blur text-white px-4 py-3 rounded-lg hover:bg-primary-400/30 transition-all border border-white/30 mt-2"
               >
                 Sign Up
               </button>
@@ -182,20 +174,18 @@ export default function LandingPage() {
             style={{
               opacity: activeTab === link.id ? 1 : 0,
               pointerEvents: activeTab === link.id ? 'auto' : 'none',
-              backgroundImage: 
+              backgroundImage:
                 link.id === 'home' ? 'url(https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=1973&auto=format&fit=crop)' :
-                link.id === 'listings' ? 'url(https://images.unsplash.com/photo-1591077174597-1aac52bae9e4?q=80&w=388&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)' :
-                link.id === 'services' ? 'url(https://images.unsplash.com/photo-1590291127093-24b2232c51ec?q=80&w=757&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)' :
-                'url(https://images.unsplash.com/photo-1762245833000-e68bc8efba60?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)',
+                  link.id === 'listings' ? 'url(https://images.unsplash.com/photo-1591077174597-1aac52bae9e4?q=80&w=388&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)' :
+                    link.id === 'services' ? 'url(https://images.unsplash.com/photo-1590291127093-24b2232c51ec?q=80&w=757&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)' :
+                      'url(https://images.unsplash.com/photo-1762245833000-e68bc8efba60?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)',
               filter: link.id === 'home' ? 'none' : 'blur(4px)',
             }}
           />
         ))}
 
-        {/* Overlay for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/50"  />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/50" />
 
-        {/* Content */}
         <div className="relative z-4 px-4">
           <h1 className="text-5xl font-bold text-white mb-6 drop-shadow-lg">
             {activeTab === 'home' && 'Streamline Your Property Bookings'}
@@ -213,8 +203,8 @@ export default function LandingPage() {
       </div>
       {activeTab === 'home' && <HomePage />}
       {activeTab === 'services' && <Services />}
-      {activeTab === 'aboutus' && <AboutUs />}
       {activeTab === 'listings' && <PropertyListings />}
+      {activeTab === 'aboutus' && <AboutUs />}
       <Footer />
     </div>
   );
@@ -224,8 +214,6 @@ function Footer() {
   return (
     <footer className="bg-gray-900 text-gray-300 pt-20 pb-10 static bottom-0 w-full">
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12">
-
-        {/* Company */}
         <div>
           <h3 className="text-white text-xl font-semibold mb-4">Omarey</h3>
           <p className="text-gray-400 leading-relaxed">
@@ -234,7 +222,6 @@ function Footer() {
           </p>
         </div>
 
-        {/* Quick Links */}
         <div>
           <h4 className="text-white text-lg font-semibold mb-4">Quick Links</h4>
           <ul className="space-y-3">
@@ -245,7 +232,6 @@ function Footer() {
           </ul>
         </div>
 
-        {/* Property Tools */}
         <div>
           <h4 className="text-white text-lg font-semibold mb-4">Property Tools</h4>
           <ul className="space-y-3">
@@ -256,7 +242,6 @@ function Footer() {
           </ul>
         </div>
 
-        {/* Contact & Social */}
         <div>
           <h4 className="text-white text-lg font-semibold mb-4">Contact</h4>
           <ul className="space-y-2 text-gray-400">
@@ -274,10 +259,9 @@ function Footer() {
         </div>
       </div>
 
-      {/* Bottom row */}
       <div className="border-t border-gray-700 mt-16 pt-8 text-center text-gray-500">
         <p>© {new Date().getFullYear()} Omarey. All rights reserved.</p>
       </div>
     </footer>
   );
-};
+}

@@ -188,7 +188,7 @@ export default function FinancialReports() {
       <div className="grid md:grid-cols-3 gap-6 mb-8">
         <div className="bg-white rounded-lg shadow p-6">
           <h3 className="text-sm text-gray-600 mb-2">Total Revenue</h3>
-          <p className="text-3xl font-bold text-green-600">${totalRevenue.toLocaleString()}</p>
+          <p className="text-3xl font-bold text-primary-400">${totalRevenue.toLocaleString()}</p>
         </div>
         <div className="bg-white rounded-lg shadow p-6">
           <h3 className="text-sm text-gray-600 mb-2">Total Commissions Paid</h3>
