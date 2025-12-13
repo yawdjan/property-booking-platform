@@ -37,19 +37,20 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
         />
       )}
 
-      {/* Minimalistic white sidebar */}
       <div className={`
         fixed md:static inset-y-0 left-0 z-50
-        w-64 bg-white border-r border-gray-200 shadow-lg
+        w-64 bg-white border-r border-primary-200 shadow-lg
         transform transition-transform duration-300 ease-in-out
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
       `}>
-        {/* Clean header */}
-        <div className="p-6 border-b border-gray-200">
+        {/* Header with gradient */}
+        <div className="p-6 border-b border-primary-200 bg-gradient-to-br from-cream-500/30 via-primary-100/50 to-secondary-100/30">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Omarey</h1>
-              <p className="text-sm text-gray-500">{isAgent ? 'Agent Portal' : 'Admin Panel'}</p>
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary-700 via-accent-600 to-secondary-600 bg-clip-text text-transparent">
+                Omarey
+              </h1>
+              <p className="text-sm text-gray-600">{isAgent ? 'Agent Portal' : 'Admin Panel'}</p>
             </div>
             <button 
               onClick={() => setIsSidebarOpen(false)}
@@ -60,7 +61,7 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
           </div>
         </div>
         
-        {/* Minimalistic navigation */}
+        {/* Navigation */}
         <nav className="px-4 py-6 space-y-1">
           {menuItems.map(item => {
             const Icon = item.icon;
@@ -70,8 +71,8 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
                 onClick={() => handleMenuClick(item.id)}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm font-medium ${
                   activeTab === item.id 
-                    ? 'bg-primary-400 text-white shadow-sm' 
-                    : 'text-gray-700 hover:bg-gray-100'
+                    ? 'bg-gradient-to-r from-secondary-500 to-accent-500 text-white shadow-md' 
+                    : 'text-gray-700 hover:bg-gradient-to-r hover:from-cream-500/30 hover:to-primary-100/30'
                 }`}
               >
                 <Icon className="w-5 h-5" />

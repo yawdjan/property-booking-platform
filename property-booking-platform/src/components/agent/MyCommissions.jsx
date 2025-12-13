@@ -70,7 +70,7 @@ export default function MyCommissions() {
       case 'approved':
         return 'bg-blue-100 text-blue-800';
       case 'pending':
-        return 'bg-primary-50 text-secondary-600';
+        return 'bg-primary-50 text-amber-800';
       case 'denied':
         return 'bg-red-100 text-red-800';
       default:
@@ -195,18 +195,18 @@ export default function MyCommissions() {
 
           {/* Commission History */}
           <div className="bg-white rounded-2xl mt-10 shadow-lg border-2 border-primary-50 overflow-hidden">
-            <div className="bg-gradient-to-r from-gray-50 to-orange-50 px-6 py-4 border-b-2 border-primary-100">
+            <div className="bg-gradient-to-r from-gray-50 to-orange-50 px-6 py-4 border-b-2 border-amber-200">
               <h2 className="text-xl font-bold text-amber-950">Commission History</h2>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-50 border-b-2 border-primary-100">
+                <thead className="bg-gray-50 border-b-2 border-amber-200">
                   <tr>
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-secondary-700">Comission ID</th>
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-secondary-700">Amount</th>
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-secondary-700">Earned Date</th>
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-secondary-700">Status</th>
-                    <th className="px-6 py-3 text-left text-sm font-semibold text-secondary-700">Last Updated At</th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-amber-900">Comission ID</th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-amber-900">Amount</th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-amber-900">Earned Date</th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-amber-900">Status</th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-amber-900">Last Updated At</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-primary-50">
@@ -242,14 +242,14 @@ export default function MyCommissions() {
                 </div>
                 <div className="p-6 space-y-4">
                   <div>
-                    <label className="block text-sm font-semibold text-secondary-700 mb-2">
+                    <label className="block text-sm font-semibold text-amber-900 mb-2">
                       Available Balance
                     </label>
                     <p className="text-3xl font-bold text-secondary-500">${pendingPayout}</p>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-secondary-700 mb-2">
+                    <label className="block text-sm font-semibold text-amber-900 mb-2">
                       Request Amount
                     </label>
                     <input
@@ -263,7 +263,7 @@ export default function MyCommissions() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-secondary-700 mb-2">
+                    <label className="block text-sm font-semibold text-amber-900 mb-2">
                       Description
                     </label>
                     <textarea
@@ -278,7 +278,7 @@ export default function MyCommissions() {
                   <div className="flex gap-3 pt-4">
                     <button
                       onClick={() => setShowRequestModal(false)}
-                      className="flex-1 px-4 py-3 border-2 border-amber-300 text-secondary-700 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
+                      className="flex-1 px-4 py-3 border-2 border-amber-300 text-amber-900 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
                     >
                       Cancel
                     </button>

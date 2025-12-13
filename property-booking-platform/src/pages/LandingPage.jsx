@@ -81,17 +81,19 @@ export default function LandingPage({ defaultTab = 'home' }) {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-primary-100 via-secondary-100 to-secondary-200">
-      <nav className="sticky top-0 z-10 backdrop-blur-lg bg-amber-950/60 border-b border-amber-800/30 shadow-lg">
+      <nav className="sticky top-0 z-10 backdrop-blur-lg bg-white/80 border-b border-primary-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
-            <div className="text-2xl font-bold text-primary-50 drop-shadow-lg">Omarey</div>
+            <div className="text-2xl font-bold bg-gradient-to-r from-primary-700 via-accent-600 to-secondary-600 bg-clip-text text-transparent">
+              Omarey
+            </div>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex space-x-4 items-center">
               {links.map(link => (
                 <button
                   key={link.id}
-                  className="text-primary-50 px-4 py-2 hover:text-primary-400 transition-colors drop-shadow font-medium"
+                  className="text-primary-800 px-4 py-2 hover:text-primary-600 transition-colors drop-shadow font-medium"
                   onClick={() => handleTabChange(link.id)}
                 >
                   {link.label}
@@ -99,7 +101,7 @@ export default function LandingPage({ defaultTab = 'home' }) {
               ))}
               <button
                 onClick={() => navigate('/login')}
-                className="px-4 py-2 text-primary-50 hover:text-secondary-500 transition-colors drop-shadow font-medium"
+                className="px-4 py-2 text-primary-800 hover:text-secondary-500 transition-colors drop-shadow font-medium"
               >
                 Login
               </button>

@@ -80,13 +80,13 @@ export default function Services() {
     ];
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-50">
+        <div className="min-h-screen bg-gradient-to-br from-cream-500/20 to-primary-50">
 
             {/* Hero Section */}
-            <div className="bg-gradient-to-r from-amber-900 via-amber-800 to-amber-900 text-white py-20 px-4">
+            <div className="bg-gradient-to-r from-primary-600 via-accent-600 to-secondary-600 text-white py-20 px-4">
                 <div className="max-w-7xl mx-auto text-center">
                     <h1 className="text-5xl md:text-6xl font-bold mb-6 text-amber-50">Our Services</h1>
-                    <p className="text-xl md:text-2xl text-amber-100 max-w-3xl mx-auto leading-relaxed">
+                    <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto leading-relaxed">
                         Empowering property owners and booking agents through technology, trust, and excellence
                     </p>
                 </div>
@@ -94,7 +94,7 @@ export default function Services() {
 
             {/* About Section */}
             <div className="max-w-7xl mx-auto px-4 py-16">
-                <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 border-2 border-amber-200">
+                <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12">
                     <h2 className="text-4xl font-bold text-amber-950 mb-6 text-center">Welcome To Omarey</h2>
                     <div className="prose prose-lg max-w-none text-amber-900 leading-relaxed space-y-4">
                         <p>
@@ -124,9 +124,9 @@ export default function Services() {
                     {services.map((service, index) => (
                         <div
                             key={index}
-                            className="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-amber-100 group"
+                            className="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-primary-200 group"
                         >
-                            <div className={`p-8 ${service.color === 'blue' ? 'bg-gradient-to-br from-secondary-500 to-primary-400' : 'bg-gradient-to-br from-amber-800 to-amber-700'}`}>
+                            <div className={`p-8 ${service.color === 'blue' ? 'bg-gradient-to-br from-secondary-500 via-accent-500 to-cream-500' : 'bg-gradient-to-br from-primary-500 via-accent-500 to-secondary-400'}`}>
                                 <div className="text-white mb-4">
                                     {service.icon}
                                 </div>
@@ -136,8 +136,8 @@ export default function Services() {
                                 </p>
                             </div>
 
-                            <div className="p-8 bg-gradient-to-br from-white to-amber-50">
-                                <h4 className="font-semibold text-amber-950 mb-4 text-lg">Key Features:</h4>
+                            <div className="p-8 bg-gradient-to-br from-white to-cream-500/20">
+                                <h4 className="font-semibold text-gray-900 mb-4 text-lg">Key Features:</h4>
                                 <ul className="space-y-3">
                                     {service.features.map((feature, idx) => (
                                         <li key={idx} className="flex items-start gap-3">
@@ -147,7 +147,7 @@ export default function Services() {
                                     ))}
                                 </ul>
                                 <button className={`w-full mt-6 py-3 rounded-xl font-semibold transition-all shadow-lg ${service.color === 'blue'
-                                        ? 'bg-secondary-500 text-white hover:bg-primary-400'
+                                        ? 'bg-secondary-500 text-white hover:bg-accent-500'
                                         : 'bg-amber-700 text-white hover:bg-amber-600'
                                     }`}>
                                     Learn More
@@ -159,7 +159,7 @@ export default function Services() {
             </div>
 
             {/* Benefits Section */}
-            <div className="bg-gradient-to-br from-amber-900 to-amber-800 py-20 px-4">
+            <div className="bg-gradient-to-br from-secondary-500 to-accent-500 py-20 px-4">
                 <div className="max-w-7xl mx-auto">
                     <h2 className="text-4xl font-bold text-center text-amber-50 mb-4">Why Choose Omarey</h2>
                     <p className="text-center text-amber-100 text-lg mb-12 max-w-2xl mx-auto">
