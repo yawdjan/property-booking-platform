@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from 'react';
 import HomePage from './HomePage';
 import AboutUs from './AboutUs';
@@ -107,7 +108,7 @@ export default function LandingPage({ defaultTab = 'home' }) {
               </button>
               <button
                 onClick={() => navigate('/register')}
-                className="px-10 py-4 bg-secondary-500 text-white rounded-full hover:bg-primary-400 transition-all shadow-lg hover:shadow-xl border border-primary-400/50 font-semibold drop-shadow"
+                className="px-8 py-4 bg-gradient-to-r from-secondary-500 to-accent-500 text-white rounded-full hover:from-secondary-600 hover:to-accent-600 transition-all shadow-lg hover:shadow-xl font-semibold"
               >
                 Sign Up
               </button>
@@ -158,8 +159,7 @@ export default function LandingPage({ defaultTab = 'home' }) {
                   navigate('/register');
                   setMobileMenuOpen(false);
                 }}
-                className="block w-full text-center bg-primary-400/20 backdrop-blur text-white px-4 py-3 rounded-lg hover:bg-primary-400/30 transition-all border border-white/30 mt-2"
-              >
+                className="px-8 py-4 bg-gradient-to-r from-secondary-500 to-accent-500 text-white rounded-full hover:from-secondary-600 hover:to-accent-600 transition-all shadow-lg hover:shadow-xl font-semibold">
                 Sign Up
               </button>
             </div>

@@ -14,6 +14,7 @@ import AdminLayout from './pages/AdminLayout';
 
 // Agent pages
 import AgentLayout from './pages/AgentLayout';
+import PropertyDetail from './pages/PropertyDetail';
 
 // Protected Route Component
 function ProtectedRoute({ children, allowedRoles }) {
@@ -51,6 +52,7 @@ function AppContent() {
       <Route path="/listings" element={<LandingPage defaultTab="listings" />} />
       <Route path="/services" element={<LandingPage defaultTab="services" />} />
       <Route path="/aboutus" element={<LandingPage defaultTab="aboutus" />} />
+      <Route path="/listings/:id" element={<PropertyDetail />} />
       <Route path="/pay/:paymentId" element={<PaymentPage />} />
       <Route path="/payment/callback" element={<PaymentCallback />} />
 

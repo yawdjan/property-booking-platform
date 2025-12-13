@@ -1,41 +1,45 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { ChevronDown } from 'lucide-react';
 
 export default function AboutUs() {
-    // Sections that fade in/out and a scroll-absorbing fullpage behavior (wheel & touch)
     const sectionsData = [
         {
             title: 'About Omarey',
-            body:
-                "Welcome to Omarey, where we are redefining the short-let property market by fostering powerful connections. We are more than just a booking portal, we are a dynamic ecosystem designed for two key players: discerning property owners and ambitious booking agents.",
-            bg: 'from-amber-900 to-amber-800'
+            subtitle: 'Welcome to the Future',
+            body: "Welcome to Omarey, where we are redefining the short-let property market by fostering powerful connections. We are more than just a booking portal, we are a dynamic ecosystem designed for two key players: discerning property owners and ambitious booking agents.",
+            image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&q=80",
+            imageAlt: "Modern office workspace"
         },
         {
             title: 'Our Story',
-            body:
-            'Our platform was born from a simple observation: the process for agents to discover and book exceptional short-let properties was fragmented, and property owners struggled to gain consistent, high-quality exposure. We bridge this gap.',
-            bg: 'from-blue-900 to-blue-800'
+            subtitle: 'How It All Began',
+            body: 'Our platform was born from a simple observation: the process for agents to discover and book exceptional short-let properties was fragmented, and property owners struggled to gain consistent, high-quality exposure. We bridge this gap through innovation and dedication.',
+            image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=1200&q=80",
+            imageAlt: "Team collaboration"
         },
         {
             title: 'Our Mission',
-            body:
-                "At Omarey, our mission is to empower success on both sides of the transaction through technology, trust, and a shared commitment to excellence. Join us in building the future of short-let rentals.",
-            bg: 'from-amber-900 to-amber-800'
+            subtitle: 'Empowering Success',
+            body: "At Omarey, our mission is to empower success on both sides of the transaction through technology, trust, and a shared commitment to excellence. Join us in building the future of short-let rentals.",
+            image: "https://images.unsplash.com/photo-1556761175-b413da4baf72?w=1200&q=80",
+            imageAlt: "Strategic planning"
         },
         {
             title: 'Our Team',
-            body:
-                'A diverse group of product people, engineers, and hospitality pros who care about building practical software. We value clarity, performance, and great UX.',
-                bg: 'from-blue-800 to-blue-900'
-            },
-            {
-                title: 'Thank You',
-                body:
-                'Thanks for choosing Omarey. We are committed to continuously improving the platform and supporting your goals in property management.',
-                bg: 'from-amber-800 to-amber-900'
+            subtitle: 'The People Behind Omarey',
+            body: 'A diverse group of product people, engineers, and hospitality professionals who care about building practical software. We value clarity, performance, and great user experience in everything we create.',
+            image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&q=80",
+            imageAlt: "Team meeting"
+        },
+        {
+            title: 'Thank You',
+            subtitle: 'Join Our Journey',
+            body: 'Thanks for choosing Omarey. We are committed to continuously improving the platform and supporting your goals in property management. Together, we\'re building something special.',
+            image: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1200&q=80",
+            imageAlt: "Success celebration"
         },
     ];
 
-    // Full-page scrolling with debounce/throttle
     const scrollThrottleMs = 700;
     const [index, setIndex] = useState(0);
     const throttledRef = useRef(false);
@@ -47,18 +51,14 @@ export default function AboutUs() {
         const isFirst = index === 0;
         const isLast = index === sectionsData.length - 1;
 
-        // If in the FIRST section and scrolling UP → allow parent scroll
+        // Allow parent scroll at boundaries
         if (isFirst && e.deltaY < 0) return;
-
-        // If in the LAST section and scrolling DOWN → allow parent scroll
         if (isLast && e.deltaY > 0) return;
 
-        // Otherwise, trap scroll inside AboutUs
         e.preventDefault();
         e.stopPropagation();
 
         if (throttledRef.current) return;
-
         throttledRef.current = true;
 
         if (e.deltaY > 0) {
@@ -82,10 +82,7 @@ export default function AboutUs() {
         const isFirst = index === 0;
         const isLast = index === sectionsData.length - 1;
 
-        // FIRST section: downward swipe → allow parent scroll
         if (isFirst && diff < 0) return;
-
-        // LAST section: upward swipe → allow parent scroll
         if (isLast && diff > 0) return;
 
         e.preventDefault();
@@ -131,8 +128,7 @@ export default function AboutUs() {
         }
         window.addEventListener('keydown', onKey);
         return () => window.removeEventListener('keydown', onKey);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [sectionsData.length]);
 
     return (
         <div
@@ -141,9 +137,10 @@ export default function AboutUs() {
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}
-            className={`relative h-screen w-full overflow-hidden bg-amber-950 ${index === 0 || index === 3 ? '' : 'touch-none'}`}>
+            className={`relative h-screen w-full overflow-hidden bg-amber-950`}
+        >
+            {/* Sections Container */}
             <div
-                // move the sections with transform for smooth full-page transitions
                 style={{
                     transform: `translateY(-${index * 100}vh)`,
                     transition: 'transform 700ms cubic-bezier(.2,.9,.2,1)',
@@ -153,35 +150,121 @@ export default function AboutUs() {
             >
                 {sectionsData.map((s, i) => {
                     const active = i === index;
+                    const isEven = i % 2 === 0;
+                    
+                    // Alternate between two gradient schemes
+                    const bgGradient = isEven 
+                        ? 'from-primary-600 via-accent-600 to-secondary-600'
+                        : 'from-secondary-500 via-primary-400 to-accent-600';
+
                     return (
                         <section
                             key={s.title}
-                            className={`h-screen w-full flex items-center justify-center px-8 bg-gradient-to-br ${s.bg}`}
+                            className={`h-screen w-full flex items-center justify-center px-4 md:px-8 bg-gradient-to-br ${bgGradient} relative overflow-hidden`}
                             aria-hidden={!active}
                         >
-                            <div
-                                className={`max-w-3xl text-center transform transition-all duration-700 ${active ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+                            {/* Decorative Background Elements */}
+                            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                                <div className="absolute top-20 right-20 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+                                <div className="absolute bottom-20 left-20 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
+                            </div>
+
+                            {/* Content Container */}
+                            <div className="max-w-7xl w-full mx-auto relative z-10">
+                                <div
+                                    className={`grid md:grid-cols-2 gap-8 lg:gap-12 items-center transform transition-all duration-700 ${
+                                        active ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
                                     }`}
-                            >
-                                <h1 className="text-5xl font-bold mb-6 text-primary-50 drop-shadow-lg">{s.title}</h1>
-                                <p className="text-xl text-gray-50 leading-relaxed">{s.body}</p>
+                                >
+                                    {/* Image - Desktop: alternates left/right, Mobile: alternates top/bottom */}
+                                    <div
+                                        className={`
+                                            ${isEven ? 'md:order-1' : 'md:order-2'}
+                                            ${isEven ? 'order-1' : 'order-2'}
+                                        `}
+                                    >
+                                        <div className="rounded-2xl overflow-hidden shadow-2xl border-4 border-white/20 backdrop-blur-sm">
+                                            <img
+                                                src={s.image}
+                                                alt={s.imageAlt}
+                                                className="w-full h-64 md:h-96 object-cover hover:scale-105 transition-transform duration-700"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Text Content - Desktop: alternates right/left, Mobile: alternates top/bottom (opposite of image) */}
+                                    <div
+                                        className={`
+                                            ${isEven ? 'md:order-2' : 'md:order-1'}
+                                            ${isEven ? 'order-2' : 'order-1'}
+                                            text-center md:text-left
+                                        `}
+                                    >
+                                        {/* Subtitle */}
+                                        <p className="text-blue-200 font-bold mb-3 uppercase tracking-wide text-sm md:text-base">
+                                            {s.subtitle}
+                                        </p>
+
+                                        {/* Title */}
+                                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white drop-shadow-2xl">
+                                            {s.title}
+                                        </h1>
+
+                                        {/* Body */}
+                                        <p className="text-lg md:text-xl lg:text-2xl text-blue-50 leading-relaxed drop-shadow-lg">
+                                            {s.body}
+                                        </p>
+
+                                        {/* Scroll Indicator (only on first section) */}
+                                        {i === 0 && (
+                                            <div className="mt-8 flex justify-center md:justify-start">
+                                                <div className="animate-bounce w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                                                    <ChevronDown className="w-6 h-6 text-white" />
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
                             </div>
                         </section>
                     );
                 })}
             </div>
 
-            {/* small indicator */}
-            <div className="absolute right-6 top-1/2 transform -translate-y-1/2 flex flex-col gap-3 z-5">
-                {sectionsData.map((_, i) => (
+            {/* Navigation Dots */}
+            <div className="fixed right-6 md:right-8 top-1/2 transform -translate-y-1/2 flex flex-col gap-4 z-50">
+                {sectionsData.map((section, i) => (
                     <button
                         key={i}
                         onClick={() => setIndex(i)}
-                        className={`w-3 h-10 rounded-full transition-all duration-300 ${i === index ? 'bg-primary-400 scale-110 shadow-lg' : 'bg-amber-200/50 hover:bg-amber-200'
+                        className={`group relative transition-all duration-300 ${
+                            i === index ? 'w-3 h-12' : 'w-3 h-3'
+                        }`}
+                        aria-label={`Go to ${section.title}`}
+                    >
+                        <div
+                            className={`w-full h-full rounded-full transition-all duration-300 ${
+                                i === index
+                                    ? 'bg-white shadow-lg shadow-white/50'
+                                    : 'bg-white/40 hover:bg-white/60'
                             }`}
-                        aria-label={`Go to section ${i + 1}`}
-                    />
+                        />
+                        
+                        {/* Tooltip */}
+                        <div className="absolute right-6 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                            <div className="bg-white text-amber-950 px-3 py-1 rounded-lg text-sm font-semibold whitespace-nowrap shadow-lg">
+                                {section.title}
+                            </div>
+                        </div>
+                    </button>
                 ))}
+            </div>
+
+            {/* Keyboard Hint */}
+            <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 hidden md:block">
+                <div className="bg-white/10 backdrop-blur-lg text-white px-4 py-2 rounded-full text-sm flex items-center gap-2 border border-white/20">
+                    <span>Use ↑ ↓ arrow keys to navigate</span>
+                </div>
             </div>
         </div>
     );

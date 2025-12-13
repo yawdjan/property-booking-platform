@@ -1,11 +1,11 @@
 // Header.js
-import React, { useState } from 'react';
-import { Bell, LogOut, Menu } from 'lucide-react';
+import React from 'react';
+import { LogOut, Menu } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
 export default function Header({ isSidebarOpen, setIsSidebarOpen}) {
-  const { currentUser, logout, notifications } = useApp();
-  const [showNotifications, setShowNotifications] = useState(false);
+  const { currentUser, logout } = useApp();
+  // const [showNotifications, setShowNotifications] = useState(false);
 
   return (
     <header className="bg-white border-b border-primary-200 px-4 md:px-6 py-4 flex justify-between items-center shadow-sm">
@@ -24,7 +24,7 @@ export default function Header({ isSidebarOpen, setIsSidebarOpen}) {
       </div>
       
       <div className="flex items-center gap-2 md:gap-4">
-        {/* Notification bell */}
+        {/* Notification bell
         <div className="relative">
           <button 
             onClick={() => setShowNotifications(!showNotifications)} 
@@ -64,7 +64,7 @@ export default function Header({ isSidebarOpen, setIsSidebarOpen}) {
               </div>
             </>
           )}
-        </div>
+        </div> */}
         
         {/* Logout button */}
         <button 

@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Check } from 'lucide-react';
 import { websocket } from '../../services/websocket';
@@ -28,7 +30,6 @@ export default function BookingCalendar() {
     if (properties.length > 0 && !selectedProperty) {
       setSelectedProperty(properties[0]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [properties]);
 
   // Load unavailable dates when property changes

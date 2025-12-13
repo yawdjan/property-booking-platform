@@ -31,16 +31,15 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
   return (
     <>
       {isSidebarOpen && (
-        <div 
-          className="fixed inset-0 bg-black/20 z-40 md:hidden"
+        <div
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
 
       <div className={`
-        fixed md:static inset-y-0 left-0 z-50
-        w-64 bg-white border-r border-primary-200 shadow-lg
-        transform transition-transform duration-300 ease-in-out
+        fixed top-0 left-0 h-full w-64 bg-gradient-to-br from-primary-600 via-accent-600 to-secondary-600 
+          shadow-2xl z-50 transform transition-transform duration-300 ease-in-out
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
       `}>
         {/* Header with gradient */}
@@ -52,7 +51,7 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
               </h1>
               <p className="text-sm text-gray-600">{isAgent ? 'Agent Portal' : 'Admin Panel'}</p>
             </div>
-            <button 
+            <button
               onClick={() => setIsSidebarOpen(false)}
               className="md:hidden text-gray-500 hover:text-gray-700 p-2"
             >
@@ -60,7 +59,7 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
             </button>
           </div>
         </div>
-        
+
         {/* Navigation */}
         <nav className="px-4 py-6 space-y-1">
           {menuItems.map(item => {
@@ -69,11 +68,10 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
               <button
                 key={item.id}
                 onClick={() => handleMenuClick(item.id)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm font-medium ${
-                  activeTab === item.id 
-                    ? 'bg-gradient-to-r from-secondary-500 to-accent-500 text-white shadow-md' 
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm font-medium ${activeTab === item.id
+                    ? 'bg-gradient-to-r from-secondary-500 to-accent-500 text-white shadow-md'
                     : 'text-gray-700 hover:bg-gradient-to-r hover:from-cream-500/30 hover:to-primary-100/30'
-                }`}
+                  }`}
               >
                 <Icon className="w-5 h-5" />
                 <span>{item.label}</span>

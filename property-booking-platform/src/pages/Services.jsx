@@ -1,6 +1,7 @@
 import React from 'react';
-import { Home, Key, Users, TrendingUp, Shield, Award, Clock, DollarSign } from 'lucide-react';
+import { Home, Key, Users, TrendingUp, Shield, Award, Clock, DollarSign, CheckCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
 
 export default function Services() {
     const navigate = useNavigate();
@@ -16,7 +17,8 @@ export default function Services() {
                 "Seamless booking process",
                 "Competitive pricing"
             ],
-            color: "blue"
+            color: "blue",
+            gradient: "from-secondary-500 to-accent-500"
         },
         {
             icon: <Home className="w-12 h-12" />,
@@ -28,7 +30,8 @@ export default function Services() {
                 "Direct owner connections",
                 "Transparent pricing"
             ],
-            color: "amber"
+            color: "amber",
+            gradient: "from-primary-400 to-amber-600"
         },
         {
             icon: <Users className="w-12 h-12" />,
@@ -40,7 +43,8 @@ export default function Services() {
                 "Training & resources",
                 "Priority customer support"
             ],
-            color: "blue"
+            color: "blue",
+            gradient: "from-secondary-500 to-accent-500"
         },
         {
             icon: <TrendingUp className="w-12 h-12" />,
@@ -52,7 +56,8 @@ export default function Services() {
                 "Performance analytics",
                 "Occupancy optimization"
             ],
-            color: "amber"
+            color: "amber",
+            gradient: "from-primary-400 to-amber-600"
         }
     ];
 
@@ -79,35 +84,79 @@ export default function Services() {
         }
     ];
 
+    const features = [
+        {
+            title: "Smart Booking System",
+            description: "Our intelligent booking system automatically syncs availability across all platforms, preventing double bookings and maximizing your occupancy rates.",
+            image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80"
+        },
+        {
+            title: "Commission Management",
+            description: "Track and manage your earnings in real-time with transparent commission structures and automated payout systems.",
+            image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&q=80"
+        },
+        {
+            title: "Analytics Dashboard",
+            description: "Get deep insights into your property performance with comprehensive analytics and reporting tools.",
+            image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80"
+        }
+    ];
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-cream-500/20 to-primary-50">
 
             {/* Hero Section */}
-            <div className="bg-gradient-to-r from-primary-600 via-accent-600 to-secondary-600 text-white py-20 px-4">
-                <div className="max-w-7xl mx-auto text-center">
-                    <h1 className="text-5xl md:text-6xl font-bold mb-6 text-amber-50">Our Services</h1>
-                    <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto leading-relaxed">
+            <div className="relative overflow-hidden bg-gradient-to-br from-primary-600 via-accent-600 to-secondary-600 text-white py-24 px-4">
+                {/* Decorative Elements */}
+                <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+                <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary-400/20 rounded-full blur-3xl"></div>
+                
+                <div className="max-w-7xl mx-auto text-center relative z-1">
+                    <p className="text-blue-200 font-bold mb-4 uppercase tracking-wide text-sm">What We Offer</p>
+                    <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-white">Our Services</h1>
+                    <p className="text-xl md:text-2xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
                         Empowering property owners and booking agents through technology, trust, and excellence
                     </p>
                 </div>
             </div>
 
             {/* About Section */}
-            <div className="max-w-7xl mx-auto px-4 py-16">
-                <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12">
-                    <h2 className="text-4xl font-bold text-amber-950 mb-6 text-center">Welcome To Omarey</h2>
-                    <div className="prose prose-lg max-w-none text-amber-900 leading-relaxed space-y-4">
-                        <p>
+            <div className="max-w-7xl mx-auto px-4 py-20">
+                <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 border-2 border-primary-100">
+                    <div className="text-center mb-8">
+                        <p className="text-secondary-500 font-bold mb-2 uppercase tracking-wide">Welcome To Omarey</p>
+                        <h2 className="text-4xl md:text-5xl font-bold text-amber-950 mb-6">A Dynamic Ecosystem</h2>
+                    </div>
+                    
+                    <div className="prose prose-lg max-w-none text-amber-900 leading-relaxed space-y-6">
+                        <p className="text-xl">
                             To our <span className="font-bold text-secondary-500">Users</span>, we are more than just a booking portal—we are a dynamic ecosystem designed for two key players: discerning property owners and ambitious booking agents.
                         </p>
-                        <p>
+                        
+                        <div className="grid md:grid-cols-2 gap-8 my-8">
+                            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl border-2 border-blue-100">
+                                <div className="w-12 h-12 bg-gradient-to-br from-secondary-500 to-accent-500 rounded-xl flex items-center justify-center mb-4">
+                                    <Home className="w-6 h-6 text-white" />
+                                </div>
+                                <h3 className="font-bold text-xl text-amber-950 mb-3">For Property Owners</h3>
+                                <p className="text-amber-800">
+                                    We provide a streamlined, powerful dashboard to list your property, manage availability, and connect directly with a network of vetted agents who can fill your calendar with reliable bookings.
+                                </p>
+                            </div>
+                            
+                            <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-6 rounded-2xl border-2 border-amber-100">
+                                <div className="w-12 h-12 bg-gradient-to-br from-primary-400 to-amber-600 rounded-xl flex items-center justify-center mb-4">
+                                    <Users className="w-6 h-6 text-white" />
+                                </div>
+                                <h3 className="font-bold text-xl text-amber-950 mb-3">For Booking Agents</h3>
+                                <p className="text-amber-800">
+                                    We offer a curated portfolio of verified, high-quality short-let properties. Our tools simplify search, comparison, and booking, freeing you to focus on serving your clients.
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <p className="text-lg text-center italic text-amber-700 bg-primary-50 p-6 rounded-2xl border-2 border-primary-100">
                             Our platform was born from a simple observation: the process for agents to discover and book exceptional short-let properties was fragmented, and property owners struggled to gain consistent, high-quality exposure. We bridge this gap.
-                        </p>
-                        <p>
-                            <span className="font-semibold text-secondary-500">For Property Owners</span>, we provide a streamlined, powerful dashboard to list your property, manage availability, and connect directly with a network of vetted agents who can fill your calendar with reliable bookings. Maximize your occupancy and revenue with ease.
-                        </p>
-                        <p>
-                            <span className="font-semibold text-secondary-500">For Booking Agents</span>, we offer a curated portfolio of verified, high-quality short-let properties. Our tools simplify search, comparison, and booking, freeing you to focus on what you do best—serving your clients and growing your business.
                         </p>
                     </div>
                 </div>
@@ -115,20 +164,25 @@ export default function Services() {
 
             {/* Services Grid */}
             <div className="max-w-7xl mx-auto px-4 py-16">
-                <h2 className="text-4xl font-bold text-center text-amber-950 mb-4">What We Offer</h2>
-                <p className="text-center text-amber-800 text-lg mb-12 max-w-2xl mx-auto">
-                    Comprehensive solutions designed to streamline your property management and booking experience
-                </p>
+                <div className="text-center mb-12">
+                    <p className="text-secondary-500 font-bold mb-2 uppercase tracking-wide">Comprehensive Solutions</p>
+                    <h2 className="text-4xl md:text-5xl font-bold text-amber-950 mb-4">What We Offer</h2>
+                    <p className="text-xl text-amber-800 max-w-2xl mx-auto">
+                        Streamline your property management and booking experience
+                    </p>
+                </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {services.map((service, index) => (
                         <div
                             key={index}
-                            className="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-primary-200 group"
+                            className="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-primary-100 group"
                         >
-                            <div className={`p-8 ${service.color === 'blue' ? 'bg-gradient-to-br from-secondary-500 via-accent-500 to-cream-500' : 'bg-gradient-to-br from-primary-500 via-accent-500 to-secondary-400'}`}>
-                                <div className="text-white mb-4">
-                                    {service.icon}
+                            <div className={`p-8 bg-gradient-to-br ${service.gradient}`}>
+                                <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                    <div className="text-white">
+                                        {service.icon}
+                                    </div>
                                 </div>
                                 <h3 className="text-3xl font-bold text-white mb-3">{service.title}</h3>
                                 <p className="text-blue-50 text-lg leading-relaxed">
@@ -136,21 +190,22 @@ export default function Services() {
                                 </p>
                             </div>
 
-                            <div className="p-8 bg-gradient-to-br from-white to-cream-500/20">
-                                <h4 className="font-semibold text-gray-900 mb-4 text-lg">Key Features:</h4>
-                                <ul className="space-y-3">
+                            <div className="p-8">
+                                <h4 className="font-bold text-amber-950 mb-4 text-lg flex items-center gap-2">
+                                    <CheckCircle className="w-5 h-5 text-secondary-500" />
+                                    Key Features
+                                </h4>
+                                <ul className="space-y-3 mb-6">
                                     {service.features.map((feature, idx) => (
                                         <li key={idx} className="flex items-start gap-3">
-                                            <span className={`mt-1 w-2 h-2 rounded-full flex-shrink-0 ${service.color === 'blue' ? 'bg-primary-400' : 'bg-amber-600'}`}></span>
-                                            <span className="text-amber-900">{feature}</span>
+                                            <span className={`mt-1 w-2 h-2 rounded-full flex-shrink-0 bg-gradient-to-br ${service.gradient}`}></span>
+                                            <span className="text-amber-800">{feature}</span>
                                         </li>
                                     ))}
                                 </ul>
-                                <button className={`w-full mt-6 py-3 rounded-xl font-semibold transition-all shadow-lg ${service.color === 'blue'
-                                        ? 'bg-secondary-500 text-white hover:bg-accent-500'
-                                        : 'bg-amber-700 text-white hover:bg-amber-600'
-                                    }`}>
+                                <button className={`w-full py-3 rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 bg-gradient-to-r ${service.gradient} text-white`}>
                                     Learn More
+                                    <ArrowRight className="w-5 h-5" />
                                 </button>
                             </div>
                         </div>
@@ -158,25 +213,80 @@ export default function Services() {
                 </div>
             </div>
 
-            {/* Benefits Section */}
-            <div className="bg-gradient-to-br from-secondary-500 to-accent-500 py-20 px-4">
-                <div className="max-w-7xl mx-auto">
-                    <h2 className="text-4xl font-bold text-center text-amber-50 mb-4">Why Choose Omarey</h2>
-                    <p className="text-center text-amber-100 text-lg mb-12 max-w-2xl mx-auto">
-                        Built on the pillars of trust, quality, efficiency, and growth
+            {/* Features Section */}
+            <div className="max-w-7xl mx-auto px-4 py-16">
+                <div className="text-center mb-12">
+                    <p className="text-secondary-500 font-bold mb-2 uppercase tracking-wide">Platform Features</p>
+                    <h2 className="text-4xl md:text-5xl font-bold text-amber-950 mb-4">Built For Success</h2>
+                    <p className="text-xl text-amber-800 max-w-2xl mx-auto">
+                        Powerful tools designed to help you grow your business
                     </p>
+                </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div className="space-y-16">
+                    {features.map((feature, index) => (
+                        <div
+                            key={index}
+                            className={`grid md:grid-cols-2 gap-8 items-center ${
+                                index % 2 === 1 ? 'md:flex-row-reverse' : ''
+                            }`}
+                        >
+                            <div className={`${index % 2 === 1 ? 'md:order-2' : ''}`}>
+                                <div className="bg-white rounded-2xl shadow-xl p-8 border-2 border-primary-100">
+                                    <h3 className="text-3xl font-bold text-amber-950 mb-4">{feature.title}</h3>
+                                    <p className="text-lg text-amber-800 leading-relaxed mb-6">
+                                        {feature.description}
+                                    </p>
+                                    <button className="px-6 py-3 bg-gradient-to-r from-primary-400 to-secondary-500 text-white rounded-xl font-semibold hover:from-primary-500 hover:to-secondary-600 transition-all shadow-lg hover:shadow-xl flex items-center gap-2">
+                                        Explore Feature
+                                        <ArrowRight className="w-5 h-5" />
+                                    </button>
+                                </div>
+                            </div>
+                            <div className={`${index % 2 === 1 ? 'md:order-1' : ''}`}>
+                                <div className="rounded-2xl overflow-hidden shadow-xl border-2 border-primary-100">
+                                    <img
+                                        src={feature.image}
+                                        alt={feature.title}
+                                        className="w-full h-64 md:h-80 object-cover hover:scale-105 transition-transform duration-500"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* Rest of Services page content... */}
+
+            {/* Benefits Section */}
+            <div className="relative overflow-hidden bg-gradient-to-br from-secondary-500 to-accent-500 py-20 px-4">
+                {/* Decorative Elements */}
+                <div className="absolute top-0 left-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+                <div className="absolute bottom-0 right-0 w-96 h-96 bg-primary-400/20 rounded-full blur-3xl"></div>
+                
+                <div className="max-w-7xl mx-auto relative z-1">
+                    <div className="text-center mb-12">
+                        <p className="text-blue-200 font-bold mb-2 uppercase tracking-wide">Our Commitment</p>
+                        <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Why Choose Omarey</h2>
+                        <p className="text-xl text-blue-100 max-w-2xl mx-auto">
+                            Built on the pillars of trust, quality, efficiency, and growth
+                        </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         {benefits.map((benefit, index) => (
                             <div
                                 key={index}
-                                className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-amber-600/30 hover:bg-white/20 transition-all duration-300"
+                                className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border-2 border-white/20 hover:bg-white/20 transition-all duration-300 group"
                             >
-                                <div className="text-blue-300 mb-4">
-                                    {benefit.icon}
+                                <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                    <div className="text-white">
+                                        {benefit.icon}
+                                    </div>
                                 </div>
-                                <h3 className="text-xl font-bold text-amber-50 mb-3">{benefit.title}</h3>
-                                <p className="text-amber-100 leading-relaxed">{benefit.description}</p>
+                                <h3 className="text-xl font-bold text-white mb-3">{benefit.title}</h3>
+                                <p className="text-blue-100 leading-relaxed">{benefit.description}</p>
                             </div>
                         ))}
                     </div>
@@ -185,22 +295,49 @@ export default function Services() {
 
             {/* CTA Section */}
             <div className="max-w-7xl mx-auto px-4 py-20">
-                <div className="bg-gradient-to-r from-secondary-500 to-primary-400 rounded-3xl shadow-2xl p-12 text-center text-white">
-                    <h2 className="text-4xl font-bold mb-4">Ready to Get Started?</h2>
-                    <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-                        Join our ecosystem today and experience the future of short-let property management
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <button disabled className="px-8 py-4 bg-white text-secondary-500 rounded-full font-semibold text-lg hover:bg-amber-50 transition-all shadow-lg ">
-                             Email Us To List Your Property
-                        </button>
-                        <div className='ml-5 mr-5 self-center text-amber-200 text-xl'><h2 className=''>or</h2></div>
-                        <button  
-                            onClick={() => navigate('/register')} // <--- 4. Fix: Use navigate to go to the register route
-                            className="px-8 py-4 bg-amber-700 text-white rounded-full font-semibold text-lg hover:bg-amber-600 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
-                        >
-                            Become an Agent
-                        </button>
+                <div className="relative overflow-hidden bg-gradient-to-br from-secondary-500 to-primary-400 rounded-3xl shadow-2xl p-12 text-center text-white">
+                    {/* Decorative Elements */}
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+                    <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary-600/30 rounded-full blur-3xl"></div>
+                    
+                    <div className="relative z-1">
+                        <h2 className="text-4xl md:text-5xl font-bold mb-4">Ready to Get Started?</h2>
+                        <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+                            Join our ecosystem today and experience the future of short-let property management
+                        </p>
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                            <button 
+                                onClick={() => window.location.href = 'mailto:support@omarey.com?subject=List My Property'}
+                                className="px-10 py-5 bg-white text-secondary-500 rounded-full font-bold text-lg hover:bg-blue-50 transition-all shadow-xl hover:shadow-2xl transform hover:scale-105 flex items-center justify-center gap-2"
+                            >
+                                <Home className="w-5 h-5" />
+                                Email Us To List Your Property
+                            </button>
+                            <div className='hidden sm:flex items-center text-blue-100 text-2xl font-light px-4'>or</div>
+                            <button  
+                                onClick={() => navigate('/register')}
+                                className="px-10 py-5 bg-gradient-to-r from-amber-600 to-amber-500 text-white rounded-full font-bold text-lg hover:from-amber-700 hover:to-amber-600 transition-all shadow-xl hover:shadow-2xl transform hover:scale-105 flex items-center justify-center gap-2"
+                            >
+                                <Users className="w-5 h-5" />
+                                Become an Agent
+                            </button>
+                        </div>
+                        
+                        {/* Trust Indicators */}
+                        <div className="mt-12 flex flex-wrap items-center justify-center gap-8 text-sm text-blue-100">
+                            <div className="flex items-center gap-2">
+                                <CheckCircle className="w-5 h-5" />
+                                <span>100+ Properties</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <CheckCircle className="w-5 h-5" />
+                                <span>Verified Agents</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <CheckCircle className="w-5 h-5" />
+                                <span>24/7 Support</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
