@@ -46,13 +46,13 @@ export default function AdminDashboard() {
       <div className="grid md:grid-cols-4 gap-6 mb-8">
         <StatCard 
           title="Total Revenue" 
-          value={`$${totalRevenue.toLocaleString()}`} 
+          value={`¢${totalRevenue.toLocaleString()}`} 
           icon={DollarSign} 
           color="green" 
         />
         <StatCard 
           title="Total Commissions" 
-          value={`$${totalCommissions.toLocaleString()}`} 
+          value={`¢${totalCommissions.toLocaleString()}`} 
           icon={DollarSign} 
           color="blue" 
         />

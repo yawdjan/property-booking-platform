@@ -1,5 +1,5 @@
 import React, { useState, useEffect} from 'react';
-import { bookingsAPI, agentsAPI } from '../../services/api';
+import { bookingsAPI, agentsAPI, commissionsAPI } from '../../services/api';
 
 // Lightweight vertical bar chart built with divs (no external lib needed)
 function VerticalBarChart({ title, labels = [], values = [], currency = false }) {
@@ -74,6 +74,7 @@ export default function FinancialReports() {
   const [bookings, setBookings] = useState([]);
   const [agents, setAgents] = useState([]);
   const [agentStats, setAgentStats] = useState([]);
+  const [payoutStats, setPayoutStats] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(() => {
@@ -85,6 +86,7 @@ export default function FinancialReports() {
 
   useEffect(() => {
     loadData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedMonth]);
   
   const loadData = async () => {
@@ -101,12 +103,14 @@ export default function FinancialReports() {
         endDate = last.toISOString().split('T')[0];
       }
 
-      const [bookingsRes, agentsRes, statsRes] = await Promise.all([
+      const [bookingsRes, comissionsRes,agentsRes, statsRes] = await Promise.all([
         bookingsAPI.getAll(),
+        commissionsAPI.getAllPayouts(),
         agentsAPI.getAll(),
         agentsAPI.getStats(startDate, endDate)
       ]);
       setBookings(bookingsRes.data);
+      setPayoutStats(comissionsRes.data);
       setAgents(agentsRes.data);
       setAgentStats(statsRes.data || statsRes);
     } catch (err) {
@@ -177,8 +181,8 @@ export default function FinancialReports() {
     .filter(b => b.status === 'Booked')
     .reduce((sum, b) => sum + parseFloat(b.commission ?? b.commissionAmount ?? 0), 0);
     
-  const pendingPayouts = bookings
-    .filter(b => b.paymentStatus === 'Pending Payout')
+  const pendingPayouts = payoutStats
+    .filter(b => b.paymentStatus !== 'completed')
     .reduce((sum, b) => sum + parseFloat(b.commission ?? b.commissionAmount ?? 0), 0);
 
   return (
@@ -191,7 +195,7 @@ export default function FinancialReports() {
           <p className="text-3xl font-bold text-primary-400">${totalRevenue.toLocaleString()}</p>
         </div>
         <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-sm text-gray-600 mb-2">Total Commissions Paid</h3>
+          <h3 className="text-sm text-gray-600 mb-2">Total Commissions</h3>
           <p className="text-3xl font-bold text-primary-400">
             ${(totalCommissions - pendingPayouts).toLocaleString()}
           </p>

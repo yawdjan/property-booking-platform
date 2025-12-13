@@ -60,13 +60,13 @@ export default function AgentDashboard({ setActiveTab }) {
         />
         <StatCard
           title="Total Earnings"
-          value={`$${totalEarnings.toLocaleString()}`}
+          value={`¢${totalEarnings.toLocaleString()}`}
           icon={DollarSign}
           color="green"
         />
         <StatCard
           title="Pending Payouts"
-          value={`$${pendingEarnings.toLocaleString()}`}
+          value={`¢${pendingEarnings.toLocaleString()}`}
           icon={Clock}
           color="orange"
         />

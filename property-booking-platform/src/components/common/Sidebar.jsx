@@ -32,14 +32,14 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
     <>
       {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
 
       <div className={`
-        fixed top-0 left-0 h-full w-64 bg-gradient-to-br from-primary-600 via-accent-600 to-secondary-600 
-          shadow-2xl z-50 transform transition-transform duration-300 ease-in-out
+        fixed md:static inset-y-0 left-0 z-50 h-full bg-gradient-to-br from-primary-600 via-accent-600 to-secondary-600 
+        w-64 bg-white border-r border-primary-200 shadow-2xl transform transition-transform duration-300 ease-in-out
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
       `}>
         {/* Header with gradient */}
@@ -69,8 +69,8 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, setIsS
                 key={item.id}
                 onClick={() => handleMenuClick(item.id)}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm font-medium ${activeTab === item.id
-                    ? 'bg-gradient-to-r from-secondary-500 to-accent-500 text-white shadow-md'
-                    : 'text-gray-700 hover:bg-gradient-to-r hover:from-cream-500/30 hover:to-primary-100/30'
+                  ? 'bg-gradient-to-r from-secondary-500 to-accent-500 text-white shadow-md'
+                  : 'text-gray-700 hover:bg-gradient-to-r hover:from-cream-500/30 hover:to-primary-100/30'
                   }`}
               >
                 <Icon className="w-5 h-5" />

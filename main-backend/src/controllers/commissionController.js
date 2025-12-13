@@ -287,7 +287,7 @@ export const approvePayoutRequest = async (req, res) => {
     if (parseFloat(finalAmount) > parseFloat(availableBalance)) {
       return res.status(400).json({
         success: false,
-        message: `Approved amount exceeds agent's available balance of $${availableBalance}`
+        message: `Approved amount exceeds agent's available balance of ¢${availableBalance}`
       });
     }
 
@@ -387,14 +387,14 @@ export const modifyPayoutRequest = async (req, res) => {
     if (parseFloat(modified_amount) > parseFloat(availableBalance)) {
       return res.status(400).json({
         success: false,
-        message: `Modified amount exceeds agent's available balance of $${availableBalance}`
+        message: `Modified amount exceeds agent's available balance of ¢${availableBalance}`
       });
     }
 
     // Update the request with modified amount
     await request.update({
       approvedAmount: modified_amount,
-      adminNote: admin_note || `Amount modified from $${request.requestedAmount} to $${modified_amount}`,
+      adminNote: admin_note || `Amount modified from ¢${request.requestedAmount} to ¢${modified_amount}`,
       processedBy: req.user.id
     });
 

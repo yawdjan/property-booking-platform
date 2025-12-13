@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import { DollarSign, CheckCircle, XCircle, Clock, Edit2, RefreshCw } from 'lucide-react';
-import { commissionsAPI } from '../../services/api';
+import { bookingsAPI, commissionsAPI } from '../../services/api';
 
 export default function PayoutManagement() {
     const [selectedRequest, setSelectedRequest] = useState(null);
@@ -8,6 +9,7 @@ export default function PayoutManagement() {
     const [adminNote, setAdminNote] = useState('');
     const [modifiedAmount, setModifiedAmount] = useState('');
     const [payoutRequests, setPayoutRequests] = useState([]);
+    const [bookingsRequests, setbookingsRequests] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [stats, setStats] = useState({
@@ -41,30 +43,31 @@ export default function PayoutManagement() {
 
     const fetchStats = async () => {
         try {
-            const response = await commissionsAPI.getAll();
+            const response = await bookingsAPI.getAll();
 
             if (response.success) {
                 const commissions = response.data;
+                setbookingsRequests(commissions);
 
                 // Total commissions (all)
                 const total = commissions.reduce(
-                    (sum, c) => sum + parseFloat(c.booking?.commissionAmount || 0),
+                    (sum, c) => sum + parseFloat(c.commissionAmount || 0),
                     0
                 );
 
                 // Pending commissions: Requested + Pending Payout
-                const pending = commissions
-                    .filter(c => c.status === "Requested" || c.status === "Pending Payout")
+                const pending = payoutRequests
+                    .filter(c => c.status === "pending")
                     .reduce((sum, c) => sum + parseFloat(c.amount || 0), 0);
 
                 // Paid commissions
                 const paid = payoutRequests
-                    .filter(c => c.status === "approved" || c.status === "completed")
+                    .filter(c => c.status === "completed")
                     .reduce((sum, c) => sum + parseFloat(c.approvedAmount || 0), 0);
 
                 // Count of pending payout requests
-                const pendingPayoutRequests = commissions.filter(
-                    c => c.status === "Pending Payout" || c.status === "Requested"
+                const pendingPayoutRequests = payoutRequests.filter(
+                    c => c.status === "pending" || c.status === "Requested"
                 ).length;
 
                 setStats({
@@ -105,7 +108,7 @@ export default function PayoutManagement() {
                 response = await commissionsAPI.approvePayoutWithAmount(
                     selectedRequest.id,
                     modifiedAmount,
-                    adminNote || `Amount modified from $${selectedRequest.requestedAmount.toFixed(2)} to $${parseFloat(modifiedAmount).toFixed(2)}`
+                    adminNote || `Amount modified from ¢${selectedRequest.requestedAmount.toFixed(2)} to ¢${parseFloat(modifiedAmount).toFixed(2)}`
                 );
             } else if (actionType === 'deny') {
                 if (!adminNote) {
@@ -136,6 +139,12 @@ export default function PayoutManagement() {
         setModifiedAmount('');
     };
 
+    const availableBalance = (agentId) => {
+        const agentRequests = bookingsRequests.filter(r => r.agentId === agentId);
+        const totalRequested = agentRequests.reduce((sum, r) => sum + parseFloat(r.commissionAmount || 0), 0);
+        return totalRequested;
+    };
+
     const getStatusColor = (status) => {
         switch (status) {
             case 'approved':
@@ -150,7 +159,7 @@ export default function PayoutManagement() {
     };
 
     const pendingRequests = payoutRequests.filter(r => r.status === 'processing' || r.status === 'pending');
-    const processedRequests = payoutRequests.filter(r => r.status === 'completed' || r.status === 'approved');
+    const processedRequests = payoutRequests.filter(r => r.status === 'completed' || r.status === 'denied');
  
     if (loading) {
         return (
@@ -208,7 +217,7 @@ export default function PayoutManagement() {
                         <Clock className="w-8 h-8" />
                         <span className="text-sm opacity-90">Comissions</span>
                     </div>
-                    <p className="text-3xl font-bold">{stats.pendingPayoutRequests}</p>
+                    <p className="text-3xl font-bold">¢{stats.totalCommissions}</p>
                 </div>
 
                 <div className="bg-gradient-to-br from-primary-400 to-secondary-500 rounded-2xl p-6 text-white">
@@ -217,7 +226,7 @@ export default function PayoutManagement() {
                         <span className="text-sm opacity-90">Pending Amount</span>
                     </div>
                     <p className="text-3xl font-bold">
-                        ${stats.pendingCommissions.toFixed(2)}
+                        ¢{stats.pendingCommissions.toFixed(2)}
                     </p>
                 </div>
 
@@ -226,7 +235,7 @@ export default function PayoutManagement() {
                         <CheckCircle className="w-8 h-8 text-primary-400" />
                         <span className="text-sm text-amber-700">Total Commissions Paid</span>
                     </div>
-                    <p className="text-3xl font-bold text-amber-950">${stats.paidCommissions.toFixed(2)}</p>
+                    <p className="text-3xl font-bold text-amber-950">¢{stats.paidCommissions.toFixed(2)}</p>
                 </div>
             </div>
 
@@ -275,7 +284,7 @@ export default function PayoutManagement() {
                                             ${parseFloat(request.requestedAmount).toFixed(2)}
                                         </td>
                                         <td className="px-6 py-4 text-sm font-semibold text-amber-800">
-                                            ${parseFloat(request.availableBalance || 0).toFixed(2)}
+                                            ${parseFloat(availableBalance(request.agentId) || 0).toFixed(2)}
                                         </td>
                                         <td className="px-6 py-4 text-sm text-amber-700 max-w-xs truncate">
                                             {request.description || '-'}
@@ -438,7 +447,7 @@ export default function PayoutManagement() {
                             <div className="bg-gray-50 rounded-lg p-4 border-2 border-amber-200">
                                 <p className="text-sm text-amber-700 mb-1">Available Balance</p>
                                 <p className="text-xl font-bold text-amber-950">
-                                    ${parseFloat(selectedRequest.availableBalance || 0).toFixed(2)}
+                                    ${parseFloat(availableBalance(selectedRequest.agentId) || 0).toFixed(2)}
                                 </p>
                             </div>
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import { websocket } from '../../services/websocket';
-import { DollarSign, TrendingUp, Clock, CheckCircle, XCircle, Send } from 'lucide-react';
+import { Clock, CheckCircle, XCircle, Send } from 'lucide-react';
 import { bookingsAPI, commissionsAPI, propertiesAPI } from '../../services/api.js';
 
 export default function MyCommissions() {
@@ -110,7 +110,7 @@ export default function MyCommissions() {
     websocket.emit('notification', {
       id: Date.now(),
       type: 'info',
-      message: `Commission payout requested by ${currentUser.name} - $${pendingPayout}`,
+      message: `Commission payout requested by ${currentUser.name} - ¢${pendingPayout}`,
       time: new Date().toISOString()
     });
     alert('Payout request submitted! Admin will process it shortly.');
