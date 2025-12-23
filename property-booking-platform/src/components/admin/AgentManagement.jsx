@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import './AgentManagement.css';
 
-const AgentManagement = () => {
+export default function AgentManagement() {
   const [agents, setAgents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all'); // 'all', 'active', 'inactive'
@@ -56,8 +55,6 @@ const AgentManagement = () => {
       });
 
       if (response.ok) {
-        const data = await response.json();
-        
         // Update the agents list
         setAgents(agents.map(agent => 
           agent._id === selectedAgent._id 
@@ -65,7 +62,6 @@ const AgentManagement = () => {
             : agent
         ));
 
-        // Show success message
         alert(`Agent ${actionType === 'suspend' ? 'suspended' : 'activated'} successfully!`);
       } else {
         const error = await response.json();
@@ -102,41 +98,57 @@ const AgentManagement = () => {
   });
 
   if (loading) {
-    return <div className="loading">Loading agents...</div>;
+    return <div className="text-center py-10 text-gray-600">Loading agents...</div>;
   }
 
   return (
-    <div className="agent-management-container">
-      <div className="page-header">
-        <h2>Agent Management</h2>
+    <div className="max-w-7xl mx-auto px-4 py-6">
+      {/* Page Header */}
+      <div className="mb-8">
+        <h2 className="text-3xl font-bold text-gray-800">Agent Management</h2>
       </div>
 
-      <div className="controls-section">
-        <div className="search-box">
+      {/* Controls Section */}
+      <div className="bg-white rounded-lg shadow p-5 mb-5 flex flex-wrap justify-between items-center gap-4">
+        {/* Search Box */}
+        <div className="flex-1 min-w-64">
           <input
             type="text"
             placeholder="Search by name, email, or phone..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="search-input"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors"
           />
         </div>
 
-        <div className="filter-buttons">
+        {/* Filter Buttons */}
+        <div className="flex gap-2">
           <button
-            className={`filter-btn ${filter === 'all' ? 'active' : ''}`}
+            className={`px-5 py-2 rounded-lg font-medium transition-colors ${
+              filter === 'all' 
+                ? 'bg-blue-500 text-white' 
+                : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+            }`}
             onClick={() => setFilter('all')}
           >
             All ({agents.length})
           </button>
           <button
-            className={`filter-btn ${filter === 'active' ? 'active' : ''}`}
+            className={`px-5 py-2 rounded-lg font-medium transition-colors ${
+              filter === 'active' 
+                ? 'bg-blue-500 text-white' 
+                : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+            }`}
             onClick={() => setFilter('active')}
           >
             Active ({agents.filter(a => a.isActive).length})
           </button>
           <button
-            className={`filter-btn ${filter === 'inactive' ? 'active' : ''}`}
+            className={`px-5 py-2 rounded-lg font-medium transition-colors ${
+              filter === 'inactive' 
+                ? 'bg-blue-500 text-white' 
+                : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+            }`}
             onClick={() => setFilter('inactive')}
           >
             Suspended ({agents.filter(a => !a.isActive).length})
@@ -144,80 +156,107 @@ const AgentManagement = () => {
         </div>
       </div>
 
-      <div className="agents-table-container">
-        <table className="agents-table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Phone</th>
-              <th>Status</th>
-              <th>Joined Date</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredAgents.map(agent => (
-              <tr key={agent._id} className={!agent.isActive ? 'inactive-row' : ''}>
-                <td>
-                  <div className="agent-name">
-                    {agent.name}
-                    {!agent.isActive && <span className="inactive-badge">Suspended</span>}
-                  </div>
-                </td>
-                <td>{agent.email}</td>
-                <td>{agent.phoneNumber || 'N/A'}</td>
-                <td>
-                  <span className={`status-badge ${agent.isActive ? 'status-active' : 'status-inactive'}`}>
-                    {agent.isActive ? 'Active' : 'Suspended'}
-                  </span>
-                </td>
-                <td>
-                  {agent.createdAt 
-                    ? new Date(agent.createdAt).toLocaleDateString()
-                    : 'N/A'}
-                </td>
-                <td>
-                  <button
-                    className={`toggle-btn ${agent.isActive ? 'btn-deactivate' : 'btn-activate'}`}
-                    onClick={() => handleToggleStatus(agent)}
-                  >
-                    {agent.isActive ? 'Suspend' : 'Activate'}
-                  </button>
-                </td>
+      {/* Agents Table */}
+      <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50 border-b-2 border-gray-200">
+              <tr>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Name</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Email</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Phone</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Status</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Joined Date</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filteredAgents.map((agent) => (
+                <tr 
+                  key={agent._id} 
+                  className={`border-b border-gray-100 hover:bg-gray-50 transition-colors ${
+                    !agent.isActive ? 'opacity-70 bg-gray-50' : ''
+                  }`}
+                >
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-gray-800">{agent.name}</span>
+                      {!agent.isActive && (
+                        <span className="text-xs font-semibold px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full">
+                          Suspended
+                        </span>
+                      )}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-600">{agent.email}</td>
+                  <td className="px-6 py-4 text-sm text-gray-600">{agent.phoneNumber || 'N/A'}</td>
+                  <td className="px-6 py-4">
+                    <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
+                      agent.isActive 
+                        ? 'bg-green-100 text-green-800' 
+                        : 'bg-red-100 text-red-800'
+                    }`}>
+                      {agent.isActive ? 'Active' : 'Suspended'}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-600">
+                    {agent.createdAt 
+                      ? new Date(agent.createdAt).toLocaleDateString()
+                      : 'N/A'}
+                  </td>
+                  <td className="px-6 py-4">
+                    <button
+                      className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                        agent.isActive
+                          ? 'bg-red-500 text-white hover:bg-red-600'
+                          : 'bg-green-500 text-white hover:bg-green-600'
+                      }`}
+                      onClick={() => handleToggleStatus(agent)}
+                    >
+                      {agent.isActive ? 'Suspend' : 'Activate'}
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
 
-        {filteredAgents.length === 0 && (
-          <div className="no-results">
-            No agents found matching your criteria.
-          </div>
-        )}
+          {filteredAgents.length === 0 && (
+            <div className="text-center py-12 text-gray-500">
+              No agents found matching your criteria.
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Confirmation Modal */}
       {showConfirmModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h3>Confirm Action</h3>
-            <p>
-              Are you sure you want to <strong>{actionType}</strong> the account for{' '}
-              <strong>{selectedAgent?.name}</strong>?
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl p-8 max-w-md w-full mx-4">
+            <h3 className="text-2xl font-bold text-gray-800 mb-4">Confirm Action</h3>
+            <p className="text-gray-600 mb-4">
+              Are you sure you want to <strong className="text-gray-800">{actionType}</strong> the account for{' '}
+              <strong className="text-gray-800">{selectedAgent?.name}</strong>?
             </p>
             {actionType === 'suspend' && (
-              <p className="warning-text">
+              <p className="bg-yellow-50 border-l-4 border-yellow-400 p-3 text-sm text-yellow-800 rounded mb-6">
                 ⚠️ Suspending this agent will prevent them from logging in and making new bookings.
               </p>
             )}
-            <div className="modal-actions">
-              <button onClick={cancelToggleStatus} className="btn-cancel">
+            <div className="flex gap-3 justify-end">
+              <button 
+                onClick={cancelToggleStatus} 
+                className="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 font-medium transition-colors"
+              >
                 Cancel
               </button>
               <button 
                 onClick={confirmToggleStatus} 
-                className={`btn-confirm ${actionType === 'suspend' ? 'btn-danger' : 'btn-success'}`}
+                className={`px-6 py-2 text-white rounded-lg font-medium transition-colors ${
+                  actionType === 'suspend' 
+                    ? 'bg-red-500 hover:bg-red-600' 
+                    : 'bg-green-500 hover:bg-green-600'
+                }`}
               >
                 {actionType === 'suspend' ? 'Suspend' : 'Activate'}
               </button>
@@ -227,6 +266,4 @@ const AgentManagement = () => {
       )}
     </div>
   );
-};
-
-export default AgentManagement;
+}

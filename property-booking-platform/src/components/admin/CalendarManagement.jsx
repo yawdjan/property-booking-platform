@@ -133,7 +133,7 @@ export default function CalendarManagement() {
           </button>
         </div>
 
-        {/* Emoji banner when calendar has no data (still keeps the calendar visible) */}
+        {/* Emoji banner when calendar has no data */}
         {showEmptyEmoji && (
           <div className="text-center mb-4 text-2xl" aria-hidden>
             📅 No bookings yet — your calendar is ready!
@@ -194,7 +194,7 @@ export default function CalendarManagement() {
           })}
         </div>
 
-        {/* Updated Legend with 3 colors */}
+        {/* Legend with 3 colors */}
         <div className="flex gap-6 mt-6">
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 bg-green-100 border border-green-300 rounded"></div>
