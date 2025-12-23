@@ -84,15 +84,27 @@ export const createBooking = async (req, res) => {
     const { propertyId, checkIn, checkOut, clientEmail } = req.body;
     const agentId = req.user.id;
 
-    // Validate check-in is at least 24 hours from now
+    // Validate check-in date/time
     const now = new Date();
     const checkInDate = new Date(checkIn);
-    const hoursDiff = (checkInDate - now) / (1000 * 60 * 60);
+    const currentHour = now.getHours();
+    const todayStr = now.toISOString().split('T')[0];
+    const checkInStr = checkIn; // Already in YYYY-MM-DD format
 
-    if (hoursDiff < 24) {
+    // Check if trying to book for today
+    if (checkInStr === todayStr) {
+      // Allow only if it's before 2 PM
+      if (currentHour >= 14) {
+        return res.status(400).json({
+          success: false,
+          message: 'Same-day bookings are only allowed before 2:00 PM. Please select tomorrow or a later date.'
+        });
+      }
+    } else if (checkInDate < now) {
+      // Don't allow past dates
       return res.status(400).json({
         success: false,
-        message: 'Check-in must be at least 24 hours from now'
+        message: 'Check-in date cannot be in the past'
       });
     }
 

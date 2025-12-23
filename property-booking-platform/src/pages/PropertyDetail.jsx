@@ -300,13 +300,13 @@ export default function PropertyDetail() {
                     </div>
                   </div>
                 </div>
-
+{/* 
                 <button
                   onClick={() => navigate('/register')}
                   className="w-full py-4 bg-gradient-to-r from-primary-400 to-secondary-500 text-white rounded-xl font-bold text-lg hover:from-primary-500 hover:to-secondary-600 transition-all shadow-lg hover:shadow-xl"
                 >
                   Book Now
-                </button>
+                </button> */}
 
                 <p className="text-center text-sm text-amber-700 mt-4">
                   Register as an agent to book this property

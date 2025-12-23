@@ -1,150 +1,225 @@
-import React, { useEffect, useState } from 'react';
-import { Check, Edit2 } from 'lucide-react';
-import { websocket } from '../../services/websocket';
-import { agentsAPI } from '../../services/api.js';
+import React, { useState, useEffect } from 'react';
+import './AgentManagement.css';
 
-export default function AgentManagement() {
+const AgentManagement = () => {
   const [agents, setAgents] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [editingAgent, setEditingAgent] = useState(null);
-  const [editCommissionRate, setEditCommissionRate] = useState('');
+  const [filter, setFilter] = useState('all'); // 'all', 'active', 'inactive'
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [selectedAgent, setSelectedAgent] = useState(null);
+  const [actionType, setActionType] = useState(''); // 'activate' or 'suspend'
 
   useEffect(() => {
-    // Load data 
-    loadData();
+    fetchAgents();
   }, []);
 
-  const loadData = async () => {
+  const fetchAgents = async () => {
     try {
       setLoading(true);
-      // Simulate API call
-      const response = await agentsAPI.getAll();
-      setAgents(response.data);
-    } catch (err) {
-      setError('Failed to load agents '+ err.message);
-    } finally {
+      const response = await fetch('/api/admin/agents', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      const data = await response.json();
+      setAgents(data.agents || data);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching agents:', error);
       setLoading(false);
     }
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div className="text-red-600">{error}</div>;
+  const handleToggleStatus = (agent) => {
+    setSelectedAgent(agent);
+    setActionType(agent.isActive ? 'suspend' : 'activate');
+    setShowConfirmModal(true);
+  };
 
-  const approveAgent = (agentId) => {
-    setAgents(agents.map(a => a.id === agentId ? { ...a, status: 'Active' } : a));
+  const confirmToggleStatus = async () => {
+    if (!selectedAgent) return;
+
     try {
-      agentsAPI.approve(agentId);
-      websocket.emit('notification', {
-        id: Date.now(),
-        type: 'success',
-        message: `Agent approved successfully`,
-        time: new Date().toISOString()
+      // Use the existing suspend route
+      const endpoint = `/api/admin/agents/${selectedAgent._id}/suspend`;
+      
+      const response = await fetch(endpoint, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          suspended: actionType === 'suspend' // true to suspend, false to activate
+        })
       });
+
+      if (response.ok) {
+        const data = await response.json();
+        
+        // Update the agents list
+        setAgents(agents.map(agent => 
+          agent._id === selectedAgent._id 
+            ? { ...agent, isActive: actionType === 'activate' }
+            : agent
+        ));
+
+        // Show success message
+        alert(`Agent ${actionType === 'suspend' ? 'suspended' : 'activated'} successfully!`);
+      } else {
+        const error = await response.json();
+        alert(`Error: ${error.message || 'Failed to update agent status'}`);
+      }
     } catch (error) {
-      websocket.emit('notification', {
-        id: Date.now(),
-        type: 'Error',
-        message: `Agent approval failed: ${error.message}`,
-        time: new Date().toISOString()
-      });
+      console.error('Error toggling agent status:', error);
+      alert('Error updating agent status. Please try again.');
+    } finally {
+      setShowConfirmModal(false);
+      setSelectedAgent(null);
+      setActionType('');
     }
   };
 
-  const saveCommissionRate = () => {
-    setAgents(agents.map(a => 
-      a.id === editingAgent.id 
-        ? { ...a, commissionRate: editCommissionRate ? parseFloat(editCommissionRate) : null } 
-        : a
-    ));
-    setEditingAgent(null);
-    setEditCommissionRate('');
+  const cancelToggleStatus = () => {
+    setShowConfirmModal(false);
+    setSelectedAgent(null);
+    setActionType('');
   };
 
+  // Filter agents based on status and search query
+  const filteredAgents = agents.filter(agent => {
+    const matchesFilter = filter === 'all' 
+      || (filter === 'active' && agent.isActive) 
+      || (filter === 'inactive' && !agent.isActive);
+    
+    const matchesSearch = searchQuery === '' 
+      || agent.name?.toLowerCase().includes(searchQuery.toLowerCase())
+      || agent.email?.toLowerCase().includes(searchQuery.toLowerCase())
+      || agent.phoneNumber?.includes(searchQuery);
+    
+    return matchesFilter && matchesSearch;
+  });
+
+  if (loading) {
+    return <div className="loading">Loading agents...</div>;
+  }
+
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-6">Agent Management</h2>
-      <div className="bg-white rounded-lg shadow overflow-x-auto">
-        <table className="w-full">
+    <div className="agent-management-container">
+      <div className="page-header">
+        <h2>Agent Management</h2>
+      </div>
+
+      <div className="controls-section">
+        <div className="search-box">
+          <input
+            type="text"
+            placeholder="Search by name, email, or phone..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="search-input"
+          />
+        </div>
+
+        <div className="filter-buttons">
+          <button
+            className={`filter-btn ${filter === 'all' ? 'active' : ''}`}
+            onClick={() => setFilter('all')}
+          >
+            All ({agents.length})
+          </button>
+          <button
+            className={`filter-btn ${filter === 'active' ? 'active' : ''}`}
+            onClick={() => setFilter('active')}
+          >
+            Active ({agents.filter(a => a.isActive).length})
+          </button>
+          <button
+            className={`filter-btn ${filter === 'inactive' ? 'active' : ''}`}
+            onClick={() => setFilter('inactive')}
+          >
+            Suspended ({agents.filter(a => !a.isActive).length})
+          </button>
+        </div>
+      </div>
+
+      <div className="agents-table-container">
+        <table className="agents-table">
           <thead>
-            <tr className="border-b bg-gray-50">
-              <th className="text-left py-4 px-6">Name</th>
-              <th className="text-left py-4 px-6">Email</th>
-              <th className="text-left py-4 px-6">Company</th>
-              <th className="text-left py-4 px-6">Status</th>
-              <th className="text-left py-4 px-6">Commission Rate</th>
-              <th className="text-left py-4 px-6">Actions</th>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Status</th>
+              <th>Joined Date</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {agents.map(agent => (
-              <tr key={agent.id} className="border-b hover:bg-gray-50">
-                <td className="py-4 px-6">{agent.name}</td>
-                <td className="py-4 px-6">{agent.email}</td>
-                <td className="py-4 px-6">{agent.company || 'N/A'}</td>
-                <td className="py-4 px-6">
-                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                    agent.status === 'Active' ? 'bg-green-100 text-green-800' :
-                    agent.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
-                    'bg-red-100 text-red-800'
-                  }`}>
-                    {agent.status}
+            {filteredAgents.map(agent => (
+              <tr key={agent._id} className={!agent.isActive ? 'inactive-row' : ''}>
+                <td>
+                  <div className="agent-name">
+                    {agent.name}
+                    {!agent.isActive && <span className="inactive-badge">Suspended</span>}
+                  </div>
+                </td>
+                <td>{agent.email}</td>
+                <td>{agent.phoneNumber || 'N/A'}</td>
+                <td>
+                  <span className={`status-badge ${agent.isActive ? 'status-active' : 'status-inactive'}`}>
+                    {agent.isActive ? 'Active' : 'Suspended'}
                   </span>
                 </td>
-                <td className="py-4 px-6">{agent.commissionRate ? `${agent.commissionRate}%` : 'Default'}</td>
-                <td className="py-4 px-6">
-                  <div className="flex gap-2">
-                    {agent.status === 'Pending' && (
-                      <button 
-                        onClick={() => approveAgent(agent.id)} 
-                        className="p-2 text-primary-400 hover:bg-green-50 rounded"
-                      >
-                        <Check className="w-4 h-4" />
-                      </button>
-                    )}
-                    <button 
-                      onClick={() => { 
-                        setEditingAgent(agent); 
-                        setEditCommissionRate(agent.commissionRate || ''); 
-                      }} 
-                      className="p-2 text-primary-400 hover:bg-blue-50 rounded"
-                    >
-                      <Edit2 className="w-4 h-4" />
-                    </button>
-                  </div>
+                <td>
+                  {agent.createdAt 
+                    ? new Date(agent.createdAt).toLocaleDateString()
+                    : 'N/A'}
+                </td>
+                <td>
+                  <button
+                    className={`toggle-btn ${agent.isActive ? 'btn-deactivate' : 'btn-activate'}`}
+                    onClick={() => handleToggleStatus(agent)}
+                  >
+                    {agent.isActive ? 'Suspend' : 'Activate'}
+                  </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+
+        {filteredAgents.length === 0 && (
+          <div className="no-results">
+            No agents found matching your criteria.
+          </div>
+        )}
       </div>
 
-      {editingAgent && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full">
-            <h3 className="text-xl font-bold mb-4">Edit Agent Commission</h3>
-            <div className="mb-4">
-              <label className="block text-sm font-medium mb-2">Custom Commission Rate (%)</label>
-              <input 
-                type="number" 
-                value={editCommissionRate}
-                onChange={(e) => setEditCommissionRate(e.target.value)}
-                className="w-full px-4 py-2 border rounded-lg" 
-                placeholder="Leave empty for default" 
-              />
-            </div>
-            <div className="flex gap-2">
-              <button 
-                onClick={() => setEditingAgent(null)} 
-                className="flex-1 px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
-              >
+      {/* Confirmation Modal */}
+      {showConfirmModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3>Confirm Action</h3>
+            <p>
+              Are you sure you want to <strong>{actionType}</strong> the account for{' '}
+              <strong>{selectedAgent?.name}</strong>?
+            </p>
+            {actionType === 'suspend' && (
+              <p className="warning-text">
+                ⚠️ Suspending this agent will prevent them from logging in and making new bookings.
+              </p>
+            )}
+            <div className="modal-actions">
+              <button onClick={cancelToggleStatus} className="btn-cancel">
                 Cancel
               </button>
               <button 
-                onClick={saveCommissionRate} 
-                className="flex-1 px-4 py-2 bg-primary-400 text-white rounded-lg hover:bg-secondary-500"
+                onClick={confirmToggleStatus} 
+                className={`btn-confirm ${actionType === 'suspend' ? 'btn-danger' : 'btn-success'}`}
               >
-                Save
+                {actionType === 'suspend' ? 'Suspend' : 'Activate'}
               </button>
             </div>
           </div>
@@ -152,4 +227,6 @@ export default function AgentManagement() {
       )}
     </div>
   );
-}
+};
+
+export default AgentManagement;

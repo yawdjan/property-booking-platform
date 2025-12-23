@@ -54,6 +54,32 @@ export default function CalendarManagement() {
     }
   }
 
+  // Helper function to determine booking status
+  const getBookingStatus = (dateStr, bookedEntry) => {
+    if (!bookedEntry) {
+      return 'available'; // Green - no booking
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Get checkout date from bookedEntry
+    // Try multiple possible field names for checkout date
+    const checkoutDate = bookedEntry.checkoutDate || bookedEntry.checkOut || bookedEntry.checkout;
+    
+    if (checkoutDate) {
+      const checkout = new Date(checkoutDate);
+      checkout.setHours(0, 0, 0, 0);
+      
+      // If checkout date has passed, booking is completed
+      if (checkout < today) {
+        return 'completed'; // Gold - booking completed
+      }
+    }
+
+    return 'booked'; // Red - active booking
+  };
+
   const days = getDaysInMonth(currentMonth);
 
   const prevMonth = () => {
@@ -125,20 +151,41 @@ export default function CalendarManagement() {
 
             const dateStr = day.toISOString().split('T')[0];
             const bookedEntry = availableDates.find(d => d.date === dateStr);
-            const isBooked = !!bookedEntry;
-            const title = isBooked ? `Booked by ${bookedEntry.agent?.name ?? bookedEntry.clientEmail ?? 'Someone'}` : '';
+            const status = getBookingStatus(dateStr, bookedEntry);
+            
+            // Determine styling based on status
+            let bgClass, borderClass, textClass, hoverClass;
+            
+            if (status === 'available') {
+              bgClass = 'bg-green-100';
+              borderClass = 'border-green-300';
+              textClass = '';
+              hoverClass = 'hover:bg-green-200 cursor-pointer';
+            } else if (status === 'booked') {
+              bgClass = 'bg-red-100';
+              borderClass = 'border-red-300';
+              textClass = 'text-red-700/90';
+              hoverClass = '';
+            } else { // completed
+              bgClass = 'bg-yellow-100';
+              borderClass = 'border-yellow-400';
+              textClass = 'text-yellow-800';
+              hoverClass = '';
+            }
+
+            const title = bookedEntry 
+              ? `${status === 'completed' ? 'Completed - ' : ''}Booked by ${bookedEntry.agent?.name ?? bookedEntry.clientEmail ?? 'Someone'}` 
+              : 'Available';
 
             return (
               <div
                 key={idx}
                 title={title}
-                className={`aspect-square flex flex-col items-center justify-center border rounded-lg text-center px-1 ${
-                  isBooked ? 'bg-red-100 border-red-300' : 'bg-green-100 border-green-300 hover:bg-green-200 cursor-pointer'
-                }`}
+                className={`aspect-square flex flex-col items-center justify-center border rounded-lg text-center px-1 ${bgClass} ${borderClass} ${hoverClass}`}
               >
                 <div className="text-sm font-semibold">{day.getDate()}</div>
-                {isBooked && (
-                  <div className="mt-1 text-[11px] leading-tight text-red-700/90">
+                {bookedEntry && (
+                  <div className={`mt-1 text-[11px] leading-tight ${textClass}`}>
                     {bookedEntry.agent?.name ?? bookedEntry.clientEmail ?? 'Booked'}
                   </div>
                 )}
@@ -147,6 +194,7 @@ export default function CalendarManagement() {
           })}
         </div>
 
+        {/* Updated Legend with 3 colors */}
         <div className="flex gap-6 mt-6">
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 bg-green-100 border border-green-300 rounded"></div>
@@ -155,6 +203,10 @@ export default function CalendarManagement() {
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 bg-red-100 border border-red-300 rounded"></div>
             <span className="text-sm">Booked</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-yellow-100 border border-yellow-400 rounded"></div>
+            <span className="text-sm">Completed</span>
           </div>
         </div>
 

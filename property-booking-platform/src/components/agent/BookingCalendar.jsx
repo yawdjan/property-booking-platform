@@ -180,7 +180,22 @@ export default function BookingCalendar() {
     alert('Link copied to clipboard!');
   };
 
-  const minCheckIn = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+  const getMinCheckInDate = () => {
+    const now = new Date();
+    const currentHour = now.getHours();
+
+    // If it's before 2 PM (14:00), allow today's date
+    if (currentHour < 14) {
+      return now.toISOString().split('T')[0];
+    }
+
+    // Otherwise, minimum is tomorrow
+    const tomorrow = new Date(now);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return tomorrow.toISOString().split('T')[0];
+  };
+
+  const minCheckIn = getMinCheckInDate();
 
   // ✅ ALL GUARD CLAUSES BEFORE THE MAIN RETURN
   if (loading) return <div>Loading...</div>;
