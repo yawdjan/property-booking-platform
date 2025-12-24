@@ -71,8 +71,8 @@ export default function AgentManagement() {
   // Filter agents based on status and search query
   const filteredAgents = agents.filter(agent => {
     const matchesFilter = filter === 'all' 
-      || (filter === 'active' && agent.isActive) 
-      || (filter === 'inactive' && !agent.isActive);
+      || (filter === 'active' && agent.status === 'Active') 
+      || (filter === 'inactive' && agent.status !== 'Active');
     
     const matchesSearch = searchQuery === '' 
       || agent.name?.toLowerCase().includes(searchQuery.toLowerCase())
@@ -126,7 +126,7 @@ export default function AgentManagement() {
             }`}
             onClick={() => setFilter('active')}
           >
-            Active ({agents.filter(a => a.isActive).length})
+            Active ({agents.filter(a => a.status === 'Active').length})
           </button>
           <button
             className={`px-5 py-2 rounded-lg font-medium transition-colors ${
@@ -136,7 +136,7 @@ export default function AgentManagement() {
             }`}
             onClick={() => setFilter('inactive')}
           >
-            Suspended ({agents.filter(a => !a.isActive).length})
+            Suspended ({agents.filter(a => a.status !== 'Active').length})
           </button>
         </div>
       </div>
@@ -160,13 +160,13 @@ export default function AgentManagement() {
                 <tr 
                   key={agent._id} 
                   className={`border-b border-gray-100 hover:bg-gray-50 transition-colors ${
-                    !agent.isActive ? 'opacity-70 bg-gray-50' : ''
+                    agent.status !== 'Active' ? 'opacity-70 bg-gray-50' : ''
                   }`}
                 >
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
                       <span className="font-medium text-gray-800">{agent.name}</span>
-                      {!agent.isActive && (
+                      {!agent.status === 'Active' && (
                         <span className="text-xs font-semibold px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full">
                           Suspended
                         </span>
@@ -177,11 +177,11 @@ export default function AgentManagement() {
                   <td className="px-6 py-4 text-sm text-gray-600">{agent.phoneNumber || 'N/A'}</td>
                   <td className="px-6 py-4">
                     <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
-                      agent.isActive 
+                      agent.status === 'Active' 
                         ? 'bg-green-100 text-green-800' 
                         : 'bg-red-100 text-red-800'
                     }`}>
-                      {agent.isActive ? 'Active' : 'Suspended'}
+                      {agent.status}
                     </span>
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-600">
@@ -192,7 +192,7 @@ export default function AgentManagement() {
                   <td className="px-6 py-4">
                     <button
                       className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                        agent.isActive
+                        agent.status === 'Active'
                           ? 'bg-red-500 text-white hover:bg-red-600'
                           : 'bg-green-500 text-white hover:bg-green-600'
                       }`}
