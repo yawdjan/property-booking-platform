@@ -40,12 +40,12 @@ export default function AgentManagement() {
       const response = await agentsAPI.suspend(selectedAgent.id);
 
       if (response.ok) {
-        // Update the agents list
-        setAgents(agents.map(agent => 
-          agent.id === selectedAgent.id 
-            ? { ...agent, status: actionType === 'activate' ? 'Active' : 'Suspended' }
-            : agent
-        ));
+        // // Update the agents list
+        // setAgents(agents.map(agent => 
+        //   agent.id === selectedAgent.id 
+        //     ? { ...agent, status: actionType === 'activate' ? 'Active' : 'Suspended' }
+        //     : agent
+        // ));
 
         alert(`Agent ${actionType === 'suspend' ? 'suspended' : 'activated'} successfully!`);
       } else {
@@ -198,7 +198,7 @@ export default function AgentManagement() {
                       }`}
                       onClick={() => handleToggleStatus(agent)}
                     >
-                      {agent.isActive ? 'Suspend' : 'Activate'}
+                      {agent.status === 'Active' ? 'Suspend' : 'Activate'}
                     </button>
                   </td>
                 </tr>
