@@ -36,8 +36,15 @@ export default function AgentManagement() {
     if (!selectedAgent) return;
 
     try {
-      // Use the existing suspend route
-      const response = await agentsAPI.suspend(selectedAgent.id);
+      let response;
+
+      if (actionType === 'activate') {
+        // Activating an agent (toggle approve)
+        response = await agentsAPI.approve(selectedAgent.id);
+      } else {
+        // Suspending an agent
+        response = await agentsAPI.suspend(selectedAgent.id);
+      }
 
       if (response.ok) {
         // // Update the agents list
@@ -70,15 +77,15 @@ export default function AgentManagement() {
 
   // Filter agents based on status and search query
   const filteredAgents = agents.filter(agent => {
-    const matchesFilter = filter === 'all' 
-      || (filter === 'active' && agent.status === 'Active') 
+    const matchesFilter = filter === 'all'
+      || (filter === 'active' && agent.status === 'Active')
       || (filter === 'inactive' && agent.status !== 'Active');
-    
-    const matchesSearch = searchQuery === '' 
+
+    const matchesSearch = searchQuery === ''
       || agent.name?.toLowerCase().includes(searchQuery.toLowerCase())
       || agent.email?.toLowerCase().includes(searchQuery.toLowerCase())
       || agent.phoneNumber?.includes(searchQuery);
-    
+
     return matchesFilter && matchesSearch;
   });
 
@@ -109,31 +116,28 @@ export default function AgentManagement() {
         {/* Filter Buttons */}
         <div className="flex gap-2">
           <button
-            className={`px-5 py-2 rounded-lg font-medium transition-colors ${
-              filter === 'all' 
-                ? 'bg-blue-500 text-white' 
+            className={`px-5 py-2 rounded-lg font-medium transition-colors ${filter === 'all'
+                ? 'bg-blue-500 text-white'
                 : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
-            }`}
+              }`}
             onClick={() => setFilter('all')}
           >
             All ({agents.length})
           </button>
           <button
-            className={`px-5 py-2 rounded-lg font-medium transition-colors ${
-              filter === 'active' 
-                ? 'bg-blue-500 text-white' 
+            className={`px-5 py-2 rounded-lg font-medium transition-colors ${filter === 'active'
+                ? 'bg-blue-500 text-white'
                 : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
-            }`}
+              }`}
             onClick={() => setFilter('active')}
           >
             Active ({agents.filter(a => a.status === 'Active').length})
           </button>
           <button
-            className={`px-5 py-2 rounded-lg font-medium transition-colors ${
-              filter === 'inactive' 
-                ? 'bg-blue-500 text-white' 
+            className={`px-5 py-2 rounded-lg font-medium transition-colors ${filter === 'inactive'
+                ? 'bg-blue-500 text-white'
                 : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
-            }`}
+              }`}
             onClick={() => setFilter('inactive')}
           >
             Suspended ({agents.filter(a => a.status !== 'Active').length})
@@ -157,11 +161,10 @@ export default function AgentManagement() {
             </thead>
             <tbody>
               {filteredAgents.map((agent) => (
-                <tr 
-                  key={agent._id} 
-                  className={`border-b border-gray-100 hover:bg-gray-50 transition-colors ${
-                    agent.status !== 'Active' ? 'opacity-70 bg-gray-50' : ''
-                  }`}
+                <tr
+                  key={agent._id}
+                  className={`border-b border-gray-100 hover:bg-gray-50 transition-colors ${agent.status !== 'Active' ? 'opacity-70 bg-gray-50' : ''
+                    }`}
                 >
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
@@ -176,26 +179,24 @@ export default function AgentManagement() {
                   <td className="px-6 py-4 text-sm text-gray-600">{agent.email}</td>
                   <td className="px-6 py-4 text-sm text-gray-600">{agent.phoneNumber || 'N/A'}</td>
                   <td className="px-6 py-4">
-                    <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
-                      agent.status === 'Active' 
-                        ? 'bg-green-100 text-green-800' 
+                    <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${agent.status === 'Active'
+                        ? 'bg-green-100 text-green-800'
                         : 'bg-red-100 text-red-800'
-                    }`}>
+                      }`}>
                       {agent.status}
                     </span>
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-600">
-                    {agent.createdAt 
+                    {agent.createdAt
                       ? new Date(agent.createdAt).toLocaleDateString()
                       : 'N/A'}
                   </td>
                   <td className="px-6 py-4">
                     <button
-                      className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                        agent.status === 'Active'
+                      className={`px-4 py-2 rounded-lg font-medium transition-colors ${agent.status === 'Active'
                           ? 'bg-red-500 text-white hover:bg-red-600'
                           : 'bg-green-500 text-white hover:bg-green-600'
-                      }`}
+                        }`}
                       onClick={() => handleToggleStatus(agent)}
                     >
                       {agent.status === 'Active' ? 'Suspend' : 'Activate'}
@@ -229,19 +230,18 @@ export default function AgentManagement() {
               </p>
             )}
             <div className="flex gap-3 justify-end">
-              <button 
-                onClick={cancelToggleStatus} 
+              <button
+                onClick={cancelToggleStatus}
                 className="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 font-medium transition-colors"
               >
                 Cancel
               </button>
-              <button 
-                onClick={confirmToggleStatus} 
-                className={`px-6 py-2 text-white rounded-lg font-medium transition-colors ${
-                  actionType === 'suspend' 
-                    ? 'bg-red-500 hover:bg-red-600' 
+              <button
+                onClick={confirmToggleStatus}
+                className={`px-6 py-2 text-white rounded-lg font-medium transition-colors ${actionType === 'suspend'
+                    ? 'bg-red-500 hover:bg-red-600'
                     : 'bg-green-500 hover:bg-green-600'
-                }`}
+                  }`}
               >
                 {actionType === 'suspend' ? 'Suspend' : 'Activate'}
               </button>
