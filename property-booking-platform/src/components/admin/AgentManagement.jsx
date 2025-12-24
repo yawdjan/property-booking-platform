@@ -46,14 +46,9 @@ export default function AgentManagement() {
         response = await agentsAPI.suspend(selectedAgent.id);
       }
 
-      if (response.ok) {
-        // // Update the agents list
-        // setAgents(agents.map(agent => 
-        //   agent.id === selectedAgent.id 
-        //     ? { ...agent, status: actionType === 'activate' ? 'Active' : 'Suspended' }
-        //     : agent
-        // ));
-
+      if (response.ok || response.success === true) {
+        // Update the agents list
+        fetchAgents();
         alert(`Agent ${actionType === 'suspend' ? 'suspended' : 'activated'} successfully!`);
       } else {
         const error = await response.json();
