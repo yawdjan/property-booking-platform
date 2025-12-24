@@ -6,7 +6,7 @@ export default function CalendarManagement() {
   const [availableDates, setAvailableDates] = useState([]);
   const [bookings, setBookings] = useState([]);
   const [properties, setProperties] = useState([]);
-  const [loading, setLoading ] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -66,11 +66,11 @@ export default function CalendarManagement() {
     // Get checkout date from bookedEntry
     // Try multiple possible field names for checkout date
     const checkoutDate = bookedEntry.checkoutDate || bookedEntry.checkOut || bookedEntry.checkout;
-    
+
     if (checkoutDate) {
       const checkout = new Date(checkoutDate);
       checkout.setHours(0, 0, 0, 0);
-      
+
       // If checkout date has passed, booking is completed
       if (checkout < today) {
         return 'completed'; // Gold - booking completed
@@ -152,29 +152,39 @@ export default function CalendarManagement() {
             const dateStr = day.toISOString().split('T')[0];
             const bookedEntry = availableDates.find(d => d.date === dateStr);
             const status = getBookingStatus(dateStr, bookedEntry);
-            
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const isPastDate = day < today;
+
             // Determine styling based on status
             let bgClass, borderClass, textClass, hoverClass;
-            
-            if (status === 'available') {
+
+            if (!bookedEntry) {
+              // AVAILABLE
               bgClass = 'bg-green-100';
               borderClass = 'border-green-300';
               textClass = '';
               hoverClass = 'hover:bg-green-200 cursor-pointer';
-            } else if (status === 'booked') {
-              bgClass = 'bg-red-100';
-              borderClass = 'border-red-300';
-              textClass = 'text-red-700/90';
-              hoverClass = '';
-            } else { // completed
+
+            } else if (isPastDate) {
+              // BOOKED BUT DATE HAS PASSED → GOLD
               bgClass = 'bg-yellow-100';
               borderClass = 'border-yellow-400';
               textClass = 'text-yellow-800';
               hoverClass = '';
+
+            } else {
+              // BOOKED & DATE NOT PASSED → RED
+              bgClass = 'bg-red-100';
+              borderClass = 'border-red-300';
+              textClass = 'text-red-700/90';
+              hoverClass = '';
             }
 
-            const title = bookedEntry 
-              ? `${status === 'completed' ? 'Completed - ' : ''}Booked by ${bookedEntry.agent?.name ?? bookedEntry.clientEmail ?? 'Someone'}` 
+            const title = bookedEntry
+              ? `${status === 'completed' ? 'Completed - ' : ''}Booked by ${bookedEntry.agent?.name ?? bookedEntry.clientEmail ?? 'Someone'}`
               : 'Available';
 
             return (

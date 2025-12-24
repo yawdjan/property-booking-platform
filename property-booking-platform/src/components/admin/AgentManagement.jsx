@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { agentsAPI } from '../../services/api';
+import { useApp } from '../../context/AppContext';
 
 export default function AgentManagement() {
   const [agents, setAgents] = useState([]);
@@ -8,6 +10,7 @@ export default function AgentManagement() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [selectedAgent, setSelectedAgent] = useState(null);
   const [actionType, setActionType] = useState(''); // 'activate' or 'suspend'
+  const { currentUser } = useApp(); // ← Make sure this is imported
 
   useEffect(() => {
     fetchAgents();
@@ -16,13 +19,8 @@ export default function AgentManagement() {
   const fetchAgents = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/admin/agents', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-      const data = await response.json();
-      setAgents(data.agents || data);
+      const response = await agentsAPI.getAll();
+      setAgents(response.data);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching agents:', error);
@@ -41,18 +39,7 @@ export default function AgentManagement() {
 
     try {
       // Use the existing suspend route
-      const endpoint = `/api/admin/agents/${selectedAgent._id}/suspend`;
-      
-      const response = await fetch(endpoint, {
-        method: 'PATCH',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          suspended: actionType === 'suspend' // true to suspend, false to activate
-        })
-      });
+      const response = await agentsAPI.suspend(currentUser.id);
 
       if (response.ok) {
         // Update the agents list
