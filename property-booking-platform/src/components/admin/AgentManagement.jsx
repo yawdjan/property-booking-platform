@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { agentsAPI } from '../../services/api';
-import { useApp } from '../../context/AppContext';
 
 export default function AgentManagement() {
   const [agents, setAgents] = useState([]);
@@ -10,7 +9,6 @@ export default function AgentManagement() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [selectedAgent, setSelectedAgent] = useState(null);
   const [actionType, setActionType] = useState(''); // 'activate' or 'suspend'
-  const { currentUser } = useApp(); // ← Make sure this is imported
 
   useEffect(() => {
     fetchAgents();
@@ -30,7 +28,7 @@ export default function AgentManagement() {
 
   const handleToggleStatus = (agent) => {
     setSelectedAgent(agent);
-    setActionType(agent.isActive ? 'suspend' : 'activate');
+    setActionType(agent.status === 'Active' ? 'suspend' : 'activate');
     setShowConfirmModal(true);
   };
 
@@ -39,13 +37,13 @@ export default function AgentManagement() {
 
     try {
       // Use the existing suspend route
-      const response = await agentsAPI.suspend(currentUser.id);
+      const response = await agentsAPI.suspend(selectedAgent.id);
 
       if (response.ok) {
         // Update the agents list
         setAgents(agents.map(agent => 
-          agent._id === selectedAgent._id 
-            ? { ...agent, isActive: actionType === 'activate' }
+          agent.id === selectedAgent.id 
+            ? { ...agent, status: actionType === 'activate' ? 'Active' : 'Suspended' }
             : agent
         ));
 
