@@ -164,7 +164,7 @@ export default function MyCommissions() {
                 <th className="text-left py-3 px-4">Total Amount</th>
                 <th className="text-left py-3 px-4">Commission Rate</th>
                 <th className="text-left py-3 px-4">Commission Earned</th>
-                <th className="text-left py-3 px-4">Payment Status</th>
+                <th className="text-left py-3 px-4">Status</th>
               </tr>
             </thead>
             <tbody>
@@ -178,7 +178,7 @@ export default function MyCommissions() {
                     <td className="py-3 px-4">{booking.commissionRate}%</td>
                     <td className="py-3 px-4 font-semibold">${booking.commissionAmount}</td>
                     <td className="py-3 px-4">
-                      < StatusBadge status={booking.paymentStatus} size="sm" />
+                      < StatusBadge status={booking.status} size="sm" />
                     </td>
                   </tr>
                 );

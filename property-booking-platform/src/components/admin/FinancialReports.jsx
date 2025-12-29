@@ -175,15 +175,15 @@ export default function FinancialReports() {
   }
 
   const totalRevenue = bookings
-    .filter(b => b.status === 'Booked')
+    .filter(b => b.status === 'Booked' || b.status === 'Completed')
     .reduce((sum, b) => sum + parseFloat(b.totalAmount), 0);
     
   const totalCommissions = bookings
-    .filter(b => b.status === 'Booked')
+    .filter(b => b.status === 'Booked' || b.status === 'Completed')
     .reduce((sum, b) => sum + parseFloat(b.commission ?? b.commissionAmount ?? 0), 0);
     
   const pendingPayouts = payoutStats
-    .filter(b => b.paymentStatus !== 'completed')
+    .filter(b => b.paymentStatus !== 'pending')
     .reduce((sum, b) => sum + parseFloat(b.commission ?? b.commissionAmount ?? 0), 0);
 
   return (

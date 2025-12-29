@@ -412,7 +412,7 @@ export default function PropertySettings() {
                 <ImageUpload
                   images={formData.images}
                   onChange={(newImages) => setFormData(prev => ({ ...prev, images: newImages }))}
-                  maxImages={10}
+                  maxImages={20}
                 />
               </div>
 

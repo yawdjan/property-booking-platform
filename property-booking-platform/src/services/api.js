@@ -190,16 +190,16 @@ export const commissionsAPI = {
   },
 
   approvePayout: (id, approvedAmount, adminNote) =>
-    apiClient.post(`/commissions/admin/payouts/${id}/approve`, { approvedAmount, adminNote }),
+    apiClient.post(`/commissions/admin/payouts/${id}/approve`, { approvedAmount, admin_note: adminNote }),
 
   approvePayoutWithAmount: (id, approvedAmount, adminNote) =>
-    apiClient.post(`/commissions/admin/payouts/${id}/approve`, { approvedAmount, adminNote }),
+    apiClient.post(`/commissions/admin/payouts/${id}/approve`, { approvedAmount, admin_note: adminNote }),
 
   denyPayout: (id, adminNote) =>
-    apiClient.post(`/commissions/admin/payouts/${id}/deny`, { adminNote }),
+    apiClient.post(`/commissions/admin/payouts/${id}/deny`, { admin_note: adminNote }),
 
   modifyPayout: (id, modifiedAmount, adminNote) =>
-    apiClient.put(`/commissions/admin/payouts/${id}/modify`, { modifiedAmount, adminNote }),
+    apiClient.put(`/commissions/admin/payouts/${id}/modify`, { modifiedAmount, admin_note: adminNote }),
   
   getComissionStats: () =>
     apiClient.get('/commissions/admin/stats')

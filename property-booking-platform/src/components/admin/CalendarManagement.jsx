@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { getDaysInMonth } from '../../utils/helpers';
-import { calendarAPI, propertiesAPI, bookingsAPI } from '../../services/api';
+import { propertiesAPI, bookingsAPI } from '../../services/api';
 
 export default function CalendarManagement() {
-  const [availableDates, setAvailableDates] = useState([]);
+  const [bookingRanges, setBookingRanges] = useState([]);
   const [bookings, setBookings] = useState([]);
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -30,24 +30,20 @@ export default function CalendarManagement() {
       }
 
       if (propId) {
-        // Build month window (first day -> last day)
-        const year = currentMonth.getFullYear();
-        const month = currentMonth.getMonth();
-        const firstDay = new Date(year, month, 1).toISOString().split('T')[0];
-        const lastDay = new Date(year, month + 1, 0).toISOString().split('T')[0];
-
-        const calResponse = await calendarAPI.getAvailability(propId, firstDay, lastDay);
-        // API returns { success, propertyId, bookedDates }
-        const booked = calResponse?.bookedDates ?? calResponse?.data?.bookedDates ?? [];
-        setAvailableDates(booked);
+        // ✅ Use unavailableRanges API to get booking data with status
+        const rangesResponse = await bookingsAPI.getUnavailableRanges(propId);
+        const ranges = rangesResponse?.unavailableRanges ?? rangesResponse?.data?.unavailableRanges ?? [];
+        console.log('📅 Fetched booking ranges with status:', ranges);
+        setBookingRanges(ranges);
       } else {
-        setAvailableDates([]);
+        setBookingRanges([]);
       }
 
       const bookingsResponse = await bookingsAPI.getAll();
       setBookings(bookingsResponse.data || []);
       setError(null);
     } catch (err) {
+      console.error('Error loading calendar data:', err);
       setError('Failed to load calendar data.');
     } finally {
       setLoading(false);
@@ -69,34 +65,49 @@ export default function CalendarManagement() {
   };
 
   // Show an emoji banner when there are no bookings/availability yet (but still render calendar)
-  const showEmptyEmoji = !loading && !error && bookings.length === 0 && availableDates.length === 0;
+  const showEmptyEmoji = !loading && !error && bookings.length === 0 && bookingRanges.length === 0;
 
-  // Update the getBookingStatus function
-  const getBookingStatus = (dateStr, bookedEntry) => {
+  // ✅ Updated function to check if date falls within any booking range
+  const getBookingStatus = (dateStr) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const date = new Date(dateStr);
     date.setHours(0, 0, 0, 0);
 
-    if (!bookedEntry) {
+    // Check if this date falls within any booking range
+    const matchingRange = bookingRanges.find(range => {
+      const start = new Date(range.start);
+      const end = new Date(range.end);
+      start.setHours(0, 0, 0, 0);
+      end.setHours(0, 0, 0, 0);
+      
+      return date >= start && date <= end;
+    });
+
+    // If no booking, it's available or past
+    if (!matchingRange) {
       return date < today ? 'past-available' : 'available';
     }
 
-    const { status, checkOut } = bookedEntry;
-    const checkOutDate = new Date(checkOut);
+    // We have a booking - determine status
+    const { status, end } = matchingRange;
+    const checkOutDate = new Date(end);
     checkOutDate.setHours(0, 0, 0, 0);
 
-    // Check if booking should be completed
+    // Auto-complete bookings that have passed checkout
     if (status === 'Booked' && checkOutDate < today) {
       return 'completed';
     }
 
-    if (status === 'Cancelled') return 'cancelled';
-    if (status === 'Pending Payment') return 'pending';
-    if (status === 'Booked') return 'booked';
-    if (status === 'Completed') return 'completed';
+    // Map status to display status
+    const statusMap = {
+      'Cancelled': 'cancelled',
+      'Pending Payment': 'pending',
+      'Booked': 'booked',
+      'Completed': 'completed'
+    };
 
-    return 'available';
+    return statusMap[status] || 'available';
   };
 
   return (
@@ -142,69 +153,89 @@ export default function CalendarManagement() {
           </div>
         )}
 
-        <div className="grid grid-cols-7 gap-2">
-          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-            <div key={day} className="text-center font-semibold py-2">{day}</div>
-          ))}
+        {/* Loading state */}
+        {loading && (
+          <div className="text-center py-8 text-gray-500">
+            Loading calendar...
+          </div>
+        )}
 
-          {/* // Update the calendar day rendering */}
-          {days.map((day, idx) => {
-            if (!day) return (
-              <div key={idx} className="aspect-square flex items-center justify-center border rounded-lg bg-gray-50" />
-            );
+        {/* Calendar grid */}
+        {!loading && (
+          <div className="grid grid-cols-7 gap-2">
+            {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+              <div key={day} className="text-center font-semibold py-2">{day}</div>
+            ))}
 
-            const dateStr = day.toISOString().split('T')[0];
-            const bookedEntry = availableDates.find(d => d.date === dateStr);
-            const status = getBookingStatus(dateStr, bookedEntry);
+            {days.map((day, idx) => {
+              if (!day) return (
+                <div key={idx} className="aspect-square flex items-center justify-center border rounded-lg bg-gray-50" />
+              );
 
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const isPastDate = day < today;
+              const dateStr = day.toISOString().split('T')[0];
+              const status = getBookingStatus(dateStr);
 
-            // Define status styles
-            const statusStyles = {
-              available: 'bg-white hover:bg-blue-50 border-gray-200 cursor-pointer',
-              'past-available': 'bg-gray-50 border-gray-200 cursor-not-allowed opacity-60',
-              booked: 'bg-green-100 border-green-300 text-green-800 cursor-not-allowed',
-              pending: 'bg-yellow-100 border-yellow-300 text-yellow-800 cursor-not-allowed',
-              cancelled: 'bg-red-100 border-red-300 text-red-800 cursor-not-allowed',
-              completed: 'bg-amber-100 border-amber-300 text-amber-800 cursor-not-allowed' // ✅ GOLD
-            };
+              const today = new Date();
+              today.setHours(0, 0, 0, 0);
+              const isPastDate = day < today;
 
-            return (
-              <div
-                key={idx}
-                onClick={() => !isPastDate && status === 'available'}
-                className={` aspect-square flex flex-col items-center justify-center border rounded-lg 
-                  transition-all duration-200
-                  ${statusStyles[status]}
+              // ✅ Define status styles with correct colors
+              const statusStyles = {
+                available: 'bg-white hover:bg-blue-50 border-gray-200 cursor-pointer',
+                'past-available': 'bg-gray-50 border-gray-200 cursor-not-allowed opacity-60',
+                booked: 'bg-green-100 border-green-300 text-green-800 cursor-not-allowed',
+                pending: 'bg-yellow-100 border-yellow-300 text-yellow-800 cursor-not-allowed',
+                cancelled: 'bg-red-100 border-red-300 text-red-800 cursor-not-allowed',
+                completed: 'bg-amber-100 border-amber-300 text-amber-800 cursor-not-allowed'
+              };
+
+              return (
+                <div
+                  key={idx}
+                  onClick={() => !isPastDate && status === 'available'}
+                  className={`
+                    aspect-square flex flex-col items-center justify-center border rounded-lg 
+                    transition-all duration-200
+                    ${statusStyles[status]}
                   `}
-              >
+                >
+                  <span className="font-medium">{day.getDate()}</span>
+                  {status !== 'available' && status !== 'past-available' && (
+                    <span className="text-xs mt-0.5 capitalize">
+                      {status === 'completed' ? '✓' : status}
+                    </span>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
 
-                <span className="font-medium">{day.getDate()}</span>
-                {status !== 'available' && status !== 'past-available' && (
-                  <span className="text-xs mt-0.5 capitalize">
-                    {status === 'completed' ? '✓' : status}
-                  </span>
-                )}
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Legend with 3 colors */}
-        <div className="flex gap-6 mt-6">
+        {/* ✅ Updated Legend with correct colors matching the calendar */}
+        <div className="flex flex-wrap gap-6 mt-6 pt-4 border-t border-gray-200">
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-white border-2 border-gray-200 rounded"></div>
+            <span className="text-sm text-gray-700">Available</span>
+          </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 bg-green-100 border border-green-300 rounded"></div>
-            <span className="text-sm">Available</span>
+            <span className="text-sm text-gray-700">Booked</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-yellow-100 border border-yellow-300 rounded"></div>
+            <span className="text-sm text-gray-700">Pending Payment</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-amber-100 border border-amber-300 rounded"></div>
+            <span className="text-sm text-gray-700">Completed</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 bg-red-100 border border-red-300 rounded"></div>
-            <span className="text-sm">Booked</span>
+            <span className="text-sm text-gray-700">Cancelled</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 bg-yellow-100 border border-yellow-400 rounded"></div>
-            <span className="text-sm">Completed</span>
+            <div className="w-4 h-4 bg-gray-50 border border-gray-200 rounded"></div>
+            <span className="text-sm text-gray-700">Past</span>
           </div>
         </div>
 
@@ -212,4 +243,4 @@ export default function CalendarManagement() {
       </div>
     </div>
   );
-}
+} 

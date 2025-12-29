@@ -217,7 +217,7 @@ export default function PayoutManagement() {
                         <Clock className="w-8 h-8" />
                         <span className="text-sm opacity-90">Comissions</span>
                     </div>
-                    <p className="text-3xl font-bold">¢{stats.totalCommissions}</p>
+                    <p className="text-3xl font-bold">¢{stats.totalCommissions.toFixed(2)}</p>
                 </div>
 
                 <div className="bg-gradient-to-br from-primary-400 to-secondary-500 rounded-2xl p-6 text-white">
