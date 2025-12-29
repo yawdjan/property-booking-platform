@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { getDaysInMonth } from '../../utils/helpers';
-import { propertiesAPI, bookingsAPI } from '../../services/api';
+import { propertiesAPI, bookingsAPI, calendarAPI } from '../../services/api';
 
 export default function CalendarManagement() {
-  const [bookingRanges, setBookingRanges] = useState([]);
+  const [availableDates, setAvailableDates] = useState([]);
   const [bookings, setBookings] = useState([]);
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -30,13 +30,18 @@ export default function CalendarManagement() {
       }
 
       if (propId) {
-        // ✅ Use unavailableRanges API to get booking data with status
-        const rangesResponse = await bookingsAPI.getUnavailableRanges(propId);
-        const ranges = rangesResponse?.unavailableRanges ?? rangesResponse?.data?.unavailableRanges ?? [];
-        console.log('📅 Fetched booking ranges with status:', ranges);
-        setBookingRanges(ranges);
+        // Build month window (first day -> last day)
+        const year = currentMonth.getFullYear();
+        const month = currentMonth.getMonth();
+        const firstDay = new Date(year, month, 1).toISOString().split('T')[0];
+        const lastDay = new Date(year, month + 1, 0).toISOString().split('T')[0];
+
+        const calResponse = await calendarAPI.getAvailability(propId, firstDay, lastDay);
+        // API returns { success, propertyId, bookedDates }
+        const booked = calResponse?.bookedDates ?? calResponse?.data?.bookedDates ?? [];
+        setAvailableDates(booked);
       } else {
-        setBookingRanges([]);
+        setAvailableDates([]);
       }
 
       const bookingsResponse = await bookingsAPI.getAll();
@@ -65,49 +70,54 @@ export default function CalendarManagement() {
   };
 
   // Show an emoji banner when there are no bookings/availability yet (but still render calendar)
-  const showEmptyEmoji = !loading && !error && bookings.length === 0 && bookingRanges.length === 0;
+  const showEmptyEmoji = !loading && !error && bookings.length === 0 && availableDates.length === 0;
 
   // ✅ Updated function to check if date falls within any booking range
-  const getBookingStatus = (dateStr) => {
+  const getBookingStatus = (dateStr, bookedEntry) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const date = new Date(dateStr);
     date.setHours(0, 0, 0, 0);
 
-    // Check if this date falls within any booking range
-    const matchingRange = bookingRanges.find(range => {
-      const start = new Date(range.start);
-      const end = new Date(range.end);
-      start.setHours(0, 0, 0, 0);
-      end.setHours(0, 0, 0, 0);
-      
-      return date >= start && date <= end;
+    if (!bookedEntry) {
+      if (date < today) {
+        return 'past-available'; // Gray - past date
+      }
+      return 'available'; // Green - no booking
+    }
+
+    // Get checkout date from bookedEntry
+    // Try multiple possible field names for checkout date
+    const checkoutDate = bookedEntry.checkoutDate || bookedEntry.checkOut || bookedEntry.checkout;
+
+    if (checkoutDate) {
+      const checkout = new Date(checkoutDate);
+      checkout.setHours(0, 0, 0, 0);
+
+      // If checkout date has passed, booking is completed
+      if (checkout < today) {
+        return 'completed'; // Gold - booking completed
+      }
+    }
+
+    // Check against bookings array to determine status
+    const booking = bookings.find(b => {
+      const checkinDate = new Date(b.checkinDate || b.checkIn || b.checkin);
+      const checkoutDate = new Date(b.checkoutDate || b.checkOut || b.checkout);
+      checkinDate.setHours(0, 0, 0, 0);
+      checkoutDate.setHours(0, 0, 0, 0);
+      const dateToCheck = new Date(dateStr);
+      dateToCheck.setHours(0, 0, 0, 0);
+      return dateToCheck >= checkinDate && dateToCheck < checkoutDate && b.propertyId === selectedProperty;
     });
 
-    // If no booking, it's available or past
-    if (!matchingRange) {
-      return date < today ? 'past-available' : 'available';
+    if (booking) {
+      if (booking.status === 'Pending Payment') return 'pending'; // Yellow for pending, Red for booked
+      if (booking.status === 'Cancelled') return 'cancelled';
+      return 'booked'; // Red - active booking
     }
 
-    // We have a booking - determine status
-    const { status, end } = matchingRange;
-    const checkOutDate = new Date(end);
-    checkOutDate.setHours(0, 0, 0, 0);
-
-    // Auto-complete bookings that have passed checkout
-    if (status === 'Booked' && checkOutDate < today) {
-      return 'completed';
-    }
-
-    // Map status to display status
-    const statusMap = {
-      'Cancelled': 'cancelled',
-      'Pending Payment': 'pending',
-      'Booked': 'booked',
-      'Completed': 'completed'
-    };
-
-    return statusMap[status] || 'available';
+    return 'available';
   };
 
   return (

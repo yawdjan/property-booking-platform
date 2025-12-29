@@ -326,7 +326,7 @@ export const unavailableBookingDates = async (req, res) => {
     // Build the Sequelize query
     let whereClause = {
       propertyId,
-      status: { [Op.in]: ['Booked', 'Pending Payment'] }
+      status: { [Op.in]: ['Booked', 'Pending Payment', 'Completed'] }
     };
 
     // Add date range filter if provided
@@ -402,7 +402,7 @@ export const unavailableBookingRanges = async (req, res) => {
     const bookings = await Booking.findAll({
       where: {
         propertyId,
-        status: { [Op.in]: ['Booked', 'Pending Payment'] }
+        status: { [Op.in]: ['Booked', 'Pending Payment', 'Completed'] }
       },
       attributes: ['checkIn', 'checkOut', 'clientEmail'],
       order: [['checkIn', 'ASC']]

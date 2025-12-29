@@ -43,7 +43,7 @@ function buildAgentStats(bookings, agents) {
   const map = new Map();
   agents.forEach(a => map.set(a.id, { id: a.id, name: a.name || a.email || a.id, amount: 0, count: 0 }));
 
-  bookings.filter(b => b.status === 'Booked').forEach(b => {
+  bookings.filter(b => b.status === 'Booked' || b.status === 'Completed').forEach(b => {
     const agentId = b.agentId || b.agent?.id;
     if (!agentId) return;
     const amt = Number(b.totalAmount ?? 0) || 0;
@@ -244,7 +244,7 @@ export default function FinancialReports() {
               </tr>
             </thead>
             <tbody>
-              {bookings.filter(b => b.status === 'Booked').map(booking => {
+              {bookings.filter(b => b.status === 'Booked' || b.status === 'Completed').map(booking => {
                 const agent = agents.find(a => a.id === booking.agentId);
                 return (
                   <tr key={booking.id} className="border-b">

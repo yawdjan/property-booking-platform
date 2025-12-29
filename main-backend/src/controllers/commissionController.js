@@ -280,7 +280,9 @@ export const approvePayoutRequest = async (req, res) => {
     const availableBalance = await Booking.sum('commissionAmount', {
       where: {
         agentId: request.agentId,
-        status: ['pending', 'completed']
+        status: {
+          [Op.in]: ['Pending Payment', 'Completed']
+        }
       }
     }) || 0;
 
@@ -380,7 +382,9 @@ export const modifyPayoutRequest = async (req, res) => {
     const availableBalance = await Booking.sum('commissionAmount', {
       where: {
         agentId: request.agentId,
-        status: ['pending', 'completed']
+        status: {
+          [Op.in]: ['Pending Payment', 'Completed']
+        }
       }
     }) || 0;
 

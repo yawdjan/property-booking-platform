@@ -1,110 +1,42 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { bookingsAPI } from '../../services/api';
 
-const MiniCalendar = ({ propertyId }) => {
+export default function MiniCalendar({ propertyId }) {
     const [currentMonth, setCurrentMonth] = useState(new Date());
-    const [bookingRanges, setBookingRanges] = useState([]);
+    const [unavailableDates, setUnavailableDates] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    // Fetch booking ranges when month changes
-    useEffect(() => {
-        if (!propertyId) return;
-
-        const fetchBookingRanges = async () => {
+    const loadUnavailableDates = useCallback(async () => {
+        try {
             setLoading(true);
-            try {
-                // Use the unavailableBookingRanges endpoint which includes status
-                const response = await bookingsAPI.getUnavailableRanges(propertyId);
-                const ranges = response?.unavailableRanges ?? response?.data?.unavailableRanges ?? [];
-                
-                console.log('📅 Fetched booking ranges with status:', ranges);
-                setBookingRanges(ranges);
-            } catch (error) {
-                console.error('Error fetching booking ranges:', error);
-                setBookingRanges([]);
-            } finally {
-                setLoading(false);
-            }
-        };
+            // Use the API that returns individual unavailable dates for a window
+            // Query param names expected by backend: startDate / endDate
+            const year = currentMonth.getFullYear();
+            const month = currentMonth.getMonth();
+            const firstDay = new Date(year, month, 1).toISOString().split('T')[0];
+            const lastDay = new Date(year, month + 1, 0).toISOString().split('T')[0];
 
-        fetchBookingRanges();
-    }, [propertyId, currentMonth]); // Re-fetch when month changes (optional optimization)
+            const response = await bookingsAPI.getUnavailableDates(propertyId, firstDay, lastDay);
+            // The API returns { success, propertyId, unavailableDates } (axios wrapper already returns response.data)
+            const dates = response?.unavailableDates ?? response?.data ?? [];
 
-    const getDateStatus = (dateStr) => {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        const date = new Date(dateStr);
-        date.setHours(0, 0, 0, 0);
+            console.log('📅 Fetched unavailable dates for', firstDay, '->', lastDay, dates);
 
-        // Check if this date falls within any booking range
-        const matchingRange = bookingRanges.find(range => {
-            const start = new Date(range.start);
-            const end = new Date(range.end);
-            start.setHours(0, 0, 0, 0);
-            end.setHours(0, 0, 0, 0);
-            
-            return date >= start && date <= end;
-        });
-
-        // If no booking, it's available or past
-        if (!matchingRange) {
-            return date < today ? 'past-available' : 'available';
+            // Remove duplicates (safety)
+            const uniqueDates = [...new Set(dates)];
+            console.log('🔴 Unavailable dates:', uniqueDates); // DEBUG
+            setUnavailableDates(uniqueDates);
+        } catch (error) {
+            console.error('Failed to load unavailable dates:', error);
+        } finally {
+            setLoading(false);
         }
+    }, [propertyId, currentMonth]);
 
-        // We have a booking - determine status
-        const { status, end } = matchingRange;
-        const checkOutDate = new Date(end);
-        checkOutDate.setHours(0, 0, 0, 0);
-
-        // Auto-complete bookings that have passed checkout
-        if (status === 'Booked' && checkOutDate < today) {
-            return 'completed';
-        }
-
-        // Map status to display status
-        const statusMap = {
-            'Cancelled': 'cancelled',
-            'Pending Payment': 'pending',
-            'Booked': 'booked',
-            'Completed': 'completed'
-        };
-
-        return statusMap[status] || 'available';
-    };
-
-    const statusStyles = {
-        available: {
-            bg: 'bg-white hover:bg-gray-50',
-            text: 'text-gray-900',
-            border: 'border-gray-200'
-        },
-        'past-available': {
-            bg: 'bg-gray-50',
-            text: 'text-gray-400',
-            border: 'border-gray-100'
-        },
-        booked: {
-            bg: 'bg-green-100',
-            text: 'text-green-800',
-            border: 'border-green-300'
-        },
-        pending: {
-            bg: 'bg-yellow-100',
-            text: 'text-yellow-800',
-            border: 'border-yellow-300'
-        },
-        completed: {
-            bg: 'bg-amber-100',
-            text: 'text-amber-800',
-            border: 'border-amber-300'
-        },
-        cancelled: {
-            bg: 'bg-red-100',
-            text: 'text-red-800',
-            border: 'border-red-300'
-        }
-    };
+    useEffect(() => {
+        loadUnavailableDates();
+    }, [propertyId, currentMonth]);
 
     const getDaysInMonth = () => {
         const year = currentMonth.getFullYear();
@@ -124,13 +56,19 @@ const MiniCalendar = ({ propertyId }) => {
         // Add all days of the month
         for (let day = 1; day <= daysInMonth; day++) {
             const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-            const status = getDateStatus(dateStr);
+            const isUnavailable = unavailableDates.includes(dateStr);
+
             const isPast = new Date(dateStr) < new Date().setHours(0, 0, 0, 0);
+
+            // DEBUG: Log a few dates to check
+            if (day <= 3) {
+                console.log(`Day ${day}: ${dateStr}, isUnavailable: ${isUnavailable}, in array: ${unavailableDates.includes(dateStr)}`);
+            }
 
             days.push({
                 day,
                 dateStr,
-                status,
+                isUnavailable,
                 isPast
             });
         }
@@ -138,11 +76,11 @@ const MiniCalendar = ({ propertyId }) => {
         return days;
     };
 
-    const goToPreviousMonth = () => {
+    const previousMonth = () => {
         setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1));
     };
 
-    const goToNextMonth = () => {
+    const nextMonth = () => {
         setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1));
     };
 
@@ -151,112 +89,82 @@ const MiniCalendar = ({ propertyId }) => {
         year: 'numeric'
     });
 
-    const days = getDaysInMonth();
     const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const days = getDaysInMonth();
 
     return (
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
-            {/* Header */}
+        <div className="bg-white rounded-lg shadow p-4">
             <div className="flex items-center justify-between mb-4">
                 <button
-                    onClick={goToPreviousMonth}
-                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                    disabled={loading}
+                    onClick={previousMonth}
+                    className="p-1 hover:bg-gray-100 rounded"
+                    aria-label="Previous month"
                 >
-                    <ChevronLeft className="w-5 h-5 text-gray-600" />
+                    <ChevronLeft className="w-5 h-5" />
                 </button>
-                <h3 className="font-semibold text-gray-900">{monthYear}</h3>
+
+                <h3 className="text-lg font-semibold">{monthYear}</h3>
+
                 <button
-                    onClick={goToNextMonth}
-                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                    disabled={loading}
+                    onClick={nextMonth}
+                    className="p-1 hover:bg-gray-100 rounded"
+                    aria-label="Next month"
                 >
-                    <ChevronRight className="w-5 h-5 text-gray-600" />
+                    <ChevronRight className="w-5 h-5" />
                 </button>
             </div>
 
-            {/* Loading State */}
-            {loading && (
-                <div className="text-center py-8 text-gray-500 text-sm">
-                    Loading...
-                </div>
-            )}
-
-            {/* Calendar Grid */}
-            {!loading && (
+            {loading ? (
+                <div className="text-center py-8 text-gray-500">Loading...</div>
+            ) : (
                 <>
-                    {/* Week day headers */}
                     <div className="grid grid-cols-7 gap-1 mb-2">
                         {weekDays.map(day => (
-                            <div
-                                key={day}
-                                className="text-center text-xs font-medium text-gray-600 py-1"
-                            >
+                            <div key={day} className="text-center text-xs font-medium text-gray-600 py-1">
                                 {day}
                             </div>
                         ))}
                     </div>
 
-                    {/* Calendar days */}
                     <div className="grid grid-cols-7 gap-1">
-                        {days.map((dayObj, index) => {
-                            if (!dayObj) {
-                                return <div key={`empty-${index}`} className="aspect-square" />;
-                            }
+                        {days.map((day, index) => (
+                            <div
+                                key={index}
+                                className={`
+                  aspect-square flex items-center justify-center text-sm rounded
+                  ${!day ? 'invisible' : ''}
+                  ${day?.isPast && day?.isUnavailable
+                                        ? 'bg-amber-300 text-amber-800 font-semibold'
+                                        : day?.isUnavailable
+                                            ? 'bg-red-300 text-red-900 font-semibold'
+                                            : day?.isPast
+                                                ? 'bg-gray-100 text-gray-400'
+                                                : 'hover:bg-gray-100'
+                                    }
+                `}
+                                 title={day?.isUnavailable ? (day?.isPast ? 'Completed' : 'Unavailable') : ''}
+                            >
+                                {day?.day}
+                            </div>
+                        ))}
+                    </div>
 
-                            const { day, dateStr, status, isPast } = dayObj;
-                            const styles = statusStyles[status] || statusStyles.available;
-
-                            return (
-                                <div
-                                    key={dateStr}
-                                    className={`
-                                        aspect-square flex items-center justify-center
-                                        text-xs font-medium rounded-lg border transition-colors
-                                        ${styles.bg} ${styles.text} ${styles.border}
-                                        ${isPast && status === 'available' ? 'cursor-not-allowed' : ''}
-                                    `}
-                                    title={`${dateStr} - ${status.replace('-', ' ')}`}
-                                >
-                                    {day}
-                                </div>
-                            );
-                        })}
+                    <div className="mt-4 flex items-center gap-4 text-xs text-gray-600">
+                        <div className="flex items-center gap-2">
+                            <div className="w-4 h-4 bg-red-100 border border-red-300 rounded"></div>
+                            <span className="text-sm text-gray-700">Booked</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <div className="w-4 h-4 bg-gray-50 border border-gray-200 rounded"></div>
+                            <span className="text-sm text-gray-700">Past</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <div className="w-4 h-4 bg-amber-100 border border-amber-300 rounded"></div>
+                            <span className="text-sm text-gray-700">Completed</span>
+                        </div>
                     </div>
                 </>
             )}
-
-            {/* Legend */}
-            <div className="mt-4 pt-4 border-t border-gray-200">
-                <div className="grid grid-cols-2 gap-2 text-xs">
-                    <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 rounded bg-white border border-gray-200"></div>
-                        <span className="text-gray-600">Available</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 rounded bg-green-100 border border-green-300"></div>
-                        <span className="text-gray-600">Booked</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 rounded bg-yellow-100 border border-yellow-300"></div>
-                        <span className="text-gray-600">Pending</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 rounded bg-amber-100 border border-amber-300"></div>
-                        <span className="text-gray-600">Completed</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 rounded bg-red-100 border border-red-300"></div>
-                        <span className="text-gray-600">Cancelled</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 rounded bg-gray-50 border border-gray-100"></div>
-                        <span className="text-gray-600">Past</span>
-                    </div>
-                </div>
-            </div>
         </div>
     );
-};
-
-export default MiniCalendar;
+}
