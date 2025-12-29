@@ -277,10 +277,10 @@ export const approvePayoutRequest = async (req, res) => {
     const finalAmount = approved_amount || request.approvedAmount || request.requestedAmount;
 
     // Validate against available balance
-    const availableBalance = await Commission.sum('amount', {
+    const availableBalance = await Booking.sum('commissionAmount', {
       where: {
         agentId: request.agentId,
-        status: 'pending'
+        status: ['pending', 'completed']
       }
     }) || 0;
 
@@ -377,10 +377,10 @@ export const modifyPayoutRequest = async (req, res) => {
     }
 
     // Check if modified amount exceeds available balance
-    const availableBalance = await Commission.sum('amount', {
+    const availableBalance = await Booking.sum('commissionAmount', {
       where: {
         agentId: request.agentId,
-        status: 'pending'
+        status: ['pending', 'completed']
       }
     }) || 0;
 
