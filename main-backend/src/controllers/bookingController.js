@@ -160,6 +160,9 @@ export const createBooking = async (req, res) => {
     const commissionRate = calculateCommissionRate(req.user, property);
     const commissionAmount = (totalAmount * commissionRate) / 100;
 
+    // Set payment link expiry (30 minutes from now for auto-cancellation)
+    const paymentLinkExpiry = new Date(Date.now() + 30 * 60 * 1000); // 30 minutes
+
     // Create booking
     const booking = await Booking.create({
       propertyId,
@@ -174,7 +177,7 @@ export const createBooking = async (req, res) => {
       commissionRate,
       commissionAmount,
       status: 'Pending Payment',
-      paymentLinkExpiry: new Date(Date.now() + 24 * 60 * 60 * 1000)
+      paymentLinkExpiry // Track when booking will auto-cancel
     });
 
     // Generate payment link via Payment Backend
@@ -278,23 +281,38 @@ export const updateExpiredBookings = async (req, res) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     
-    const result = await Booking.updateMany(
+    const result = await Booking.update(
+      { status: 'Completed' },
       {
-        status: 'Booked',
-        checkOut: { $lt: today }
-      },
-      {
-        $set: { status: 'Completed' }
+        where: {
+          status: 'Booked',
+          checkOut: { [Op.lt]: today }
+        }
       }
     );
-    
-    res.json({
+
+    const completedCount = result[0]; // Number of affected rows
+
+    // If called as API endpoint, send response
+    if (res) {
+      return res.json({
+        success: true,
+        message: `${completedCount} bookings updated to Completed`,
+        count: completedCount
+      });
+    }
+
+    // If called internally, return result
+    return {
       success: true,
-      message: `${result.modifiedCount} bookings updated to Completed`,
-      count: result.modifiedCount
-    });
+      count: completedCount
+    };
+    
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    if (res) {
+      return res.status(500).json({ success: false, error: error.message });
+    }
+    throw error;
   }
 };
 
