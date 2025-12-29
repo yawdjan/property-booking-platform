@@ -1,5 +1,6 @@
 import React, { useState, useEffect} from 'react';
 import { bookingsAPI, agentsAPI, commissionsAPI } from '../../services/api';
+import StatusBadge from '../common/Statusbage';
 
 // Lightweight vertical bar chart built with divs (no external lib needed)
 function VerticalBarChart({ title, labels = [], values = [], currency = false }) {
@@ -18,14 +19,14 @@ function VerticalBarChart({ title, labels = [], values = [], currency = false })
           const barPx = value === 0 ? Math.max(8, Math.round(maxPx * 0.04)) : Math.max(8, rawPx);
           return (
             <div key={label} className="flex-1 flex flex-col items-center">
-              <div className="text-xs text-gray-700 mb-1" title={`${label}: ${currency ? '$' + value.toFixed(2) : value}`}>
-                {currency ? '$' + value.toFixed(2) : value}
+              <div className="text-xs text-gray-700 mb-1" title={`${label}: ${currency ? '¢' + value.toFixed(2) : value}`}>
+                {currency ? '¢' + value.toFixed(2) : value}
               </div>
               <div className="w-full flex items-end justify-center">
                 <div
                   className="w-4 bg-gradient-to-t from-blue-500 to-indigo-600 rounded-t transition-all"
                   style={{ height: `${barPx}px`, minHeight: '8px' }}
-                  title={`${label}: ${currency ? '$' + value.toFixed(2) : value}`}
+                  title={`${label}: ${currency ? '¢' + value.toFixed(2) : value}`}
                 />
               </div>
               <div className="text-xs mt-2 text-center truncate w-full" title={label}>{label}</div>
@@ -192,17 +193,17 @@ export default function FinancialReports() {
       <div className="grid md:grid-cols-3 gap-6 mb-8">
         <div className="bg-white rounded-lg shadow p-6">
           <h3 className="text-sm text-gray-600 mb-2">Total Revenue</h3>
-          <p className="text-3xl font-bold text-primary-400">${totalRevenue.toLocaleString()}</p>
+          <p className="text-3xl font-bold text-primary-400">¢{totalRevenue.toLocaleString()}</p>
         </div>
         <div className="bg-white rounded-lg shadow p-6">
           <h3 className="text-sm text-gray-600 mb-2">Total Commissions</h3>
           <p className="text-3xl font-bold text-primary-400">
-            ${(totalCommissions - pendingPayouts).toLocaleString()}
+            ¢{(totalCommissions - pendingPayouts).toLocaleString()}
           </p>
         </div>
         <div className="bg-white rounded-lg shadow p-6">
           <h3 className="text-sm text-gray-600 mb-2">Pending Payouts</h3>
-          <p className="text-3xl font-bold text-orange-600">${pendingPayouts.toLocaleString()}</p>
+          <p className="text-3xl font-bold text-orange-600">¢{pendingPayouts.toLocaleString()}</p>
         </div>
       </div>
 
@@ -249,16 +250,10 @@ export default function FinancialReports() {
                   <tr key={booking.id} className="border-b">
                     <td className="py-3 px-4">#{booking.id}</td>
                     <td className="py-3 px-4">{agent?.name}</td>
-                    <td className="py-3 px-4">${booking.totalAmount}</td>
-                    <td className="py-3 px-4">${(booking.commission ?? booking.commissionAmount ?? 0)}</td>
+                    <td className="py-3 px-4">{booking.totalAmount}</td>
+                    <td className="py-3 px-4">¢{(booking.commission ?? booking.commissionAmount ?? 0)}</td>
                     <td className="py-3 px-4">
-                      <span className={`px-2 py-1 rounded-full text-xs ${
-                        booking.paymentStatus?.includes('Booked') 
-                          ? 'bg-green-100 text-green-800' 
-                          : 'bg-yellow-100 text-yellow-800'
-                      }`}>
-                        {booking.paymentStatus || booking.status}
-                      </span>
+                      < StatusBadge status={booking.status || booking.booking_status} />
                     </td>
                   </tr>
                 );

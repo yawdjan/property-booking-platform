@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Eye } from 'lucide-react';
 import { bookingsAPI, propertiesAPI, agentsAPI } from '../../services/api';
+import StatusBadge from '../common/Statusbage';
 
 export default function BookingManagement() {
   const [bookings, setBookings] = useState([]);
@@ -125,18 +126,14 @@ export default function BookingManagement() {
                     {new Date(booking.checkOut || booking.check_out).toLocaleDateString()}
                   </td>
                   <td className="py-4 px-6">
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                      booking.status === 'Booked' || booking.payment_status === 'paid' || booking.payment_status === 'Paid' || booking.payment_status === 'Booked'
-                        ? 'bg-green-100 text-green-800' 
-                        : booking.status === 'pending_payment' || booking.payment_status === 'pending'
-                        ? 'bg-yellow-100 text-yellow-800' 
-                        : 'bg-gray-100 text-gray-800'
-                    }`}>
-                      {booking.status || booking.payment_status || 'Unknown'}
-                    </span>
+                    < StatusBadge 
+                      status={booking.status || booking.booking_status} 
+                      size="sm" 
+                      showDot={true} 
+                    />
                   </td>
                   <td className="py-4 px-6 font-semibold">
-                    ${Number(booking.total || booking.totalAmount || 0).toFixed(2)}
+                  ¢{Number(booking.total || booking.totalAmount || 0).toFixed(2)}
                   </td>
                   <td className="py-4 px-6">
                     <button 

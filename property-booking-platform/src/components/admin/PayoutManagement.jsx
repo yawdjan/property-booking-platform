@@ -281,10 +281,10 @@ export default function PayoutManagement() {
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 text-sm font-bold text-secondary-500">
-                                            ${parseFloat(request.requestedAmount).toFixed(2)}
+                                            ¢{parseFloat(request.requestedAmount).toFixed(2)}
                                         </td>
                                         <td className="px-6 py-4 text-sm font-semibold text-amber-800">
-                                            ${parseFloat(availableBalance(request.agentId) || 0).toFixed(2)}
+                                            ¢{parseFloat(availableBalance(request.agentId) || 0).toFixed(2)}
                                         </td>
                                         <td className="px-6 py-4 text-sm text-amber-700 max-w-xs truncate">
                                             {request.description || '-'}
@@ -378,7 +378,7 @@ export default function PayoutManagement() {
                                         <td className="px-6 py-4">
                                             <div>
                                                 <p className="text-sm font-bold text-secondary-500">
-                                                    ${parseFloat(request.requestedAmount).toFixed(2)}
+                                                    ¢{parseFloat(request.requestedAmount).toFixed(2)}
                                                 </p>
                                                 <p className="text-xs text-amber-600">
                                                     {new Date(request.requestDate).toLocaleDateString()}
@@ -389,7 +389,7 @@ export default function PayoutManagement() {
                                             <div>
                                                 {request.approvedAmount && (
                                                     <p className="text-sm font-bold text-secondary-500">
-                                                        ${parseFloat(request.approvedAmount).toFixed(2)}
+                                                        ¢{parseFloat(request.approvedAmount).toFixed(2)}
                                                     </p>
                                                 )}
                                                 <p className="text-xs text-amber-600">
@@ -440,14 +440,14 @@ export default function PayoutManagement() {
                             <div className="bg-blue-50 rounded-lg p-4 border-2 border-blue-200">
                                 <p className="text-sm text-secondary-500 mb-1">Requested Amount</p>
                                 <p className="text-2xl font-bold text-secondary-500">
-                                    ${parseFloat(selectedRequest.requestedAmount).toFixed(2)}
+                                ¢{parseFloat(selectedRequest.requestedAmount).toFixed(2)}
                                 </p>
                             </div>
 
                             <div className="bg-gray-50 rounded-lg p-4 border-2 border-amber-200">
                                 <p className="text-sm text-amber-700 mb-1">Available Balance</p>
                                 <p className="text-xl font-bold text-amber-950">
-                                    ${parseFloat(availableBalance(selectedRequest.agentId) || 0).toFixed(2)}
+                                    ¢{parseFloat(availableBalance(selectedRequest.agentId) || 0).toFixed(2)}
                                 </p>
                             </div>
 

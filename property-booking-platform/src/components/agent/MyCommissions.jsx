@@ -3,6 +3,7 @@ import { useApp } from '../../context/AppContext';
 import { websocket } from '../../services/websocket';
 import { Clock, CheckCircle, XCircle, Send } from 'lucide-react';
 import { bookingsAPI, commissionsAPI, propertiesAPI } from '../../services/api.js';
+import StatusBadge from '../common/Statusbage.jsx';
 
 export default function MyCommissions() {
   const { currentUser } = useApp();
@@ -116,7 +117,6 @@ export default function MyCommissions() {
     alert('Payout request submitted! Admin will process it shortly.');
   };
 
-
   return (
     <div>
       <h2 className="text-2xl font-bold mb-6">My Commissions</h2>
@@ -178,14 +178,7 @@ export default function MyCommissions() {
                     <td className="py-3 px-4">{booking.commissionRate}%</td>
                     <td className="py-3 px-4 font-semibold">${booking.commissionAmount}</td>
                     <td className="py-3 px-4">
-                      <span className={`px-2 py-1 rounded-full text-xs ${booking.status === 'Booked'
-                        ? 'bg-green-100 text-green-800'
-                        : booking.status === 'Pending Payment'
-                          ? 'bg-yellow-100 text-yellow-800'
-                          : 'bg-gray-100 text-gray-800'
-                        }`}>
-                        {booking.status}
-                      </span>
+                      < StatusBadge status={booking.paymentStatus} size="sm" />
                     </td>
                   </tr>
                 );

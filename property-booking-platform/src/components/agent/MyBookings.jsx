@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Copy, Trash2 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { bookingsAPI, propertiesAPI } from '../../services/api.js';
+import StatusBadge from '../common/Statusbage.jsx';
 
 export default function MyBookings() {
   const { currentUser } = useApp();
@@ -94,14 +95,9 @@ export default function MyBookings() {
                     <td className="py-4 px-6">{booking.checkIn}</td>
                     <td className="py-4 px-6">{booking.checkOut}</td>
                     <td className="py-4 px-6">
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${booking.status === 'Booked' ? 'bg-green-100 text-green-800' :
-                        booking.status === 'Pending Payment' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-gray-100 text-gray-800'
-                        }`}>
-                        {booking.status}
-                      </span>
+                      < StatusBadge status={booking.status} size="sm" />
                     </td>
-                    <td className="py-4 px-6">${booking.totalAmount}</td>
+                    <td className="py-4 px-6">¢{booking.totalAmount}</td>
                     <td className="py-4 px-6">
                       <div className="flex gap-2">
                         {/* Copy Payment Link - Show only for Pending Payment */}

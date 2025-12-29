@@ -3,6 +3,7 @@ import { Calendar, DollarSign, Clock } from 'lucide-react';
 import StatCard from '../common/StatCard';
 import { useApp } from '../../context/AppContext';
 import { bookingsAPI, propertiesAPI } from '../../services/api.js';
+import StatusBadge from '../common/Statusbage.jsx';
 
 export default function AgentDashboard({ setActiveTab }) {
   const { currentUser } = useApp();
@@ -41,7 +42,7 @@ export default function AgentDashboard({ setActiveTab }) {
 
   const agentBookings = bookings.filter(b => b.agentId === currentUser.id);
   const totalEarnings = agentBookings
-    .filter(b => b.status === 'Booked')
+    .filter(b => b.status === 'Booked' || b.status === 'Completed' || b.status === 'completed'  )
     .reduce((sum, b) => sum + parseFloat(b.commissionAmount || 0), 0);
   const pendingEarnings = agentBookings
     .filter(b => b.status === 'Pending Payment')
@@ -111,12 +112,7 @@ export default function AgentDashboard({ setActiveTab }) {
                 <div key={booking.id} className="p-3 bg-gray-50 rounded-lg">
                   <p className="font-medium">{property?.name}</p>
                   <p className="text-sm text-gray-600">Check-in: {booking.checkIn}</p>
-                  <span className={`inline-block mt-1 px-2 py-1 rounded-full text-xs ${booking.status === 'Booked'
-                      ? 'bg-green-100 text-green-800'
-                      : 'bg-yellow-100 text-yellow-800'
-                    }`}>
-                    {booking.status}
-                  </span>
+                  <StatusBadge status={booking.status} showDot={true} />
                 </div>
               );
             })}

@@ -52,32 +52,6 @@ export default function CalendarManagement() {
     } finally {
       setLoading(false);
     }
-  }
-
-  // Helper function to determine booking status
-  const getBookingStatus = (dateStr, bookedEntry) => {
-    if (!bookedEntry) {
-      return 'available'; // Green - no booking
-    }
-
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    // Get checkout date from bookedEntry
-    // Try multiple possible field names for checkout date
-    const checkoutDate = bookedEntry.checkoutDate || bookedEntry.checkOut || bookedEntry.checkout;
-
-    if (checkoutDate) {
-      const checkout = new Date(checkoutDate);
-      checkout.setHours(0, 0, 0, 0);
-
-      // If checkout date has passed, booking is completed
-      if (checkout < today) {
-        return 'completed'; // Gold - booking completed
-      }
-    }
-
-    return 'booked'; // Red - active booking
   };
 
   const days = getDaysInMonth(currentMonth);
@@ -96,6 +70,34 @@ export default function CalendarManagement() {
 
   // Show an emoji banner when there are no bookings/availability yet (but still render calendar)
   const showEmptyEmoji = !loading && !error && bookings.length === 0 && availableDates.length === 0;
+
+  // Update the getBookingStatus function
+  const getBookingStatus = (dateStr, bookedEntry) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const date = new Date(dateStr);
+    date.setHours(0, 0, 0, 0);
+
+    if (!bookedEntry) {
+      return date < today ? 'past-available' : 'available';
+    }
+
+    const { status, checkOut } = bookedEntry;
+    const checkOutDate = new Date(checkOut);
+    checkOutDate.setHours(0, 0, 0, 0);
+
+    // Check if booking should be completed
+    if (status === 'Booked' && checkOutDate < today) {
+      return 'completed';
+    }
+
+    if (status === 'Cancelled') return 'cancelled';
+    if (status === 'Pending Payment') return 'pending';
+    if (status === 'Booked') return 'booked';
+    if (status === 'Completed') return 'completed';
+
+    return 'available';
+  };
 
   return (
     <div>
@@ -144,6 +146,8 @@ export default function CalendarManagement() {
           {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
             <div key={day} className="text-center font-semibold py-2">{day}</div>
           ))}
+
+          {/* // Update the calendar day rendering */}
           {days.map((day, idx) => {
             if (!day) return (
               <div key={idx} className="aspect-square flex items-center justify-center border rounded-lg bg-gray-50" />
@@ -155,49 +159,33 @@ export default function CalendarManagement() {
 
             const today = new Date();
             today.setHours(0, 0, 0, 0);
-
             const isPastDate = day < today;
 
-            // Determine styling based on status
-            let bgClass, borderClass, textClass, hoverClass;
-
-            if (!bookedEntry) {
-              // AVAILABLE
-              bgClass = 'bg-green-100';
-              borderClass = 'border-green-300';
-              textClass = '';
-              hoverClass = 'hover:bg-green-200 cursor-pointer';
-
-            } else if (isPastDate) {
-              // BOOKED BUT DATE HAS PASSED → GOLD
-              bgClass = 'bg-yellow-100';
-              borderClass = 'border-yellow-400';
-              textClass = 'text-yellow-800';
-              hoverClass = '';
-
-            } else {
-              // BOOKED & DATE NOT PASSED → RED
-              bgClass = 'bg-red-100';
-              borderClass = 'border-red-300';
-              textClass = 'text-red-700/90';
-              hoverClass = '';
-            }
-
-            const title = bookedEntry
-              ? `${status === 'completed' ? 'Completed - ' : ''}Booked by ${bookedEntry.agent?.name ?? bookedEntry.clientEmail ?? 'Someone'}`
-              : 'Available';
+            // Define status styles
+            const statusStyles = {
+              available: 'bg-white hover:bg-blue-50 border-gray-200 cursor-pointer',
+              'past-available': 'bg-gray-50 border-gray-200 cursor-not-allowed opacity-60',
+              booked: 'bg-green-100 border-green-300 text-green-800 cursor-not-allowed',
+              pending: 'bg-yellow-100 border-yellow-300 text-yellow-800 cursor-not-allowed',
+              cancelled: 'bg-red-100 border-red-300 text-red-800 cursor-not-allowed',
+              completed: 'bg-amber-100 border-amber-300 text-amber-800 cursor-not-allowed' // ✅ GOLD
+            };
 
             return (
               <div
                 key={idx}
-                title={title}
-                className={`aspect-square flex flex-col items-center justify-center border rounded-lg text-center px-1 ${bgClass} ${borderClass} ${hoverClass}`}
+                onClick={() => !isPastDate && status === 'available'}
+                className={` aspect-square flex flex-col items-center justify-center border rounded-lg 
+                  transition-all duration-200
+                  ${statusStyles[status]}
+                  `}
               >
-                <div className="text-sm font-semibold">{day.getDate()}</div>
-                {bookedEntry && (
-                  <div className={`mt-1 text-[11px] leading-tight ${textClass}`}>
-                    {bookedEntry.agent?.name ?? bookedEntry.clientEmail ?? 'Booked'}
-                  </div>
+
+                <span className="font-medium">{day.getDate()}</span>
+                {status !== 'available' && status !== 'past-available' && (
+                  <span className="text-xs mt-0.5 capitalize">
+                    {status === 'completed' ? '✓' : status}
+                  </span>
                 )}
               </div>
             );
