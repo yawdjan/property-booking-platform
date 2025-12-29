@@ -21,7 +21,6 @@ export default function BookingCalendar() {
   const [unavailableDates, setUnavailableDates] = useState([]);
   const { currentUser } = useApp(); // ← Make sure this is imported
 
-
   useEffect(() => {
     loadData();
   }, []);
