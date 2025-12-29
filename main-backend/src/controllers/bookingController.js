@@ -53,6 +53,8 @@ export const getAgentBookings = async (req, res) => {
 
 export const getBooking = async (req, res) => {
   try {
+    await updateExpiredBookings(req, res); // Ensure booking statuses are up-to-date
+
     const booking = await Booking.findByPk(req.params.id, {
       include: [
         { model: Property, as: 'property' },
@@ -268,6 +270,31 @@ export const updateBooking = async (req, res) => {
       success: false,
       message: error.message
     });
+  }
+};
+
+export const updateExpiredBookings = async (req, res) => {
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const result = await Booking.updateMany(
+      {
+        status: 'Booked',
+        checkOut: { $lt: today }
+      },
+      {
+        $set: { status: 'Completed' }
+      }
+    );
+    
+    res.json({
+      success: true,
+      message: `${result.modifiedCount} bookings updated to Completed`,
+      count: result.modifiedCount
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
   }
 };
 

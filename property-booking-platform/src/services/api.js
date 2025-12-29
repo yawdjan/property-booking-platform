@@ -97,10 +97,21 @@ export const propertiesAPI = {
 
 // Bookings APIs
 export const bookingsAPI = {
-  getAll: () => apiClient.get('/bookings'),
+    getAll: async () => {
+    // Auto-update expired bookings before fetching
+    await apiClient.post('/bookings/update-expired');
+    return apiClient.get('/bookings');
+  },
 
-  getByAgent: (agentId) =>
-    apiClient.get(`/bookings/agent/${agentId}`),
+  getByAgent: async (agentId) => {
+    // Auto-update expired bookings before fetching
+    await apiClient.post('/bookings/update-expired');
+    return apiClient.get(`/bookings/agent/${agentId}`);
+  },
+
+  // New method to manually update expired bookings
+  updateExpiredBookings: () => 
+    apiClient.post('/bookings/update-expired'),
 
   getById: (id) =>
     apiClient.get(`/bookings/${id}`),
