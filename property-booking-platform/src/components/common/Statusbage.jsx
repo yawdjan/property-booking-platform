@@ -1,5 +1,5 @@
 import React from 'react';
-import { getStatusColor } from '../constants/statusColors';
+import { getStatusColor } from '../../constants/statusColors';
 
 const StatusBadge = ({ status, size = 'md', showDot = false }) => {
   const colors = getStatusColor(status);
