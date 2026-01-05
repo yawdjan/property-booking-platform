@@ -85,8 +85,11 @@ export default function LandingPage({ defaultTab = 'home' }) {
       <nav className="sticky top-0 z-10 backdrop-blur-lg bg-white/80 border-b border-primary-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
-            <div className="text-2xl font-bold bg-gradient-to-r from-primary-700 via-accent-600 to-secondary-600 bg-clip-text text-transparent">
-              Omarey
+            <div className="flex items-center space-x-1">
+              <img src="/logo.png" alt="Omarey Logo" className="h-10 w-24" />
+              <div className="text-2xl font-bold bg-gradient-to-r from-primary-700 via-accent-600 to-secondary-600 bg-clip-text text-transparent">
+                Omarey
+              </div>
             </div>
 
             {/* Desktop Navigation */}
@@ -222,6 +225,7 @@ function Footer() {
             All-in-one platform to manage bookings, payments, clients, and
             properties with ease.
           </p>
+          <img src="/logo.png" alt="Omarey Logo" className="h-16 w-36 mt-4" />
         </div>
 
         <div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getDaysInMonth } from '../../utils/helpers';
-import { propertiesAPI, bookingsAPI, calendarAPI } from '../../services/api';
+import { propertiesAPI, bookingsAPI } from '../../services/api';
 
 export default function CalendarManagement() {
   const [availableDates, setAvailableDates] = useState([]);
@@ -36,9 +36,9 @@ export default function CalendarManagement() {
         const firstDay = new Date(year, month, 1).toISOString().split('T')[0];
         const lastDay = new Date(year, month + 1, 0).toISOString().split('T')[0];
 
-        const calResponse = await calendarAPI.getAvailability(propId, firstDay, lastDay);
+        const calResponse = await bookingsAPI.getUnavailableDates(propId, firstDay, lastDay);
         // API returns { success, propertyId, bookedDates }
-        const booked = calResponse?.bookedDates ?? calResponse?.data?.bookedDates ?? [];
+        const booked = calResponse?.unavailableDates ?? calResponse?.data ?? [];
         setAvailableDates(booked);
       } else {
         setAvailableDates([]);

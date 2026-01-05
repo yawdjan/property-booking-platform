@@ -53,7 +53,7 @@ export const getAgentBookings = async (req, res) => {
 
 export const getBooking = async (req, res) => {
   try {
-    await updateExpiredBookings(req, res); // Ensure booking statuses are up-to-date
+    const exp = await updateExpiredBookings(req, res); // Ensure booking statuses are up-to-date
 
     const booking = await Booking.findByPk(req.params.id, {
       include: [
