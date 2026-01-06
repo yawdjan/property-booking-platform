@@ -78,24 +78,16 @@ export default function CalendarManagement() {
     today.setHours(0, 0, 0, 0);
     const date = new Date(dateStr);
     date.setHours(0, 0, 0, 0);
+    // const checkoutDate = bookedEntry.checkoutDate || bookedEntry.checkOut || bookedEntry.checkout;
 
-    if (bookedEntry) {
+    if (!bookedEntry) {
       if (date < today) {
         return 'past-available';
       }
       return 'available';
     }
 
-    const checkoutDate = bookedEntry.checkoutDate || bookedEntry.checkOut || bookedEntry.checkout;
-
-    if (checkoutDate) {
-      const checkout = new Date(checkoutDate);
-      checkout.setHours(0, 0, 0, 0);
-
-      if (checkout < today) {
-        return 'completed';
-      }
-    }
+    if (date < today) return 'completed';
 
     // Check against bookings array to determine status
     const booking = bookings.find(b => {
