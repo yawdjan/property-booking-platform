@@ -84,6 +84,11 @@ export default function BookingCalendar() {
     const start = new Date(checkIn);
     const end = new Date(checkOut);
 
+    // Exclude the checkout date (move checkout back by one day)
+    end.setDate(end.getDate() - 1);
+
+    if (start > end) return false;
+
     for (let date = new Date(start); date <= end; date.setDate(date.getDate() + 1)) {
       const dateStr = date.toISOString().split('T')[0];
       if (unavailableDates.includes(dateStr)) {
@@ -235,11 +240,92 @@ export default function BookingCalendar() {
           </div>
 
           {/* Main Image */}
-          <img
-            src={selectedProperty.images[0]}
-            alt={selectedProperty.name}
-            className="w-full h-64 object-cover rounded-lg mb-3"
-          />
+          {selectedProperty.images && selectedProperty.images.length > 0 && (
+            <div
+              className="relative mb-3 focus:outline-none"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                const imgs = selectedProperty.images || [];
+                if (imgs.length === 0) return;
+                const imgEl = document.getElementById('booking-carousel-img');
+                if (!imgEl) return;
+                const cur = parseInt(imgEl.getAttribute('data-index') || '0', 10);
+                if (e.key === 'ArrowLeft') {
+                  const next = (cur - 1 + imgs.length) % imgs.length;
+                  imgEl.src = imgs[next];
+                  imgEl.setAttribute('data-index', String(next));
+                } else if (e.key === 'ArrowRight') {
+                  const next = (cur + 1) % imgs.length;
+                  imgEl.src = imgs[next];
+                  imgEl.setAttribute('data-index', String(next));
+                }
+              }}
+            >
+              <img
+                id="booking-carousel-img"
+                data-index="0"
+                src={selectedProperty.images[0]}
+                alt={selectedProperty.name}
+                className="w-full h-64 object-cover rounded-lg"
+              />
+
+              {selectedProperty.images.length > 1 && (
+                <>
+                  <button
+                    type="button"
+                    aria-label="Previous image"
+                    onClick={() => {
+                      const imgs = selectedProperty.images || [];
+                      const imgEl = document.getElementById('booking-carousel-img');
+                      if (!imgEl || imgs.length === 0) return;
+                      const cur = parseInt(imgEl.getAttribute('data-index') || '0', 10);
+                      const next = (cur - 1 + imgs.length) % imgs.length;
+                      imgEl.src = imgs[next];
+                      imgEl.setAttribute('data-index', String(next));
+                    }}
+                    className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 rounded-full p-2"
+                  >
+                    ‹
+                  </button>
+
+                  <button
+                    type="button"
+                    aria-label="Next image"
+                    onClick={() => {
+                      const imgs = selectedProperty.images || [];
+                      const imgEl = document.getElementById('booking-carousel-img');
+                      if (!imgEl || imgs.length === 0) return;
+                      const cur = parseInt(imgEl.getAttribute('data-index') || '0', 10);
+                      const next = (cur + 1) % imgs.length;
+                      imgEl.src = imgs[next];
+                      imgEl.setAttribute('data-index', String(next));
+                    }}
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 rounded-full p-2"
+                  >
+                    ›
+                  </button>
+
+                  <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-2">
+                    {selectedProperty.images.map((_, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        aria-label={`Go to image ${i + 1}`}
+                        onClick={() => {
+                          const imgs = selectedProperty.images || [];
+                          const imgEl = document.getElementById('booking-carousel-img');
+                          if (!imgEl || imgs.length === 0) return;
+                          imgEl.src = imgs[i];
+                          imgEl.setAttribute('data-index', String(i));
+                        }}
+                        className={`w-2 h-2 rounded-full ${i === 0 ? 'bg-primary-400' : 'bg-white bg-opacity-80'}`}
+                      />
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+          )}
 
           <div className="space-y-2 text-sm">
             <p><span className="font-medium">Address:</span> {selectedProperty.address}</p>

@@ -195,24 +195,47 @@ export default function CalendarManagement() {
                 completed: 'bg-amber-100 border-amber-300 text-amber-800 cursor-not-allowed'
               };
 
-              return (
+                const bookingForDate = bookings.find(b => {
+                const checkinDate = new Date(b.checkinDate || b.checkIn || b.checkin);
+                const checkoutDate = new Date(b.checkoutDate || b.checkOut || b.checkout);
+                checkinDate.setHours(0, 0, 0, 0);
+                checkoutDate.setHours(0, 0, 0, 0);
+                const dateToCheck = new Date(day);
+                dateToCheck.setHours(0, 0, 0, 0);
+
+                const isSameDayBooking = checkinDate.getTime() === checkoutDate.getTime();
+                const isInRange = isSameDayBooking
+                  ? dateToCheck.getTime() === checkinDate.getTime()
+                  : dateToCheck >= checkinDate && dateToCheck < checkoutDate;
+
+                return isInRange && b.propertyId === selectedProperty;
+                });
+
+                const agentName = bookingForDate?.agentName || bookingForDate?.agent?.name || bookingForDate?.agentNameFull || '';
+
+                return (
                 <div
                   key={idx}
                   onClick={() => !isPastDate && status === 'available'}
                   className={`
-                    aspect-square flex flex-col items-center justify-center border rounded-lg 
-                    transition-all duration-200
-                    ${statusStyles[status]}
+                  aspect-square flex flex-col items-center justify-center border rounded-lg 
+                  transition-all duration-200
+                  ${statusStyles[status]}
                   `}
                 >
                   <span className="font-medium">{day.getDate()}</span>
+
                   {status !== 'available' && status !== 'past-available' && (
-                    <span className="text-xs mt-0.5 capitalize">
-                      {status === 'completed' ? '✓' : status}
-                    </span>
+                  <span className="text-xs mt-0.5 capitalize">
+                    {status === 'completed' ? '✓' : status}
+                  </span>
+                  )}
+
+                  {bookingForDate && agentName && (
+                  <span className="text-xs mt-0.5 text-gray-600">{agentName}</span>
                   )}
                 </div>
-              );
+                );
             })}
           </div>
         )}

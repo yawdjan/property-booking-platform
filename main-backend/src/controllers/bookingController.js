@@ -383,15 +383,25 @@ export const unavailableBookingDates = async (req, res) => {
 
     console.log('Found bookings:', bookings.length);
 
-    // Generate array of unavailable dates
+    // Generate array of unavailable dates (include checkIn, exclude checkOut)
     const unavailableDates = [];
 
     bookings.forEach(booking => {
       const start = new Date(booking.checkIn);
       const end = new Date(booking.checkOut);
 
-      // Include all dates from check-in to check-out (inclusive)
-      for (let date = new Date(start); date <= end; date.setDate(date.getDate() + 1)) {
+      // Normalize to start of day to avoid time component issues
+      start.setHours(0, 0, 0, 0);
+      end.setHours(0, 0, 0, 0);
+
+      // If checkIn and checkOut are the same day, include the checkIn (per requirement)
+      if (start.getTime() === end.getTime()) {
+        unavailableDates.push(start.toISOString().split('T')[0]);
+        return;
+      }
+
+      // Include all dates from check-in up to but excluding check-out
+      for (let date = new Date(start); date < end; date.setDate(date.getDate() + 1)) {
         unavailableDates.push(date.toISOString().split('T')[0]);
       }
     });
