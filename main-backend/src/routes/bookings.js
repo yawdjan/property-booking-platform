@@ -18,8 +18,8 @@ const router = express.Router();
 router.get('/', protect, authorize('admin'), getAllBookings);
 router.get('/agent/:agentId', protect, getAgentBookings);
 router.get('/:id', protect, getBooking);
-router.get('/unavailable-ranges/:propertyId', protect, authorize('agent'), unavailableBookingRanges);
-router.get('/unavailable-dates/:propertyId', protect, authorize('agent'), unavailableBookingDates);
+router.get('/unavailable-ranges/:propertyId', protect, unavailableBookingRanges);
+router.get('/unavailable-dates/:propertyId', protect, unavailableBookingDates);
 router.post('/', protect, authorize('agent'), checkAgentActive, createBooking);
 router.post('/:id/cancel', protect, cancelBooking);
 router.post('/confirm-payment', confirmPayment); // Called by Payment Backend

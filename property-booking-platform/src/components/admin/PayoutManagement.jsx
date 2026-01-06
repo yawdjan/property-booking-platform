@@ -50,7 +50,9 @@ export default function PayoutManagement() {
                 setbookingsRequests(commissions);
 
                 // Total commissions (all)
-                const total = commissions.reduce(
+                const total = commissions
+                .filter(c => c.status === "Completed")
+                .reduce(
                     (sum, c) => sum + parseFloat(c.commissionAmount || 0),
                     0
                 );
@@ -58,12 +60,12 @@ export default function PayoutManagement() {
                 // Pending commissions: Requested + Pending Payout
                 const pending = payoutRequests
                     .filter(c => c.status === "pending")
-                    .reduce((sum, c) => sum + parseFloat(c.amount || 0), 0);
+                    .reduce((sum, c) => sum + parseFloat(c.requestedAmount || 0), 0);
 
                 // Paid commissions
                 const paid = payoutRequests
                     .filter(c => c.status === "completed")
-                    .reduce((sum, c) => sum + parseFloat(c.approvedAmount || 0), 0);
+                    .reduce((sum, c) => sum + parseFloat(c.approvedAmount || c.requestedAmount || 0), 0);
 
                 // Count of pending payout requests
                 const pendingPayoutRequests = payoutRequests.filter(

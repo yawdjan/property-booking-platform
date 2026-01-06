@@ -23,7 +23,7 @@ export default function MyCommissions() {
   }, []);
 
   const agentBookings = bookings.filter(b =>
-    b.agentId === currentUser.id && b.status === 'Booked'
+    b.agentId === currentUser.id && b.status === 'Completed'
   );
 
   const loadData = async () => {

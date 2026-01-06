@@ -108,7 +108,7 @@ export default function FinancialReports() {
         bookingsAPI.getAll(),
         commissionsAPI.getAllPayouts(),
         agentsAPI.getAll(),
-        agentsAPI.getStats(startDate, endDate)
+        // agentsAPI.getStats(startDate, endDate)
       ]);
       setBookings(bookingsRes.data);
       setPayoutStats(comissionsRes.data);
