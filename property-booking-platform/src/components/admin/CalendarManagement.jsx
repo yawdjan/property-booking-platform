@@ -79,7 +79,7 @@ export default function CalendarManagement() {
     const date = new Date(dateStr);
     date.setHours(0, 0, 0, 0);
 
-    if (!bookedEntry) {
+    if (bookedEntry) {
       if (date < today) {
         return 'past-available';
       }
