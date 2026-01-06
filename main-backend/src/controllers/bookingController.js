@@ -151,29 +151,13 @@ export const createBooking = async (req, res) => {
     const adjustedCheckOut = adjCheckOutDate.toISOString().split('T')[0];
 
     // Check availability
-    // Check availability
     const conflictingBooking = await Booking.findOne({
       where: {
         propertyId,
         status: { [Op.in]: ['Pending Payment', 'Booked'] },
-        [Op.or]: [
-          // New booking's check-in falls within existing booking (exclusive of checkout)
-          {
-            checkIn: { [Op.lte]: checkIn },
-            checkOut: { [Op.gt]: checkIn }
-          },
-          // New booking's check-out falls within existing booking (exclusive of checkin)
-          {
-            checkIn: { [Op.lt]: checkOut },
-            checkOut: { [Op.gte]: checkOut }
-          },
-          // New booking completely encompasses existing booking
-          {
-            [Op.and]: [
-              { checkIn: { [Op.gte]: checkIn } },
-              { checkOut: { [Op.lte]: checkOut } }
-            ]
-          }
+        [Op.and]: [
+          { checkIn: { [Op.lt]: checkOut } },   // new check-in is before existing checkout
+          { checkOut: { [Op.gt]: checkIn } }    // new check-out is after existing check-in
         ]
       }
     });
