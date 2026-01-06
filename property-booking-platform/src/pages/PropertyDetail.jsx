@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { 
-  MapPin, Users, Bed, Bath, ArrowLeft, Check, 
+import {
+  MapPin, Users, Bed, Bath, ArrowLeft, Check,
   Wifi, Car, Tv, Utensils, Wind, Coffee, ChevronLeft, ChevronRight, X
 } from 'lucide-react';
 import { propertiesAPI } from '../services/api';
@@ -28,7 +28,7 @@ export default function PropertyDetail() {
 
   useEffect(() => {
     fetchProperty();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const fetchProperty = async () => {
@@ -53,7 +53,7 @@ export default function PropertyDetail() {
 
   const previousImage = () => {
     if (property?.images && property.images.length > 0) {
-      setCurrentImageIndex((prev) => 
+      setCurrentImageIndex((prev) =>
         prev === 0 ? property.images.length - 1 : prev - 1
       );
     }
@@ -182,11 +182,10 @@ export default function PropertyDetail() {
                   <button
                     key={idx}
                     onClick={() => setCurrentImageIndex(idx)}
-                    className={`flex-shrink-0 w-24 h-24 rounded-xl overflow-hidden border-2 transition-all ${
-                      idx === currentImageIndex
+                    className={`flex-shrink-0 w-24 h-24 rounded-xl overflow-hidden border-2 transition-all ${idx === currentImageIndex
                         ? 'border-primary-400 shadow-lg'
                         : 'border-gray-200 hover:border-primary-200'
-                    }`}
+                      }`}
                   >
                     <img
                       src={img}
@@ -212,7 +211,7 @@ export default function PropertyDetail() {
             {/* Header */}
             <div className="bg-white rounded-2xl shadow-xl p-8 border-2 border-primary-100">
               <h1 className="text-4xl font-bold text-amber-950 mb-4">{property.name}</h1>
-              
+
               <div className="flex items-start gap-2 mb-6">
                 <MapPin className="w-6 h-6 text-amber-600 flex-shrink-0 mt-1" />
                 <p className="text-xl text-amber-800">{property.address}</p>
@@ -300,7 +299,7 @@ export default function PropertyDetail() {
                     </div>
                   </div>
                 </div>
-{/* 
+                {/* 
                 <button
                   onClick={() => navigate('/register')}
                   className="w-full py-4 bg-gradient-to-r from-primary-400 to-secondary-500 text-white rounded-xl font-bold text-lg hover:from-primary-500 hover:to-secondary-600 transition-all shadow-lg hover:shadow-xl"
@@ -338,15 +337,18 @@ export default function PropertyDetail() {
 
       {/* Full Screen Gallery Modal */}
       {showGallery && hasImages && (
-        <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4" onClick={() => setShowGallery(false)} >
           <button
-            onClick={() => setShowGallery(false)}
+            onClick={(e) => {
+              e.stopPropagation(); // Prevent event bubbling
+              setShowGallery(false);
+            }}
             className="absolute z-50 top-4 right-4 w-12 h-12 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/20 transition-all"
           >
             <X className="w-6 h-6 text-white" />
           </button>
 
-          <div className="relative w-full h-full flex items-center justify-center">
+          <div className="relative w-full h-full flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
             <img
               src={property.images[currentImageIndex]}
               alt={`${property.name} - Image ${currentImageIndex + 1}`}

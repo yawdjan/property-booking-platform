@@ -5,6 +5,7 @@ import { bookingsAPI } from '../../services/api';
 export default function MiniCalendar({ propertyId }) {
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [unavailableDates, setUnavailableDates] = useState([]);
+    const [booking, setBooking] = useState([]);
     const [loading, setLoading] = useState(false);
 
     const loadUnavailableDates = useCallback(async () => {
@@ -20,6 +21,9 @@ export default function MiniCalendar({ propertyId }) {
             const response = await bookingsAPI.getUnavailableDates(propertyId, firstDay, lastDay);
             // The API returns { success, propertyId, unavailableDates } (axios wrapper already returns response.data)
             const dates = response?.unavailableDates ?? response?.data ?? [];
+
+            const bookingsResponse = await bookingsAPI.getAll();
+            setBooking(bookingsResponse.data);
 
             console.log('📅 Fetched unavailable dates for', firstDay, '->', lastDay, dates);
 
@@ -127,29 +131,70 @@ export default function MiniCalendar({ propertyId }) {
                     </div>
 
                     <div className="grid grid-cols-7 gap-1">
-                        {days.map((day, index) => (
-                            <div
-                                key={index}
-                                className={`
-                  aspect-square flex items-center justify-center text-sm rounded
-                  ${!day ? 'invisible' : ''}
-                  ${day?.isPast && day?.isUnavailable
-                                        ? 'bg-amber-300 text-amber-800 font-semibold'
-                                        : day?.isUnavailable
-                                            ? 'bg-red-300 text-red-900 font-semibold'
-                                            : day?.isPast
-                                                ? 'bg-gray-100 text-gray-400'
-                                                : 'hover:bg-gray-100'
-                                    }
+                        {days.map((day, index) => {
+                            if (!day) {
+                                return <div key={index} className="invisible" />;
+                            }
+
+                            const dateStr = day.dateStr;
+
+                            const foundBooking = booking.find(b => {
+                                const checkinDate = new Date(b.checkinDate || b.checkIn || b.checkin);
+                                const checkoutDate = new Date(b.checkoutDate || b.checkOut || b.checkout);
+                                checkinDate.setHours(0, 0, 0, 0);
+                                checkoutDate.setHours(0, 0, 0, 0);
+                                const dateToCheck = new Date(dateStr);
+                                dateToCheck.setHours(0, 0, 0, 0);
+
+                                // Handle same-day bookings (0 nights)
+                                const isSameDayBooking = checkinDate.getTime() === checkoutDate.getTime();
+                                const isInRange = isSameDayBooking
+                                    ? dateToCheck.getTime() === checkinDate.getTime()
+                                    : dateToCheck >= checkinDate && dateToCheck < checkoutDate;
+
+                                return isInRange && b.propertyId === propertyId;
+                            });
+
+                            const isPending = foundBooking && foundBooking.status === 'Pending Payment';
+                            const isBooked = foundBooking && foundBooking.status !== 'Pending Payment';
+
+                            return (
+                                <div
+                                    key={index}
+                                    className={`
+                    aspect-square flex items-center justify-center text-sm rounded
+                    ${isPending && day.isPast
+                                            ? 'bg-amber-300 text-amber-800 font-semibold'
+                                            : isPending
+                                                ? 'bg-green-300 text-yellow-900 font-semibold'
+                                                : isBooked && day.isPast
+                                                    ? 'bg-amber-300 text-amber-800 font-semibold'
+                                                    : isBooked
+                                                        ? 'bg-red-300 text-red-900 font-semibold'
+                                                        : day.isPast
+                                                            ? 'bg-gray-100 text-gray-400'
+                                                            : 'hover:bg-gray-100'
+                                        }
                 `}
-                                 title={day?.isUnavailable ? (day?.isPast ? 'Completed' : 'Unavailable') : ''}
-                            >
-                                {day?.day}
-                            </div>
-                        ))}
+                                    title={
+                                        isPending
+                                            ? 'Pending'
+                                            : isBooked
+                                                ? (day.isPast ? 'Completed' : 'Booked')
+                                                : ''
+                                    }
+                                >
+                                    {day.day}
+                                </div>
+                            );
+                        })}
                     </div>
 
                     <div className="mt-4 flex items-center gap-4 text-xs text-gray-600">
+                        <div className="flex items-center gap-2">
+                            <div className="w-4 h-4 bg-red-100 border border-green-300 rounded"></div>
+                            <span className="text-sm text-gray-700">Pending</span>
+                        </div>
                         <div className="flex items-center gap-2">
                             <div className="w-4 h-4 bg-red-100 border border-red-300 rounded"></div>
                             <span className="text-sm text-gray-700">Booked</span>
