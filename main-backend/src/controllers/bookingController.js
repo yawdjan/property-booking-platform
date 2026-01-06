@@ -145,25 +145,26 @@ export const createBooking = async (req, res) => {
       });
     }
 
+    // Adjust checkOut by one day for availability check (treat checkout as exclusive)
+    const adjCheckOutDate = new Date(checkOut);
+    adjCheckOutDate.setDate(adjCheckOutDate.getDate() - 1);
+    const adjustedCheckOut = adjCheckOutDate.toISOString().split('T')[0];
+
     // Check availability
     const conflictingBooking = await Booking.findOne({
       where: {
-        propertyId,
-        status: { [Op.in]: ['Pending Payment', 'Booked'] },
-        [Op.or]: [
-          {
-            checkIn: { [Op.between]: [checkIn, checkOut] }
-          },
-          {
-            checkOut: { [Op.between]: [checkIn, checkOut] }
-          },
-          {
-            [Op.and]: [
-              { checkIn: { [Op.lte]: checkIn } },
-              { checkOut: { [Op.gte]: checkOut } }
-            ]
-          }
+      propertyId,
+      status: { [Op.in]: ['Pending Payment', 'Booked'] },
+      [Op.or]: [
+        { checkIn: { [Op.between]: [checkIn, adjustedCheckOut] } },
+        { checkOut: { [Op.between]: [checkIn, adjustedCheckOut] } },
+        {
+        [Op.and]: [
+          { checkIn: { [Op.lte]: checkIn } },
+          { checkOut: { [Op.gte]: adjustedCheckOut } }
         ]
+        }
+      ]
       }
     });
 

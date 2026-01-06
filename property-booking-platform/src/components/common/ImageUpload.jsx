@@ -33,7 +33,7 @@ export default function ImageUpload({ images, onChange, maxImages = 10, maxSizeM
     }
 
     // Check file sizes
-    const maxSizeBytes = maxSizeMB * 10240 * 10240;
+    const maxSizeBytes = maxSizeMB * 10240 * 1024;
     const oversizedFiles = imageFiles.filter(file => file.size > maxSizeBytes);
     
     if (oversizedFiles.length > 0) {
