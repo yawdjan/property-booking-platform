@@ -378,7 +378,7 @@ export default function BookingCalendar() {
                 <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4">
                   <button
                     onClick={() => setShowGallery(false)}
-                    className="absolute top-4 right-4 w-12 h-12 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/20 transition-all"
+                    className="absolute z-50 top-4 right-4 w-12 h-12 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/20 transition-all"
                   >
                     <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
