@@ -242,22 +242,25 @@ export default function BookingCalendar() {
           {/* Main Image */}
           {selectedProperty.images && selectedProperty.images.length > 0 && (
             <div
-              className="relative mb-3 focus:outline-none"
+              className="relative mb-3 group focus:outline-none focus:ring-2 focus:ring-primary-400 rounded-lg"
               tabIndex={0}
               onKeyDown={(e) => {
                 const imgs = selectedProperty.images || [];
                 if (imgs.length === 0) return;
                 const imgEl = document.getElementById('booking-carousel-img');
+                const counter = document.getElementById('booking-carousel-counter');
                 if (!imgEl) return;
                 const cur = parseInt(imgEl.getAttribute('data-index') || '0', 10);
                 if (e.key === 'ArrowLeft') {
                   const next = (cur - 1 + imgs.length) % imgs.length;
                   imgEl.src = imgs[next];
                   imgEl.setAttribute('data-index', String(next));
+                  if (counter) counter.textContent = next + 1;
                 } else if (e.key === 'ArrowRight') {
                   const next = (cur + 1) % imgs.length;
                   imgEl.src = imgs[next];
                   imgEl.setAttribute('data-index', String(next));
+                  if (counter) counter.textContent = next + 1;
                 }
               }}
             >
@@ -266,61 +269,73 @@ export default function BookingCalendar() {
                 data-index="0"
                 src={selectedProperty.images[0]}
                 alt={selectedProperty.name}
-                className="w-full h-64 object-cover rounded-lg"
+                className="w-full h-64 object-cover rounded-lg transition-opacity duration-300"
               />
 
               {selectedProperty.images.length > 1 && (
                 <>
+                  {/* Previous Button */}
                   <button
                     type="button"
                     aria-label="Previous image"
                     onClick={() => {
                       const imgs = selectedProperty.images || [];
                       const imgEl = document.getElementById('booking-carousel-img');
+                      const counter = document.getElementById('booking-carousel-counter');
                       if (!imgEl || imgs.length === 0) return;
                       const cur = parseInt(imgEl.getAttribute('data-index') || '0', 10);
                       const next = (cur - 1 + imgs.length) % imgs.length;
                       imgEl.src = imgs[next];
                       imgEl.setAttribute('data-index', String(next));
+                      if (counter) counter.textContent = next + 1;
                     }}
-                    className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 rounded-full p-2"
+                    className="absolute left-3 top-1/2 -translate-y-1/2 
+                     bg-white/90 hover:bg-white shadow-lg
+                     rounded-full p-2.5 
+                     opacity-0 group-hover:opacity-100 
+                     transition-all duration-200
+                     hover:scale-110 active:scale-95
+                     focus:outline-none focus:ring-2 focus:ring-primary-400"
                   >
-                    ‹
+                    <svg className="w-5 h-5 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+                    </svg>
                   </button>
 
+                  {/* Next Button */}
                   <button
                     type="button"
                     aria-label="Next image"
                     onClick={() => {
                       const imgs = selectedProperty.images || [];
                       const imgEl = document.getElementById('booking-carousel-img');
+                      const counter = document.getElementById('booking-carousel-counter');
                       if (!imgEl || imgs.length === 0) return;
                       const cur = parseInt(imgEl.getAttribute('data-index') || '0', 10);
                       const next = (cur + 1) % imgs.length;
                       imgEl.src = imgs[next];
                       imgEl.setAttribute('data-index', String(next));
+                      if (counter) counter.textContent = next + 1;
                     }}
-                    className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 rounded-full p-2"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 
+                     bg-white/90 hover:bg-white shadow-lg
+                     rounded-full p-2.5 
+                     opacity-0 group-hover:opacity-100 
+                     transition-all duration-200
+                     hover:scale-110 active:scale-95
+                     focus:outline-none focus:ring-2 focus:ring-primary-400"
                   >
-                    ›
+                    <svg className="w-5 h-5 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                    </svg>
                   </button>
 
-                  <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-2">
-                    {selectedProperty.images.map((_, i) => (
-                      <button
-                        key={i}
-                        type="button"
-                        aria-label={`Go to image ${i + 1}`}
-                        onClick={() => {
-                          const imgs = selectedProperty.images || [];
-                          const imgEl = document.getElementById('booking-carousel-img');
-                          if (!imgEl || imgs.length === 0) return;
-                          imgEl.src = imgs[i];
-                          imgEl.setAttribute('data-index', String(i));
-                        }}
-                        className={`w-2 h-2 rounded-full ${i === 0 ? 'bg-primary-400' : 'bg-white bg-opacity-80'}`}
-                      />
-                    ))}
+                  {/* Image Counter */}
+                  <div className="absolute top-3 right-3 
+                       bg-black/60 backdrop-blur-sm 
+                       text-white text-sm font-medium 
+                       px-3 py-1.5 rounded-full">
+                    <span id="booking-carousel-counter">1</span> / {selectedProperty.images.length}
                   </div>
                 </>
               )}
