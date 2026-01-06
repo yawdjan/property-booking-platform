@@ -269,7 +269,7 @@ export default function BookingCalendar() {
                 data-index="0"
                 src={selectedProperty.images[0]}
                 alt={selectedProperty.name}
-                className="w-full h-64 object-cover rounded-lg transition-opacity duration-300"
+                className="w-full h-64 object-contain rounded-lg transition-opacity duration-300 bg-gray-100"
               />
 
               {selectedProperty.images.length > 1 && (
@@ -395,7 +395,7 @@ export default function BookingCalendar() {
               <div className="p-4 bg-blue-50 rounded-lg">
                 <p className="text-sm text-gray-600 mb-2">Booking Summary</p>
                 <p className="text-lg font-semibold">Total: ${calculateTotal().toFixed(2)}</p>
-                <p className="text-xs text-gray-600 mt-1">
+                <p className="text-sm text-gray-600 mt-1">
                   {calculateNights(checkIn, checkOut)} nights × ${selectedProperty.nightlyRate} + ${parseFloat(selectedProperty.cleaningFee)} cleaning fee
                 </p>
               </div>

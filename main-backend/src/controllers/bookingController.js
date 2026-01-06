@@ -153,26 +153,31 @@ export const createBooking = async (req, res) => {
     // Check availability
     const conflictingBooking = await Booking.findOne({
       where: {
-      propertyId,
-      status: { [Op.in]: ['Pending Payment', 'Booked'] },
-      [Op.or]: [
-        { checkIn: { [Op.between]: [checkIn, adjustedCheckOut] } },
-        { checkOut: { [Op.between]: [checkIn, adjustedCheckOut] } },
-        {
-        [Op.and]: [
-          { checkIn: { [Op.lte]: checkIn } },
-          { checkOut: { [Op.gte]: adjustedCheckOut } }
+        propertyId,
+        status: { [Op.in]: ['Pending Payment', 'Booked'] },
+        [Op.or]: [
+          { checkIn: { [Op.between]: [checkIn, checkOut] } },
+          { checkOut: { [Op.between]: [checkIn, checkOut] } },
+          {
+            [Op.and]: [
+              { checkIn: { [Op.lte]: checkIn } },
+              { checkOut: { [Op.gte]: checkOut } }
+            ]
+          }
         ]
-        }
-      ]
       }
     });
 
     if (conflictingBooking) {
-      return res.status(400).json({
-        success: false,
-        message: 'Property is not available for selected dates'
-      });
+      // Check if confict is only on the checkout date
+      const isOnlyCheckoutConflict = (new Date(conflictingBooking.checkIn).getTime() === new Date(adjustedCheckOut).getTime());
+
+      if (!isOnlyCheckoutConflict) {
+        return res.status(400).json({
+          success: false,
+          message: 'Property is not available for selected dates'
+        });
+      }
     }
 
     // Calculate booking details
@@ -307,7 +312,7 @@ export const updateExpiredBookings = async (req, res) => {
   try {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    
+
     const result = await Booking.update(
       { status: 'Completed' },
       {
@@ -334,7 +339,7 @@ export const updateExpiredBookings = async (req, res) => {
       success: true,
       count: completedCount
     };
-    
+
   } catch (error) {
     if (res) {
       return res.status(500).json({ success: false, error: error.message });
