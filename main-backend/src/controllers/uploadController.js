@@ -27,7 +27,7 @@ export const uploadImage = async (req, res) => {
 
     fs.writeFileSync(filepath, req.file.buffer);
 
-    console.log(`✅ Uploaded: ${filename} (${(req.file.size / 1024 / 1024).toFixed(2)}MB)`);
+    console.log(`✅ Uploaded: ${filename} (${(req.file.size / 10240 / 10240).toFixed(2)}MB)`);
 
     const imageUrl = `/uploads/properties/${filename}`;
     const fullUrl = `${req.protocol}://${req.get('host')}${imageUrl}`;

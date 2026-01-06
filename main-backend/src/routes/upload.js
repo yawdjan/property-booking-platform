@@ -10,7 +10,7 @@ const storage = multer.memoryStorage();
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 50 * 10240 * 1024 // 50MB limit
+    fileSize: 50 * 10240 * 10240 // 50MB limit
   },
   fileFilter: (req, file, cb) => {
     // Accept all image types including TIFF, RAW, etc.
