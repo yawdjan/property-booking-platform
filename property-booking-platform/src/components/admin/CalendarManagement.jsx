@@ -81,22 +81,19 @@ export default function CalendarManagement() {
 
     if (!bookedEntry) {
       if (date < today) {
-        return 'past-available'; // Gray - past date
+        return 'past-available';
       }
-      return 'available'; // Green - no booking
+      return 'available';
     }
 
-    // Get checkout date from bookedEntry
-    // Try multiple possible field names for checkout date
     const checkoutDate = bookedEntry.checkoutDate || bookedEntry.checkOut || bookedEntry.checkout;
 
     if (checkoutDate) {
       const checkout = new Date(checkoutDate);
       checkout.setHours(0, 0, 0, 0);
 
-      // If checkout date has passed, booking is completed
       if (checkout < today) {
-        return 'completed'; // Gold - booking completed
+        return 'completed';
       }
     }
 
@@ -108,13 +105,20 @@ export default function CalendarManagement() {
       checkoutDate.setHours(0, 0, 0, 0);
       const dateToCheck = new Date(dateStr);
       dateToCheck.setHours(0, 0, 0, 0);
-      return dateToCheck >= checkinDate && dateToCheck < checkoutDate && b.propertyId === selectedProperty;
+
+      // Handle same-day bookings (0 nights)
+      const isSameDayBooking = checkinDate.getTime() === checkoutDate.getTime();
+      const isInRange = isSameDayBooking
+        ? dateToCheck.getTime() === checkinDate.getTime()
+        : dateToCheck >= checkinDate && dateToCheck < checkoutDate;
+
+      return isInRange && b.propertyId === selectedProperty;
     });
 
     if (booking) {
-      if (booking.status === 'Pending Payment') return 'pending'; // Yellow for pending, Red for booked
+      if (booking.status === 'Pending Payment') return 'pending';
       if (booking.status === 'Cancelled') return 'cancelled';
-      return 'booked'; // Red - active booking
+      return 'booked';
     }
 
     return 'available';

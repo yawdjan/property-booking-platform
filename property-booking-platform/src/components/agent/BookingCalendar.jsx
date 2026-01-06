@@ -234,10 +234,11 @@ export default function BookingCalendar() {
             </select>
           </div>
 
+          {/* Main Image */}
           <img
-            src={selectedProperty.image}
+            src={selectedProperty.images[0]}
             alt={selectedProperty.name}
-            className="w-full h-48 object-cover rounded-lg mb-4"
+            className="w-full h-64 object-cover rounded-lg mb-3"
           />
 
           <div className="space-y-2 text-sm">

@@ -42,7 +42,7 @@ export default function AgentDashboard({ setActiveTab }) {
 
   const agentBookings = bookings.filter(b => b.agentId === currentUser.id);
   const totalEarnings = agentBookings
-    .filter(b => b.status === 'Booked' || b.status === 'Completed' || b.status === 'completed'  )
+    .filter(b => b.status === 'Completed'  )
     .reduce((sum, b) => sum + parseFloat(b.commissionAmount || 0), 0);
   const pendingEarnings = agentBookings
     .filter(b => b.status === 'Pending Payment')
