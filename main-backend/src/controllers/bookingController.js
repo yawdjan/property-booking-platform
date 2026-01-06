@@ -151,17 +151,27 @@ export const createBooking = async (req, res) => {
     const adjustedCheckOut = adjCheckOutDate.toISOString().split('T')[0];
 
     // Check availability
+    // Check availability
     const conflictingBooking = await Booking.findOne({
       where: {
         propertyId,
         status: { [Op.in]: ['Pending Payment', 'Booked'] },
         [Op.or]: [
-          { checkIn: { [Op.between]: [checkIn, checkOut] } },
-          { checkOut: { [Op.between]: [checkIn, checkOut] } },
+          // New booking's check-in falls within existing booking (exclusive of checkout)
+          {
+            checkIn: { [Op.lte]: checkIn },
+            checkOut: { [Op.gt]: checkIn }
+          },
+          // New booking's check-out falls within existing booking (exclusive of checkin)
+          {
+            checkIn: { [Op.lt]: checkOut },
+            checkOut: { [Op.gte]: checkOut }
+          },
+          // New booking completely encompasses existing booking
           {
             [Op.and]: [
-              { checkIn: { [Op.lte]: checkIn } },
-              { checkOut: { [Op.gte]: checkOut } }
+              { checkIn: { [Op.gte]: checkIn } },
+              { checkOut: { [Op.lte]: checkOut } }
             ]
           }
         ]
@@ -169,15 +179,10 @@ export const createBooking = async (req, res) => {
     });
 
     if (conflictingBooking) {
-      // Check if confict is only on the checkout date
-      const isOnlyCheckoutConflict = (new Date(conflictingBooking.checkIn).getTime() === new Date(adjustedCheckOut).getTime());
-
-      if (!isOnlyCheckoutConflict) {
-        return res.status(400).json({
-          success: false,
-          message: 'Property is not available for selected dates'
-        });
-      }
+      return res.status(400).json({
+        success: false,
+        message: 'Property is not available for selected dates'
+      });
     }
 
     // Calculate booking details
