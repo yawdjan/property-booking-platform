@@ -97,7 +97,7 @@ export default function MyCommissions() {
   if (error) return <div className="text-red-600">{error}</div>;
 
   const totalEarned = agentBookings
-    .filter(b => b.status === 'Booked')
+    .filter(b => b.status === 'Completed')
     .reduce((sum, b) => sum + parseFloat(b.commissionAmount || 0), 0);
   // TODO: add this logic to both front and backend
   const paid = Array.isArray(payoutRequests)
