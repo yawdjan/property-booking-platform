@@ -187,7 +187,7 @@ export default function CalendarManagement() {
               );
 
               const dateStr = day.toISOString().split('T')[0];
-              const status = getBookingStatus(dateStr);
+              const status = getBookingStatus(dateStr, availableDates.some(d => d === dateStr));
 
               const today = new Date();
               today.setHours(0, 0, 0, 0);

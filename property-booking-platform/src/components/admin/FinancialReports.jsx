@@ -58,14 +58,14 @@ function buildAgentStats(bookings, agents) {
 
 function AgentAmountChart({ bookings, agents, stats }) {
   // Use server-provided stats if present, otherwise build from bookings + agents
-  const dataStats = stats && stats.length ? stats : buildAgentStats(bookings, agents);
+  const dataStats = buildAgentStats(bookings, agents);
   const labels = dataStats.map(s => s.name);
   const values = dataStats.map(s => Number(s.totalAmount ?? s.amount ?? 0));
   return <VerticalBarChart title="Agents — Booking Amounts" labels={labels} values={values} currency />;
 }
 
 function AgentCountChart({ bookings, agents, stats }) {
-  const dataStats = stats && stats.length ? stats : buildAgentStats(bookings, agents);
+  const dataStats = buildAgentStats(bookings, agents);
   const labels = dataStats.map(s => s.name);
   const values = dataStats.map(s => s.bookingCount ?? s.count ?? 0);
   return <VerticalBarChart title="Agents — Number of Bookings" labels={labels} values={values} currency={false} />;
@@ -108,7 +108,7 @@ export default function FinancialReports() {
         bookingsAPI.getAll(),
         commissionsAPI.getAllPayouts(),
         agentsAPI.getAll(),
-        // agentsAPI.getStats(startDate, endDate)
+        agentsAPI.getStats(startDate, endDate)
       ]);
       setBookings(bookingsRes.data);
       setPayoutStats(comissionsRes.data);
