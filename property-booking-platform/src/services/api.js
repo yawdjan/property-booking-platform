@@ -116,6 +116,9 @@ export const bookingsAPI = {
   getById: (id) =>
     apiClient.get(`/bookings/${id}`),
 
+  getByPublicId: (id) =>
+    apiClient.get(`/bookings/public/${id}`),
+
   create: (bookingData) =>
     apiClient.post('/bookings', bookingData),
 

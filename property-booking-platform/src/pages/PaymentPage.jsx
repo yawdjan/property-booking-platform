@@ -27,7 +27,7 @@ export default function PaymentPage() {
       setLoading(true);
       setError('');
 
-      const response = await bookingsAPI.getById(bookingId);
+      const response = await bookingsAPI.getByPublicId(bookingId);
       const bookingData = response.data || response;
 
       if (!bookingData) {

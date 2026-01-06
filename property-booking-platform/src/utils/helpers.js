@@ -2,7 +2,7 @@
 
 export const calculateNights = (checkIn, checkOut) => {
   if (!checkIn || !checkOut) return 0;
-  return Math.ceil((new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24));
+  return (Math.ceil((new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24))) + 1;
 };
 
 export const calculateBookingTotal = (nightlyRate, nights, cleaningFee) => {

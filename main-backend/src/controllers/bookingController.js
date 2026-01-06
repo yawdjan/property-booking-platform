@@ -79,6 +79,34 @@ export const getBooking = async (req, res) => {
   }
 };
 
+export const getBookingPublic = async (req, res) => {
+  try {
+    const booking = await Booking.findByPk(req.params.id, {
+      include: [
+        { model: Property, as: 'property' },
+        // { model: User, as: 'agent', attributes: ['id', 'name', 'email'] }
+      ]
+    });
+
+    if (!booking) {
+      return res.status(404).json({
+        success: false,
+        message: 'Booking not found'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: booking
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
 export const createBooking = async (req, res) => {
   try {
     const { propertyId, checkIn, checkOut, clientEmail } = req.body;
