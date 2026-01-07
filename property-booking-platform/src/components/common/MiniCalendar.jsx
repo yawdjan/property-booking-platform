@@ -5,7 +5,6 @@ import { bookingsAPI } from '../../services/api';
 export default function MiniCalendar({ propertyId }) {
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [unavailableDates, setUnavailableDates] = useState([]);
-    const [booking, setBooking] = useState([]);
     const [loading, setLoading] = useState(false);
 
     const loadUnavailableDates = useCallback(async () => {
@@ -21,9 +20,6 @@ export default function MiniCalendar({ propertyId }) {
             const response = await bookingsAPI.getUnavailableDates(propertyId, firstDay, lastDay);
             // The API returns { success, propertyId, unavailableDates } (axios wrapper already returns response.data)
             const dates = response?.unavailableDates ?? response?.data ?? [];
-
-            const bookingsResponse = await bookingsAPI.getAll();
-            setBooking(bookingsResponse.data);
 
             console.log('📅 Fetched unavailable dates for', firstDay, '->', lastDay, dates);
 
@@ -132,9 +128,6 @@ export default function MiniCalendar({ propertyId }) {
 
                     <div className="grid grid-cols-7 gap-1">
                         {days.map((day, index) => (
-
-                            
-
                             <div
                                 key={index}
                                 className={`
@@ -149,7 +142,7 @@ export default function MiniCalendar({ propertyId }) {
                                                 : 'hover:bg-gray-100'
                                     }
                 `}
-                                title={day?.isUnavailable ? (day?.isPast ? 'Completed' : 'Unavailable') : ''}
+                                 title={day?.isUnavailable ? (day?.isPast ? 'Completed' : 'Unavailable') : ''}
                             >
                                 {day?.day}
                             </div>
