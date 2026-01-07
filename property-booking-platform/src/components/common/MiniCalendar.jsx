@@ -132,6 +132,9 @@ export default function MiniCalendar({ propertyId }) {
 
                     <div className="grid grid-cols-7 gap-1">
                         {days.map((day, index) => (
+
+                            
+
                             <div
                                 key={index}
                                 className={`
@@ -146,7 +149,7 @@ export default function MiniCalendar({ propertyId }) {
                                                 : 'hover:bg-gray-100'
                                     }
                 `}
-                                 title={day?.isUnavailable ? (day?.isPast ? 'Completed' : 'Unavailable') : ''}
+                                title={day?.isUnavailable ? (day?.isPast ? 'Completed' : 'Unavailable') : ''}
                             >
                                 {day?.day}
                             </div>
