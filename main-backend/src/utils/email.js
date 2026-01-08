@@ -22,7 +22,7 @@ export const sendEmail = async (options) => {
 
   try {
     await transporter.sendMail(mailOptions);
-    if ( config.nodeEnv === 'development' ) console.log('Email sent successfully');
+    if ( process.env.NODE_ENV === 'development' ) console.log('Email sent successfully');
   } catch (error) {
     console.error('Email error:', error);
   }

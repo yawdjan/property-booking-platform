@@ -507,11 +507,11 @@ export const confirmPayment = async (req, res) => {
       });
     }
 
-    if ( config.nodeEnv === 'development' ) console.log('📋 Current booking status:', booking.status);
+    if ( process.env.NODE_ENV === 'development' ) console.log('📋 Current booking status:', booking.status);
 
     // ✅ Check if already confirmed
     if (booking.status === 'Confirmed' || booking.status === 'Completed' || booking.status === 'Booked') {
-      if ( config.nodeEnv === 'development' ) console.log('ℹ️ Booking already confirmed');
+      if ( process.env.NODE_ENV === 'development' ) console.log('ℹ️ Booking already confirmed');
       return res.status(200).json({
         success: true,
         message: 'Payment already confirmed'
@@ -524,7 +524,7 @@ export const confirmPayment = async (req, res) => {
       paymentId
     });
 
-    if ( config.nodeEnv === 'development' ) console.log('✅ Booking status updated to Confirmed:', updatedBooking.id);
+    if ( process.env.NODE_ENV === 'development' ) console.log('✅ Booking status updated to Confirmed:', updatedBooking.id);
 
     res.status(200).json({
       success: true,

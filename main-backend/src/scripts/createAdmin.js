@@ -13,7 +13,7 @@ async function createAdmin() {
     });
     
     if (adminExists) {
-      if ( config.nodeEnv === 'development' ) console.log('⚠️  Admin user already exists');
+      if ( process.env.NODE_ENV === 'development' ) console.log('⚠️  Admin user already exists');
       process.exit(0);
     }
     
@@ -25,10 +25,10 @@ async function createAdmin() {
       status: 'Active'
     });
 
-    if ( config.nodeEnv === 'development' ) console.log('✅ Admin user created successfully!');
-    if ( config.nodeEnv === 'development' ) console.log('📧 Email:', admin.email);
-    if ( config.nodeEnv === 'development' ) console.log('🔑 Password: Admin@123456');
-    if ( config.nodeEnv === 'development' ) console.log('⚠️  IMPORTANT: Change this password after first login!');
+    if ( process.env.NODE_ENV === 'development' ) console.log('✅ Admin user created successfully!');
+    if ( process.env.NODE_ENV === 'development' ) console.log('📧 Email:', admin.email);
+    if ( process.env.NODE_ENV === 'development' ) console.log('🔑 Password: Admin@123456');
+    if ( process.env.NODE_ENV === 'development' ) console.log('⚠️  IMPORTANT: Change this password after first login!');
     process.exit(0);
   } catch (error) {
     console.error('❌ Error:', error.message);

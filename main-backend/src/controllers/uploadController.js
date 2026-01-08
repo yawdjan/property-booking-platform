@@ -27,15 +27,15 @@ export const uploadImage = async (req, res) => {
 
     fs.writeFileSync(filepath, req.file.buffer);
 
-    if ( config.nodeEnv === 'development' ) console.log(`✅ Uploaded: ${filename} (${(req.file.size / 10240 / 10240).toFixed(2)}MB)`);
+    if ( process.env.NODE_ENV === 'development' ) console.log(`✅ Uploaded: ${filename} (${(req.file.size / 10240 / 10240).toFixed(2)}MB)`);
 
     const imageUrl = `/uploads/properties/${filename}`;
     const fullUrl = `${req.protocol}://${req.get('host')}${imageUrl}`;
 
     // ADD THESE DEBUG LOGS:
-    if ( config.nodeEnv === 'development' ) console.log('📸 Image URL:', imageUrl);
-    if ( config.nodeEnv === 'development' ) console.log('📸 Full URL:', fullUrl);
-    if ( config.nodeEnv === 'development' ) console.log('📸 File exists:', fs.existsSync(filepath));
+    if ( process.env.NODE_ENV === 'development' ) console.log('📸 Image URL:', imageUrl);
+    if ( process.env.NODE_ENV === 'development' ) console.log('📸 Full URL:', fullUrl);
+    if ( process.env.NODE_ENV === 'development' ) console.log('📸 File exists:', fs.existsSync(filepath));
 
     res.status(200).json({
       success: true,
@@ -62,7 +62,7 @@ export const deleteImage = async (req, res) => {
 
     if (fs.existsSync(filepath)) {
       fs.unlinkSync(filepath);
-      if ( config.nodeEnv === 'development' ) console.log(`🗑️  Deleted: ${filename}`);
+      if ( process.env.NODE_ENV === 'development' ) console.log(`🗑️  Deleted: ${filename}`);
     }
 
     res.status(200).json({
