@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { bookingsAPI } from '../../services/api';
 
 export default function MiniCalendar({ propertyId }) {
+    const [availableDates, setAvailableDates] = useState([]);
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [bookings, setBookings] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -16,53 +17,77 @@ export default function MiniCalendar({ propertyId }) {
             const filtered = allBookings.filter(
                 b => b.propertyId === propertyId
             );
-
             setBookings(filtered);
+            if (propertyId) {
+                // Build month window (first day -> last day)
+                const year = currentMonth.getFullYear();
+                const month = currentMonth.getMonth();
+                const firstDay = new Date(year, month, 1).toISOString().split('T')[0];
+                const lastDay = new Date(year, month + 1, 0).toISOString().split('T')[0];
+
+                const calResponse = await bookingsAPI.getUnavailableDates(propertyId, firstDay, lastDay);
+                // API returns { success, propertyId, bookedDates }
+                const booked = calResponse?.unavailableDates ?? calResponse?.data ?? [];
+                setAvailableDates(booked);
+            } else {
+                setAvailableDates([]);
+            }
         } catch (error) {
             console.error('Failed to load bookings:', error);
         } finally {
             setLoading(false);
         }
     };
-    
+
     useEffect(() => {
         if (propertyId) {
             loadBookings();
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [propertyId, currentMonth]);
 
-    const getBookingStatus = (dateStr) => {
+    // ✅ Updated function to check if date falls within any booking range
+    const getBookingStatus = (dateStr, bookedEntry) => {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-
         const date = new Date(dateStr);
         date.setHours(0, 0, 0, 0);
+        // const checkoutDate = bookedEntry.checkoutDate || bookedEntry.checkOut || bookedEntry.checkout;
 
-        const booking = bookings.find(b => {
-            const checkin = new Date(b.checkinDate || b.checkIn || b.checkin);
-            const checkout = new Date(b.checkoutDate || b.checkOut || b.checkout);
-
-            checkin.setHours(0, 0, 0, 0);
-            checkout.setHours(0, 0, 0, 0);
-
-            const sameDay = checkin.getTime() === checkout.getTime();
-
-            return sameDay
-                ? date.getTime() === checkin.getTime()
-                : date >= checkin && date < checkout;
-        });
-
-        if (!booking) {
-            return date < today ? 'past-available' : 'available';
+        if (!bookedEntry) {
+            if (date < today) {
+                return 'past-available';
+            }
+            return 'available';
         }
 
         if (date < today) return 'completed';
 
-        if (booking.status === 'Pending Payment') return 'pending';
-        if (booking.status === 'Cancelled') return 'cancelled';
+        // Check against bookings array to determine status
+        const booking = bookings.find(b => {
+            const checkinDate = new Date(b.checkinDate || b.checkIn || b.checkin);
+            const checkoutDate = new Date(b.checkoutDate || b.checkOut || b.checkout);
+            checkinDate.setHours(0, 0, 0, 0);
+            checkoutDate.setHours(0, 0, 0, 0);
+            const dateToCheck = new Date(dateStr);
+            dateToCheck.setHours(0, 0, 0, 0);
 
-        return 'booked';
+            // Handle same-day bookings (0 nights)
+            const isSameDayBooking = checkinDate.getTime() === checkoutDate.getTime();
+            const isInRange = isSameDayBooking
+                ? dateToCheck.getTime() === checkinDate.getTime()
+                : dateToCheck >= checkinDate && dateToCheck < checkoutDate;
+
+            return isInRange && b.propertyId === propertyId;
+        });
+
+        if (booking) {
+            if (booking.status === 'Pending Payment') return 'pending';
+            if (booking.status === 'Cancelled') return 'cancelled';
+            return 'booked';
+        }
+
+        return 'available';
     };
 
     const statusStyles = {
@@ -92,7 +117,7 @@ export default function MiniCalendar({ propertyId }) {
         // Add all days of the month
         for (let day = 1; day <= daysInMonth; day++) {
             const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-            const status = getBookingStatus(dateStr);
+            const status = getBookingStatus(dateStr, availableDates.some(d => d === dateStr));
 
             days.push({
                 day,
@@ -157,12 +182,14 @@ export default function MiniCalendar({ propertyId }) {
 
                     <div className="grid grid-cols-7 gap-1">
                         {days.map((day, index) => (
+
                             <div
                                 key={index}
                                 className={`aspect-square flex flex-col items-center justify-center text-sm rounded
                                 ${!day ? 'invisible' : statusStyles[day.status]}`}
                                 title={day?.status}
                             >
+
                                 <span>{day?.day}</span>
 
                                 {day?.status === 'completed' && (
