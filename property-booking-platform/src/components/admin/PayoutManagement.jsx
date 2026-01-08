@@ -51,11 +51,11 @@ export default function PayoutManagement() {
 
                 // Total commissions (all)
                 const total = commissions
-                .filter(c => c.status === "Completed")
-                .reduce(
-                    (sum, c) => sum + parseFloat(c.commissionAmount || 0),
-                    0
-                );
+                    .filter(c => c.status === "Completed")
+                    .reduce(
+                        (sum, c) => sum + parseFloat(c.commissionAmount || 0),
+                        0
+                    );
 
                 // Pending commissions: Requested + Pending Payout
                 const pending = payoutRequests
@@ -142,9 +142,12 @@ export default function PayoutManagement() {
     };
 
     const availableBalance = (agentId) => {
-        const agentRequests = bookingsRequests.filter(r => r.agentId === agentId);
-        const totalRequested = agentRequests.reduce((sum, r) => sum + parseFloat(r.commissionAmount || 0), 0);
-        return totalRequested;
+        return bookingsRequests.filter(r => r.agentId === agentId)
+            .filter(r => r.status === "Completed")
+            .reduce(
+                (sum, c) => sum + parseFloat(c.commissionAmount || 0),
+                0
+            );
     };
 
     const getStatusColor = (status) => {
@@ -160,9 +163,9 @@ export default function PayoutManagement() {
         }
     };
 
-    const pendingRequests = payoutRequests.filter(r => r.status === 'processing' || r.status === 'pending');
+    const pendingRequests = payoutRequests.filter(r => r.status === 'pending');
     const processedRequests = payoutRequests.filter(r => r.status === 'completed' || r.status === 'denied');
- 
+
     if (loading) {
         return (
             <div className="flex items-center justify-center h-64">
@@ -442,7 +445,7 @@ export default function PayoutManagement() {
                             <div className="bg-blue-50 rounded-lg p-4 border-2 border-blue-200">
                                 <p className="text-sm text-secondary-500 mb-1">Requested Amount</p>
                                 <p className="text-2xl font-bold text-secondary-500">
-                                ¢{parseFloat(selectedRequest.requestedAmount).toFixed(2)}
+                                    ¢{parseFloat(selectedRequest.requestedAmount).toFixed(2)}
                                 </p>
                             </div>
 

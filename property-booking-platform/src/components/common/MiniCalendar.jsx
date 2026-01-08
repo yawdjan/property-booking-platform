@@ -207,6 +207,10 @@ export default function MiniCalendar({ propertyId }) {
 
                     <div className="mt-4 flex items-center gap-4 text-xs text-gray-600">
                         <div className="flex items-center gap-2">
+                            <div className="w-4 h-4 bg-yellow-100 border border-yellow-300 rounded"></div>
+                            <span className="text-sm text-gray-700">Pending</span>
+                        </div>
+                        <div className="flex items-center gap-2">
                             <div className="w-4 h-4 bg-red-100 border border-red-300 rounded"></div>
                             <span className="text-sm text-gray-700">Booked</span>
                         </div>

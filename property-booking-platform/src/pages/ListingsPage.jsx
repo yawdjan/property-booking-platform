@@ -171,7 +171,7 @@ export default function PropertyListings() {
                   <label className="block text-sm font-semibold text-amber-950 mb-2">Min Price/Night</label>
                   <input
                     type="number"
-                    placeholder="$0"
+                    placeholder="¢0"
                     value={filters.minPrice}
                     onChange={(e) => handleFilterChange('minPrice', e.target.value)}
                     className="w-full px-4 py-2 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-400 focus:border-transparent"
@@ -181,7 +181,7 @@ export default function PropertyListings() {
                   <label className="block text-sm font-semibold text-amber-950 mb-2">Max Price/Night</label>
                   <input
                     type="number"
-                    placeholder="$1000"
+                    placeholder="¢1000"
                     value={filters.maxPrice}
                     onChange={(e) => handleFilterChange('maxPrice', e.target.value)}
                     className="w-full px-4 py-2 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-400 focus:border-transparent"

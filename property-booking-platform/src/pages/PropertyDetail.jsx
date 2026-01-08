@@ -271,13 +271,13 @@ export default function PropertyDetail() {
                 <div className="mb-6">
                   <div className="flex items-baseline gap-2 mb-2">
                     <span className="text-4xl font-bold text-amber-950">
-                      ${parseFloat(property.nightlyRate).toFixed(0)}
+                      ¢{parseFloat(property.nightlyRate).toFixed(0)}
                     </span>
                     <span className="text-amber-700">/ night</span>
                   </div>
                   {parseFloat(property.cleaningFee) > 0 && (
                     <p className="text-sm text-amber-700">
-                      + ${parseFloat(property.cleaningFee).toFixed(0)} cleaning fee
+                      + ¢{parseFloat(property.cleaningFee).toFixed(0)} cleaning fee
                     </p>
                   )}
                 </div>
@@ -288,12 +288,12 @@ export default function PropertyDetail() {
                     <div className="space-y-2">
                       <div className="flex justify-between text-amber-900">
                         <span>Nightly Rate</span>
-                        <span className="font-semibold">${parseFloat(property.nightlyRate).toFixed(2)}</span>
+                        <span className="font-semibold">¢{parseFloat(property.nightlyRate).toFixed(2)}</span>
                       </div>
                       {parseFloat(property.cleaningFee) > 0 && (
                         <div className="flex justify-between text-amber-900">
                           <span>Cleaning Fee</span>
-                          <span className="font-semibold">${parseFloat(property.cleaningFee).toFixed(2)}</span>
+                          <span className="font-semibold">¢{parseFloat(property.cleaningFee).toFixed(2)}</span>
                         </div>
                       )}
                     </div>

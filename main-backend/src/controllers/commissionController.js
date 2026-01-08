@@ -1,3 +1,4 @@
+import { Op } from 'sequelize';
 import { Commission, Booking, User, PayoutRequest, Property } from '../models/index.js';
 
 export const getAgentCommissions = async (req, res) => {
