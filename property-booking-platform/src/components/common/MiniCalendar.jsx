@@ -126,8 +126,6 @@ export default function MiniCalendar({ propertyId }) {
             });
 
         }
-        console.log('Days for calendar:', days);
-
         return days;
     };
 
