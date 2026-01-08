@@ -59,12 +59,12 @@ export default function PayoutManagement() {
 
                 // Pending commissions: Requested + Pending Payout
                 const pending = payoutRequests
-                    .filter(c => c.status === "pending")
+                    .filter(c => c.status === "pending" || c.status === "processing")
                     .reduce((sum, c) => sum + parseFloat(c.requestedAmount || 0), 0);
 
                 // Paid commissions
                 const paid = payoutRequests
-                    .filter(c => c.status === "completed")
+                    .filter(c => c.status === "completed" || c.status === "approved")
                     .reduce((sum, c) => sum + parseFloat(c.approvedAmount || c.requestedAmount || 0), 0);
 
                 // Count of pending payout requests
@@ -163,8 +163,8 @@ export default function PayoutManagement() {
         }
     };
 
-    const pendingRequests = payoutRequests.filter(r => r.status === 'pending');
-    const processedRequests = payoutRequests.filter(r => r.status === 'completed' || r.status === 'denied');
+    const pendingRequests = payoutRequests.filter(r => r.status === 'processing' || r.status === 'pending');
+    const processedRequests = payoutRequests.filter(r => r.status === 'completed' || r.status === 'denied' || r.status === 'approved');
 
     if (loading) {
         return (
