@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { bookingsAPI } from '../../services/api';
 
@@ -7,8 +7,7 @@ export default function MiniCalendar({ propertyId }) {
     const [bookings, setBookings] = useState([]);
     const [loading, setLoading] = useState(false);
 
-
-    const loadBookings = useCallback(async () => {
+    const loadBookings = async () => {
         try {
             setLoading(true);
             const response = await bookingsAPI.getAll();
@@ -24,13 +23,14 @@ export default function MiniCalendar({ propertyId }) {
         } finally {
             setLoading(false);
         }
-    }, [propertyId]);
+    };
     
     useEffect(() => {
         if (propertyId) {
             loadBookings();
         }
-    }, [propertyId, currentMonth, loadBookings]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [propertyId, currentMonth]);
 
     const getBookingStatus = (dateStr) => {
         const today = new Date();
