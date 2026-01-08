@@ -57,32 +57,39 @@ export default function PayoutManagement() {
                         0
                     );
 
-                // Pending commissions: Requested + Pending Payout
-                const pending = payoutRequests
-                    .filter(c => c.status === "pending" || c.status === "processing")
-                    .reduce((sum, c) => sum + parseFloat(c.requestedAmount || 0), 0);
-
-                // Paid commissions
-                const paid = payoutRequests
-                    .filter(c => c.status === "completed" || c.status === "approved")
-                    .reduce((sum, c) => sum + parseFloat(c.approvedAmount || 0), 0);
-
-                // Count of pending payout requests
-                const pendingPayoutRequests = payoutRequests.filter(
-                    c => c.status === "pending" || c.status === "Requested"
-                ).length;
-
-                setStats({
+                setStats(prev => ({
+                    ...prev,
                     totalCommissions: total,
-                    pendingCommissions: pending,
-                    paidCommissions: paid,
-                    pendingPayoutRequests
-                });
+                }));
             }
         } catch (err) {
             console.error("Error fetching stats:", err);
         }
     };
+
+    useEffect(() => {
+        if (!payoutRequests.length) return;
+
+        const pending = payoutRequests
+            .filter(c => c.status === "pending" || c.status === "processing")
+            .reduce((sum, c) => sum + parseFloat(c.requestedAmount || 0), 0);
+
+        const paid = payoutRequests
+            .filter(c => c.status === "completed" || c.status === "approved")
+            .reduce((sum, c) => sum + parseFloat(c.approvedAmount || 0), 0);
+
+        const pendingPayoutRequests = payoutRequests.filter(
+            c => c.status === "pending" || c.status === "Requested"
+        ).length;
+
+        setStats(prev => ({
+            ...prev,
+            pendingCommissions: pending,
+            paidCommissions: paid,
+            pendingPayoutRequests
+        }));
+    }, [payoutRequests]);
+
 
     const handleAction = async () => {
         try {
