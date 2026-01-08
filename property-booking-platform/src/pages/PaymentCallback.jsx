@@ -28,9 +28,7 @@ export default function PaymentCallback() {
       const refToUse = reference || trxref;
       const response = await paymentAPI.verifyPayment(refToUse);
 
-      // ✅ Check response.data.success instead of response.success
-      console.log('Full response:', response);
-      console.log('Response.data:', response.data);
+
 
       if (response.data && response.data.success) {
         setStatus('success');

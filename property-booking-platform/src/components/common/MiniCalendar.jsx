@@ -4,39 +4,75 @@ import { bookingsAPI } from '../../services/api';
 
 export default function MiniCalendar({ propertyId }) {
     const [currentMonth, setCurrentMonth] = useState(new Date());
-    const [unavailableDates, setUnavailableDates] = useState([]);
+    const [bookings, setBookings] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    const loadUnavailableDates = useCallback(async () => {
+
+    const loadBookings = useCallback(async () => {
         try {
             setLoading(true);
-            // Use the API that returns individual unavailable dates for a window
-            // Query param names expected by backend: startDate / endDate
-            const year = currentMonth.getFullYear();
-            const month = currentMonth.getMonth();
-            const firstDay = new Date(year, month, 1).toISOString().split('T')[0];
-            const lastDay = new Date(year, month + 1, 0).toISOString().split('T')[0];
+            const response = await bookingsAPI.getAll();
+            const allBookings = response.data || [];
 
-            const response = await bookingsAPI.getUnavailableDates(propertyId, firstDay, lastDay);
-            // The API returns { success, propertyId, unavailableDates } (axios wrapper already returns response.data)
-            const dates = response?.unavailableDates ?? response?.data ?? [];
+            const filtered = allBookings.filter(
+                b => b.propertyId === propertyId
+            );
 
-            console.log('📅 Fetched unavailable dates for', firstDay, '->', lastDay, dates);
-
-            // Remove duplicates (safety)
-            const uniqueDates = [...new Set(dates)];
-            console.log('🔴 Unavailable dates:', uniqueDates); // DEBUG
-            setUnavailableDates(uniqueDates);
+            setBookings(filtered);
         } catch (error) {
-            console.error('Failed to load unavailable dates:', error);
+            console.error('Failed to load bookings:', error);
         } finally {
             setLoading(false);
         }
-    }, [propertyId, currentMonth]);
-
+    }, [propertyId]);
+    
     useEffect(() => {
-        loadUnavailableDates();
-    }, [propertyId, currentMonth]);
+        if (propertyId) {
+            loadBookings();
+        }
+    }, [propertyId, currentMonth, loadBookings]);
+
+    const getBookingStatus = (dateStr) => {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const date = new Date(dateStr);
+        date.setHours(0, 0, 0, 0);
+
+        const booking = bookings.find(b => {
+            const checkin = new Date(b.checkinDate || b.checkIn || b.checkin);
+            const checkout = new Date(b.checkoutDate || b.checkOut || b.checkout);
+
+            checkin.setHours(0, 0, 0, 0);
+            checkout.setHours(0, 0, 0, 0);
+
+            const sameDay = checkin.getTime() === checkout.getTime();
+
+            return sameDay
+                ? date.getTime() === checkin.getTime()
+                : date >= checkin && date < checkout;
+        });
+
+        if (!booking) {
+            return date < today ? 'past-available' : 'available';
+        }
+
+        if (date < today) return 'completed';
+
+        if (booking.status === 'Pending Payment') return 'pending';
+        if (booking.status === 'Cancelled') return 'cancelled';
+
+        return 'booked';
+    };
+
+    const statusStyles = {
+        available: 'hover:bg-gray-100',
+        'past-available': 'bg-gray-100 text-gray-400',
+        booked: 'bg-red-300 text-red-900 font-semibold',
+        pending: 'bg-yellow-200 text-yellow-900 font-semibold',
+        cancelled: 'bg-red-100 text-red-500 line-through',
+        completed: 'bg-amber-300 text-amber-800 font-semibold'
+    };
 
     const getDaysInMonth = () => {
         const year = currentMonth.getFullYear();
@@ -56,21 +92,14 @@ export default function MiniCalendar({ propertyId }) {
         // Add all days of the month
         for (let day = 1; day <= daysInMonth; day++) {
             const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-            const isUnavailable = unavailableDates.includes(dateStr);
-
-            const isPast = new Date(dateStr) < new Date().setHours(0, 0, 0, 0);
-
-            // DEBUG: Log a few dates to check
-            if (day <= 3) {
-                console.log(`Day ${day}: ${dateStr}, isUnavailable: ${isUnavailable}, in array: ${unavailableDates.includes(dateStr)}`);
-            }
+            const status = getBookingStatus(dateStr);
 
             days.push({
                 day,
                 dateStr,
-                isUnavailable,
-                isPast
+                status
             });
+
         }
 
         return days;
@@ -130,22 +159,23 @@ export default function MiniCalendar({ propertyId }) {
                         {days.map((day, index) => (
                             <div
                                 key={index}
-                                className={`
-                  aspect-square flex items-center justify-center text-sm rounded
-                  ${!day ? 'invisible' : ''}
-                  ${day?.isPast && day?.isUnavailable
-                                        ? 'bg-amber-300 text-amber-800 font-semibold'
-                                        : day?.isUnavailable
-                                            ? 'bg-red-300 text-red-900 font-semibold'
-                                            : day?.isPast
-                                                ? 'bg-gray-100 text-gray-400'
-                                                : 'hover:bg-gray-100'
-                                    }
-                `}
-                                 title={day?.isUnavailable ? (day?.isPast ? 'Completed' : 'Unavailable') : ''}
+                                className={`aspect-square flex flex-col items-center justify-center text-sm rounded
+                                ${!day ? 'invisible' : statusStyles[day.status]}`}
+                                title={day?.status}
                             >
-                                {day?.day}
+                                <span>{day?.day}</span>
+
+                                {day?.status === 'completed' && (
+                                    <span className="text-xs">✓</span>
+                                )}
+
+                                {['booked', 'pending', 'cancelled'].includes(day?.status) && (
+                                    <span className="text-xs capitalize">
+                                        {day.status}
+                                    </span>
+                                )}
                             </div>
+
                         ))}
                     </div>
 

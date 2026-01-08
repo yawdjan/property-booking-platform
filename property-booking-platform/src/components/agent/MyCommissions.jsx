@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
-import { websocket } from '../../services/websocket';
 import { Clock, CheckCircle, XCircle, Send } from 'lucide-react';
 import { bookingsAPI, commissionsAPI, propertiesAPI } from '../../services/api.js';
 import StatusBadge from '../common/Statusbage.jsx';
@@ -8,7 +7,6 @@ import StatusBadge from '../common/Statusbage.jsx';
 export default function MyCommissions() {
   const { currentUser } = useApp();
   const [payoutRequests, setPayoutRequests] = useState([]);
-  const [comissions, setComissions] = useState([]);
   const [showRequestModal, setShowRequestModal] = useState(false);
   const [requestAmount, setRequestAmount] = useState('');
   const [requestDescription, setRequestDescription] = useState('');
@@ -35,8 +33,6 @@ export default function MyCommissions() {
       setProperties(propResponse.data);
       const payoutResponse = await commissionsAPI.getMyPayouts();
       setPayoutRequests(payoutResponse.data);
-      const comissionResponse = await commissionsAPI.getByAgent(currentUser.id);
-      setComissions(comissionResponse.data);
     } catch (err) {
       setError('Failed to load bookings: ' + err.message);
     } finally {
@@ -106,16 +102,6 @@ export default function MyCommissions() {
       .reduce((sum, b) => sum + parseFloat(b.approvedAmount), 0)
     : 0;
   const pendingPayout = totalEarned - paid;
-
-  const requestPayout = () => {
-    websocket.emit('notification', {
-      id: Date.now(),
-      type: 'info',
-      message: `Commission payout requested by ${currentUser.name} - ¢${pendingPayout}`,
-      time: new Date().toISOString()
-    });
-    alert('Payout request submitted! Admin will process it shortly.');
-  };
 
   return (
     <div>

@@ -39,7 +39,7 @@ app.use(cors());
 
 // IMPORTANT: Increase body size limits for large files
 app.use(express.json({ limit: '500mb' }));
-app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '500mb' }));
 
 // Serve uploaded images statically
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));

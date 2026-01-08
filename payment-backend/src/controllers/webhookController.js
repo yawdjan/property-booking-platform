@@ -19,15 +19,15 @@ export const handlePaystackWebhook = async (req, res) => {
 
     const event = req.body;
     
-    console.log('🔔 Webhook event received:', event.event);
-    console.log('📊 Webhook data:', JSON.stringify(event.data, null, 2));
+    if ( config.nodeEnv === 'development' ) console.log('🔔 Webhook event received:', event.event);
+    if ( config.nodeEnv === 'development' ) console.log('📊 Webhook data:', JSON.stringify(event.data, null, 2));
 
     // Handle charge.success event
     if (event.event === 'charge.success') {
       const { reference, status, amount } = event.data;
       
       if (status === 'success') {
-        console.log('✅ Processing successful payment with reference:', reference);
+        if ( config.nodeEnv === 'development' ) console.log('✅ Processing successful payment with reference:', reference);
         
         // Update payment status
         const payment = await Payment.findOneAndUpdate(
@@ -42,7 +42,7 @@ export const handlePaystackWebhook = async (req, res) => {
         );
 
         if (payment) {
-          console.log('💾 Payment updated in database:', payment._id);
+          if ( config.nodeEnv === 'development' ) console.log('💾 Payment updated in database:', payment._id);
           
           // Update payment link status
           await PaymentLink.findOneAndUpdate(
@@ -52,7 +52,7 @@ export const handlePaystackWebhook = async (req, res) => {
               paidAt: new Date()
             }
           );
-          console.log('🔗 Payment link updated');
+          if ( config.nodeEnv === 'development' ) console.log('🔗 Payment link updated');
 
           // Notify main backend
           try {
@@ -63,7 +63,7 @@ export const handlePaystackWebhook = async (req, res) => {
               throw new Error('bookingId not found in payment or metadata');
             }
             
-            console.log(`🌐 Calling main backend at ${mainBackendUrl}/bookings/confirm-payment`);
+            if ( config.nodeEnv === 'development' ) console.log(`🌐 Calling main backend at ${mainBackendUrl}/bookings/confirm-payment`);
             const response = await axios.post(`${mainBackendUrl}/bookings/confirm-payment`, {
               bookingId,
               paymentId
@@ -73,7 +73,7 @@ export const handlePaystackWebhook = async (req, res) => {
               },
               timeout: 10000
             });
-            console.log('✅ Successfully notified main backend:', response.data);
+            if ( config.nodeEnv === 'development' ) console.log('✅ Successfully notified main backend:', response.data);
           } catch (error) {
             console.error('❌ Error notifying main backend:', {
               message: error.message,

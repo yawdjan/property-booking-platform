@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CreditCard, Lock, CheckCircle, Calendar, Home, Clock, Sparkles, Shield, Info } from 'lucide-react';

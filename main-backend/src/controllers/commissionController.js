@@ -44,7 +44,7 @@ export const getAgentCommissions = async (req, res) => {
 export const requestPayout = async (req, res) => {
   try {
     const { agentId, payoutAmount, description } = req.body;
-    console.log(req.body);
+    if ( config.nodeEnv === 'development' ) console.log(req.body);
 
     // Validate required fields
     if (!agentId) {

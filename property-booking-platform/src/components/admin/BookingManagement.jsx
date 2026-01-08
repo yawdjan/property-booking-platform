@@ -26,10 +26,6 @@ export default function BookingManagement() {
         agentsAPI.getAll()
       ]);
       
-      console.log('Bookings response:', bookingsRes);
-      console.log('Properties response:', propertiesRes);
-      console.log('Agents response:', agentsRes);
-      
       // Handle different response structures
       setBookings(bookingsRes.data || bookingsRes || []);
       setProperties(propertiesRes.data || propertiesRes || []);

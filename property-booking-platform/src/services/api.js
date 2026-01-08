@@ -227,11 +227,8 @@ export const paymentAPI = {
   getPaymentStatus: (reference) =>
     paymentClient.get(`/payments/${reference}/status`),
 
-  verifyPayment: async (reference) => {
-    console.log('🔧 API: Verifying payment with reference:', reference);
-    try {
+  verifyPayment: async (reference) => { try {
       const response = await paymentClient.post('/payments/verify', { reference });
-      console.log('🔧 API: Verify response:', response);
       return response;
     } catch (error) {
       console.error('🔧 API: Verify error:', error);

@@ -342,8 +342,6 @@ export const unavailableBookingDates = async (req, res) => {
     const { propertyId } = req.params;
     const { startDate, endDate } = req.query;
 
-    console.log('Fetching unavailable dates for property:', propertyId);
-
     // Build the Sequelize query
     let whereClause = {
       propertyId,
@@ -367,16 +365,12 @@ export const unavailableBookingDates = async (req, res) => {
       ];
     }
 
-    console.log('Query where clause:', JSON.stringify(whereClause, null, 2));
-
     // Execute the query using Sequelize
     const bookings = await Booking.findAll({
       where: whereClause,
       attributes: ['checkIn', 'checkOut'],
       order: [['checkIn', 'ASC']]
     });
-
-    console.log('Found bookings:', bookings.length);
 
     // Generate array of unavailable dates (include checkIn, exclude checkOut)
     const unavailableDates = [];
@@ -404,8 +398,6 @@ export const unavailableBookingDates = async (req, res) => {
     // Remove duplicates
     const uniqueDates = [...new Set(unavailableDates)];
 
-    console.log('Unavailable dates count:', uniqueDates.length);
-
     res.json({
       success: true,
       propertyId,
@@ -427,8 +419,6 @@ export const unavailableBookingRanges = async (req, res) => {
   try {
     const { propertyId } = req.params;
 
-    console.log('Fetching unavailable ranges for property:', propertyId);
-
     // Execute the query using Sequelize
     const bookings = await Booking.findAll({
       where: {
@@ -438,8 +428,6 @@ export const unavailableBookingRanges = async (req, res) => {
       attributes: ['checkIn', 'checkOut', 'clientEmail'],
       order: [['checkIn', 'ASC']]
     });
-
-    console.log('Found bookings:', bookings.length);
 
     const unavailableRanges = bookings.map(booking => ({
       start: booking.checkIn,
@@ -509,8 +497,6 @@ export const confirmPayment = async (req, res) => {
   try {
     const { bookingId, paymentId } = req.body;
 
-    console.log('💳 Payment confirmation received for booking:', bookingId, 'payment:', paymentId);
-
     const booking = await Booking.findByPk(bookingId);
 
     if (!booking) {
@@ -521,11 +507,11 @@ export const confirmPayment = async (req, res) => {
       });
     }
 
-    console.log('📋 Current booking status:', booking.status);
+    if ( config.nodeEnv === 'development' ) console.log('📋 Current booking status:', booking.status);
 
     // ✅ Check if already confirmed
     if (booking.status === 'Confirmed' || booking.status === 'Completed' || booking.status === 'Booked') {
-      console.log('ℹ️ Booking already confirmed');
+      if ( config.nodeEnv === 'development' ) console.log('ℹ️ Booking already confirmed');
       return res.status(200).json({
         success: true,
         message: 'Payment already confirmed'
@@ -538,7 +524,7 @@ export const confirmPayment = async (req, res) => {
       paymentId
     });
 
-    console.log('✅ Booking status updated to Confirmed:', updatedBooking.id);
+    if ( config.nodeEnv === 'development' ) console.log('✅ Booking status updated to Confirmed:', updatedBooking.id);
 
     res.status(200).json({
       success: true,

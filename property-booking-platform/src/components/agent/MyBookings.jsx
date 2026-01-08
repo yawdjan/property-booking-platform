@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Copy, Trash2 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
@@ -28,12 +29,6 @@ export default function MyBookings() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleEdit = (booking) => {
-    // TODO: Implement edit functionality
-    console.log('Edit booking:', booking);
-    // You might want to open a modal or navigate to an edit page
   };
 
   const copyPaymentLink = (booking) => {

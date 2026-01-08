@@ -54,8 +54,6 @@ export default function ImageUpload({ images, onChange, maxImages = 10, maxSizeM
       
       // Add to existing images
       onChange([...images, ...uploadedUrls]);
-      console.log('📸 All URLs:', uploadedUrls); // ADD THIS
-      
       alert(`${uploadedUrls.length} image(s) uploaded successfully!`);
       setUploadProgress({});
     } catch (error) {

@@ -9,7 +9,7 @@ export const cancelExpiredPendingBookings = async () => {
   try {
     const thirtyMinutesAgo = new Date(Date.now() - 30 * 60 * 1000);
     
-    console.log('🔍 Checking for expired pending bookings...');
+    if ( config.nodeEnv === 'development' ) console.log('🔍 Checking for expired pending bookings...');
     
     // Find all bookings in Pending Payment status that were created more than 30 minutes ago
     const expiredBookings = await Booking.findAll({
@@ -26,14 +26,14 @@ export const cancelExpiredPendingBookings = async () => {
     });
 
     if (expiredBookings.length === 0) {
-      console.log('✅ No expired pending bookings found');
+      if ( config.nodeEnv === 'development' ) console.log('✅ No expired pending bookings found');
       return {
         success: true,
         cancelledCount: 0
       };
     }
 
-    console.log(`⚠️ Found ${expiredBookings.length} expired pending booking(s)`);
+    if ( config.nodeEnv === 'development' ) console.log(`⚠️ Found ${expiredBookings.length} expired pending booking(s)`);
 
     // Cancel each expired booking
     let cancelledCount = 0;
@@ -45,7 +45,7 @@ export const cancelExpiredPendingBookings = async () => {
           cancelledBy: null, // System-initiated cancellation
         });
 
-        console.log(`❌ Auto-cancelled booking #${booking.id} for ${booking.property?.name || 'Unknown Property'}`);
+        if ( config.nodeEnv === 'development' ) console.log(`❌ Auto-cancelled booking #${booking.id} for ${booking.property?.name || 'Unknown Property'}`);
         cancelledCount++;
 
         // TODO: Optional - Send notification to agent about auto-cancellation
@@ -56,7 +56,7 @@ export const cancelExpiredPendingBookings = async () => {
       }
     }
 
-    console.log(`✅ Successfully cancelled ${cancelledCount} expired pending booking(s)`);
+    if ( config.nodeEnv === 'development' ) console.log(`✅ Successfully cancelled ${cancelledCount} expired pending booking(s)`);
     
     return {
       success: true,
@@ -80,7 +80,7 @@ export const completeExpiredBookings = async () => {
     const today = new Date();
     today.setHours(0, 0, 0, 0); // Start of today
     
-    console.log('🔍 Checking for bookings to mark as completed...');
+    if ( config.nodeEnv === 'development' ) console.log('🔍 Checking for bookings to mark as completed...');
     
     const result = await Booking.update(
       { status: 'Completed' },
@@ -95,9 +95,9 @@ export const completeExpiredBookings = async () => {
     const completedCount = result[0]; // Number of affected rows
     
     if (completedCount > 0) {
-      console.log(`✅ Marked ${completedCount} booking(s) as Completed`);
+      if ( config.nodeEnv === 'development' ) console.log(`✅ Marked ${completedCount} booking(s) as Completed`);
     } else {
-      console.log('✅ No bookings to complete');
+      if ( config.nodeEnv === 'development' ) console.log('✅ No bookings to complete');
     }
     
     return {
@@ -118,27 +118,27 @@ export const completeExpiredBookings = async () => {
  * Initialize all scheduled jobs
  */
 export const initializeScheduler = () => {
-  console.log('🕐 Initializing scheduler...');
+  if ( config.nodeEnv === 'development' ) console.log('🕐 Initializing scheduler...');
 
   // Run every 5 minutes - Auto-cancel expired pending bookings
   cron.schedule('*/5 * * * *', async () => {
-    console.log('⏰ Running scheduled job: Cancel expired pending bookings');
+    if ( config.nodeEnv === 'development' ) console.log('⏰ Running scheduled job: Cancel expired pending bookings');
     await cancelExpiredPendingBookings();
   });
 
   // Run every day at 00:30 AM - Complete bookings with past checkout dates
   cron.schedule('30 0 * * *', async () => {
-    console.log('⏰ Running scheduled job: Complete expired bookings');
+    if ( config.nodeEnv === 'development' ) console.log('⏰ Running scheduled job: Complete expired bookings');
     await completeExpiredBookings();
   });
 
-  console.log('✅ Scheduler initialized successfully');
-  console.log('   - Auto-cancel pending bookings: Every 5 minutes');
-  console.log('   - Complete past bookings: Daily at 00:30 AM');
+  if ( config.nodeEnv === 'development' ) console.log('✅ Scheduler initialized successfully');
+  if ( config.nodeEnv === 'development' ) console.log('   - Auto-cancel pending bookings: Every 5 minutes');
+  if ( config.nodeEnv === 'development' ) console.log('   - Complete past bookings: Daily at 00:30 AM');
   
   // Run immediately on startup for testing
   setTimeout(() => {
-    console.log('🚀 Running initial check on startup...');
+    if ( config.nodeEnv === 'development' ) console.log('🚀 Running initial check on startup...');
     cancelExpiredPendingBookings();
     completeExpiredBookings();
   }, 5000); // Wait 5 seconds after server start

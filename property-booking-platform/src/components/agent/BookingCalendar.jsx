@@ -84,7 +84,6 @@ export default function BookingCalendar() {
       const uniqueDates = [...new Set(dates.map(d => (d.includes('T') ? d.split('T')[0] : d)))];
 
       setUnavailableDates(uniqueDates);
-      console.log('UNAVAILABLE DATES:', uniqueDates);
 
     } catch (error) {
       console.error('Failed to load unavailable dates:', error);
@@ -146,12 +145,7 @@ export default function BookingCalendar() {
         paymentStatus: 'pending'
       };
 
-      console.log('Creating booking with data:', bookingData); // DEBUG
-
       const response = await bookingsAPI.create(bookingData);
-
-      console.log('Full response:', response); // DEBUG
-      console.log('Response data:', response.data); // DEBUG
 
       // Handle different response structures
       let bookingId;
@@ -168,8 +162,6 @@ export default function BookingCalendar() {
         alert('Error: Booking created but ID not returned. Check console.');
         return;
       }
-
-      console.log('Extracted booking ID:', bookingId); // DEBUG
 
       if (!bookingId) {
         alert('Error: Booking ID is missing. Please check your backend response.');
