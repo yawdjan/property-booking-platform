@@ -65,7 +65,7 @@ export default function PayoutManagement() {
                 // Paid commissions
                 const paid = payoutRequests
                     .filter(c => c.status === "completed" || c.status === "approved")
-                    .reduce((sum, c) => sum + parseFloat(c.approvedAmount || c.requestedAmount || 0), 0);
+                    .reduce((sum, c) => sum + parseFloat(c.approvedAmount || 0), 0);
 
                 // Count of pending payout requests
                 const pendingPayoutRequests = payoutRequests.filter(
