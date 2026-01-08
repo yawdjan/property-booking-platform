@@ -11,12 +11,14 @@ import {
   confirmPayment,
   updateExpiredBookings,
   getBookingPublic,
+  getAllBookingsAgents,
 } from '../controllers/bookingController.js';
 import { protect, authorize, checkAgentActive } from '../middleware/auth.js';
 
 const router = express.Router();
 
 router.get('/', protect, authorize('admin'), getAllBookings);
+router.get('/agents', protect, authorize('agent'), getAllBookingsAgents);
 router.get('/agent/:agentId', protect, getAgentBookings);
 router.get('/:id', protect, getBooking);
 router.get('/public/:id', getBookingPublic); // Public route to get booking by public ID

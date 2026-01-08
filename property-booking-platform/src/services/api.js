@@ -103,6 +103,10 @@ export const bookingsAPI = {
     return apiClient.get('/bookings');
   },
 
+  getAllAgents: async () => {
+    return apiClient.get('/bookings/agents');
+  },
+
   getByAgent: async (agentId) => {
     // Auto-update expired bookings before fetching
     await apiClient.post('/bookings/update-expired');

@@ -27,6 +27,32 @@ export const getAllBookings = async (req, res) => {
   }
 };
 
+export const getAllBookingsAgents = async (req, res) => {
+  try {
+    const bookings = await Booking.findAll({
+      attributes: {
+      exclude: ['numberOfNights', 'clientEmail', 'commissionRate', 'commissionAmount', 'paymentLinkId', 'paymentId']
+      },
+      include: [
+      { model: Property, as: 'property' },
+      { model: User, as: 'agent', attributes: ['id', 'name', 'email'] }
+      ],
+      order: [['createdAt', 'DESC']]
+    });
+
+    res.status(200).json({
+      success: true,
+      count: bookings.length,
+      data: bookings
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
 export const getAgentBookings = async (req, res) => {
   try {
     const bookings = await Booking.findAll({

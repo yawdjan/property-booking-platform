@@ -11,7 +11,7 @@ export default function MiniCalendar({ propertyId }) {
     const loadBookings = async () => {
         try {
             setLoading(true);
-            const response = await bookingsAPI.getAll();
+            const response = await bookingsAPI.getAllAgents();
             const allBookings = response.data || [];
 
             const filtered = allBookings.filter(
