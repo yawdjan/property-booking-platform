@@ -231,7 +231,7 @@ export default function CalendarManagement() {
                     </span>
                   )}
 
-                  {bookingForDate && agentName && status !== 'cancelled' && (
+                  {bookingForDate && agentName && (status !== 'cancelled' && status !== 'past-available') && (
                     <span className="text-xs mt-0.5 text-gray-600">{agentName}</span>
                   )}
                 </div>
