@@ -195,7 +195,7 @@ export default function CalendarManagement() {
                 completed: 'bg-amber-100 border-amber-300 text-amber-800 cursor-not-allowed'
               };
 
-                const bookingForDate = bookings.find(b => {
+              const bookingForDate = bookings.find(b => {
                 const checkinDate = new Date(b.checkinDate || b.checkIn || b.checkin);
                 const checkoutDate = new Date(b.checkoutDate || b.checkOut || b.checkout);
                 checkinDate.setHours(0, 0, 0, 0);
@@ -209,11 +209,11 @@ export default function CalendarManagement() {
                   : dateToCheck >= checkinDate && dateToCheck < checkoutDate;
 
                 return isInRange && b.propertyId === selectedProperty;
-                });
+              });
 
-                const agentName = bookingForDate?.agentName || bookingForDate?.agent?.name || bookingForDate?.agentNameFull || '';
+              const agentName = bookingForDate?.agentName || bookingForDate?.agent?.name || bookingForDate?.agentNameFull || '';
 
-                return (
+              return (
                 <div
                   key={idx}
                   onClick={() => !isPastDate && status === 'available'}
@@ -226,16 +226,16 @@ export default function CalendarManagement() {
                   <span className="font-medium">{day.getDate()}</span>
 
                   {status !== 'available' && status !== 'past-available' && (
-                  <span className="text-xs mt-0.5 capitalize">
-                    {status === 'completed' ? '✓' : status}
-                  </span>
+                    <span className="text-xs mt-0.5 capitalize">
+                      {status === 'completed' ? '✓' : status}
+                    </span>
                   )}
 
-                  {bookingForDate && agentName && (
-                  <span className="text-xs mt-0.5 text-gray-600">{agentName}</span>
+                  {bookingForDate && agentName && status !== 'cancelled' && (
+                    <span className="text-xs mt-0.5 text-gray-600">{agentName}</span>
                   )}
                 </div>
-                );
+              );
             })}
           </div>
         )}

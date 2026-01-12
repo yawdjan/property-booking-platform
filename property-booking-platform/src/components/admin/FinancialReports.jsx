@@ -255,6 +255,8 @@ export default function FinancialReports() {
                     <td className="py-3 px-4">
                       < StatusBadge status={booking.status || booking.booking_status} />
                     </td>
+                    <td className="py-3 px-4">{new Date(booking.checkIn || booking.check_in).toLocaleDateString()}</td>
+                    <td className="py-3 px-4">{new Date(booking.checkOut || booking.check_out).toLocaleDateString()}</td>
                   </tr>
                 );
               })}

@@ -86,6 +86,7 @@ export default function BookingManagement() {
               <th className="text-left py-4 px-6">Property</th>
               <th className="text-left py-4 px-6">Agent</th>
               <th className="text-left py-4 px-6">Client Email</th>
+              <th className="text-left py-4 px-6">No of Nights</th>
               <th className="text-left py-4 px-6">Check-in</th>
               <th className="text-left py-4 px-6">Check-out</th>
               <th className="text-left py-4 px-6">Status</th>
@@ -114,6 +115,9 @@ export default function BookingManagement() {
                   </td>
                   <td className="py-4 px-6">
                     {booking.clientEmail || booking.client_email}
+                  </td>
+                  <td className="py-4 px-6">
+                    {booking.numberOfNights || booking.number_of_nights}
                   </td>
                   <td className="py-4 px-6">
                     {new Date(booking.checkIn || booking.check_in).toLocaleDateString()}

@@ -172,7 +172,7 @@ export default function AgentManagement() {
                     </div>
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-600">{agent.email}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{agent.phoneNumber || 'N/A'}</td>
+                  <td className="px-6 py-4 text-sm text-gray-600">{agent.phone || 'N/A'}</td>
                   <td className="px-6 py-4">
                     <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${agent.status === 'Active'
                         ? 'bg-green-100 text-green-800'
