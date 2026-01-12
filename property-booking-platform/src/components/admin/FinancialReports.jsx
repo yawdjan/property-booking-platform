@@ -78,12 +78,7 @@ export default function FinancialReports() {
   const [payoutStats, setPayoutStats] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedMonth, setSelectedMonth] = useState(() => {
-    // default to current month in YYYY-MM format for <input type="month">
-    const d = new Date();
-    const mm = String(d.getMonth() + 1).padStart(2, '0');
-    return `${d.getFullYear()}-${mm}`;
-  });
+  const [selectedMonth, setSelectedMonth] = useState('all'); // Default to 'all' to show everything
 
   useEffect(() => {
     loadData();
@@ -94,24 +89,29 @@ export default function FinancialReports() {
     try {
       setLoading(true);
       // derive start and end from selected month (format YYYY-MM)
-      const [year, month] = (selectedMonth || '').split('-');
       let startDate = null;
       let endDate = null;
-      if (year && month) {
-        const first = new Date(Number(year), Number(month) - 1, 1);
-        const last = new Date(Number(year), Number(month), 0);
-        startDate = first.toISOString().split('T')[0];
-        endDate = last.toISOString().split('T')[0];
+      
+      if (selectedMonth && selectedMonth !== 'all') {
+        const [year, month] = selectedMonth.split('-');
+        if (year && month) {
+          const first = new Date(Number(year), Number(month) - 1, 1);
+          const last = new Date(Number(year), Number(month), 0);
+          startDate = first.toISOString().split('T')[0];
+          endDate = last.toISOString().split('T')[0];
+        }
       }
 
-      const [bookingsRes, comissionsRes,agentsRes, statsRes] = await Promise.all([
+      const [bookingsRes, commissionsRes, agentsRes, statsRes] = await Promise.all([
         bookingsAPI.getAll(),
         commissionsAPI.getAllPayouts(),
         agentsAPI.getAll(),
-        agentsAPI.getStats(startDate, endDate)
+        // Only pass dates if not 'all'
+        selectedMonth !== 'all' ? agentsAPI.getStats(startDate, endDate) : agentsAPI.getStats()
       ]);
+      
       setBookings(bookingsRes.data);
-      setPayoutStats(comissionsRes.data);
+      setPayoutStats(commissionsRes.data);
       setAgents(agentsRes.data);
       setAgentStats(statsRes.data || statsRes);
     } catch (err) {
@@ -121,27 +121,51 @@ export default function FinancialReports() {
     }
   };
 
+  // Helper function to check if a booking falls within the selected month
+  const isBookingInSelectedMonth = (booking) => {
+    if (selectedMonth === 'all') return true;
+    
+    const [year, month] = selectedMonth.split('-');
+    if (!year || !month) return true;
+    
+    // Check check-in date
+    const checkInDate = new Date(booking.checkIn || booking.check_in);
+    const bookingYear = checkInDate.getFullYear();
+    const bookingMonth = checkInDate.getMonth() + 1;
+    
+    return bookingYear === Number(year) && bookingMonth === Number(month);
+  };
+
+  // Filter bookings based on selected month
+  const filteredBookings = bookings.filter(isBookingInSelectedMonth);
+
   const exportReportCSV = async () => {
     try {
       // Use current agentStats if available; if not fetch for selected month
       let stats = agentStats;
       if (!stats || !stats.length) {
         // derive start/end and fetch
-        const [year, month] = (selectedMonth || '').split('-');
         let startDate = null;
         let endDate = null;
-        if (year && month) {
-          const first = new Date(Number(year), Number(month) - 1, 1);
-          const last = new Date(Number(year), Number(month), 0);
-          startDate = first.toISOString().split('T')[0];
-          endDate = last.toISOString().split('T')[0];
+        
+        if (selectedMonth && selectedMonth !== 'all') {
+          const [year, month] = selectedMonth.split('-');
+          if (year && month) {
+            const first = new Date(Number(year), Number(month) - 1, 1);
+            const last = new Date(Number(year), Number(month), 0);
+            startDate = first.toISOString().split('T')[0];
+            endDate = last.toISOString().split('T')[0];
+          }
         }
-        const res = await agentsAPI.getStats(startDate, endDate);
+        
+        const res = selectedMonth !== 'all' 
+          ? await agentsAPI.getStats(startDate, endDate)
+          : await agentsAPI.getStats();
         stats = res.data || res;
       }
 
       if (!stats || !stats.length) {
-        alert('No data available to export for the selected month');
+        alert('No data available to export for the selected period');
         return;
       }
 
@@ -154,7 +178,7 @@ export default function FinancialReports() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      const fileName = `agent-stats-${selectedMonth || 'all'}.csv`;
+      const fileName = `agent-stats-${selectedMonth === 'all' ? 'all-time' : selectedMonth}.csv`;
       a.download = fileName;
       document.body.appendChild(a);
       a.click();
@@ -174,63 +198,85 @@ export default function FinancialReports() {
     return <div className="text-red-600">Error: {error}</div>;
   }
 
-  const totalRevenue = bookings
+  // Calculate metrics using filtered bookings
+  const totalRevenue = filteredBookings
     .filter(b => b.status === 'Booked' || b.status === 'Completed')
-    .reduce((sum, b) => sum + parseFloat(b.totalAmount), 0);
+    .reduce((sum, b) => sum + parseFloat(b.totalAmount || 0), 0);
     
-  const totalCommissions = bookings
+  const totalCommissions = filteredBookings
     .filter(b => b.status === 'Booked' || b.status === 'Completed')
     .reduce((sum, b) => sum + parseFloat(b.commission ?? b.commissionAmount ?? 0), 0);
     
   const pendingPayouts = payoutStats
-    .filter(b => b.paymentStatus !== 'pending')
+    .filter(b => b.paymentStatus === 'pending')
     .reduce((sum, b) => sum + parseFloat(b.commission ?? b.commissionAmount ?? 0), 0);
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-6">Financial Reports</h2>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold">Financial Reports</h2>
+        <div className="flex items-center gap-3">
+          <label className="text-sm text-gray-600 font-medium">Filter by:</label>
+          <select
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(e.target.value)}
+            className="px-3 py-2 border rounded-lg bg-white"
+          >
+            <option value="all">All Time</option>
+            {/* Generate last 12 months */}
+            {Array.from({ length: 12 }, (_, i) => {
+              const d = new Date();
+              d.setMonth(d.getMonth() - i);
+              const value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+              const label = d.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+              return <option key={value} value={value}>{label}</option>;
+            })}
+          </select>
+        </div>
+      </div>
       
       <div className="grid md:grid-cols-3 gap-6 mb-8">
         <div className="bg-white rounded-lg shadow p-6">
           <h3 className="text-sm text-gray-600 mb-2">Total Revenue</h3>
           <p className="text-3xl font-bold text-primary-400">¢{totalRevenue.toLocaleString()}</p>
+          <p className="text-xs text-gray-500 mt-1">
+            {selectedMonth === 'all' ? 'All time' : new Date(selectedMonth + '-01').toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}
+          </p>
         </div>
         <div className="bg-white rounded-lg shadow p-6">
           <h3 className="text-sm text-gray-600 mb-2">Total Commissions</h3>
           <p className="text-3xl font-bold text-primary-400">
-            ¢{(totalCommissions - pendingPayouts).toLocaleString()}
+            ¢{totalCommissions.toLocaleString()}
+          </p>
+          <p className="text-xs text-gray-500 mt-1">
+            {selectedMonth === 'all' ? 'All time' : new Date(selectedMonth + '-01').toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}
           </p>
         </div>
         <div className="bg-white rounded-lg shadow p-6">
           <h3 className="text-sm text-gray-600 mb-2">Pending Payouts</h3>
           <p className="text-3xl font-bold text-orange-600">¢{pendingPayouts.toLocaleString()}</p>
+          <p className="text-xs text-gray-500 mt-1">Current outstanding</p>
         </div>
       </div>
 
       <div className="grid md:grid-cols-2 gap-6 mb-6">
-            <div>
-              <AgentAmountChart bookings={bookings} agents={agents} stats={agentStats} />
-            </div>
-            <div>
-              <AgentCountChart bookings={bookings} agents={agents} stats={agentStats} />
-            </div>
-          </div>
+        <div>
+          <AgentAmountChart bookings={filteredBookings} agents={agents} stats={agentStats} />
+        </div>
+        <div>
+          <AgentCountChart bookings={filteredBookings} agents={agents} stats={agentStats} />
+        </div>
+      </div>
 
       <div className="bg-white rounded-lg shadow p-6">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-xl font-semibold">Commission Details</h3>
-          <div className="flex items-center gap-3">
-            <label className="text-sm text-gray-600">Month:</label>
-            <input
-              type="month"
-              value={selectedMonth}
-              onChange={(e) => setSelectedMonth(e.target.value)}
-              className="px-2 py-1 border rounded"
-            />
-            <button onClick={exportReportCSV} className="px-4 py-2 bg-primary-400 text-white rounded-lg hover:bg-secondary-500">
-              Export CSV
-            </button>
-          </div>
+          <button 
+            onClick={exportReportCSV} 
+            className="px-4 py-2 bg-primary-400 text-white rounded-lg hover:bg-secondary-500"
+          >
+            Export CSV
+          </button>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
@@ -241,27 +287,36 @@ export default function FinancialReports() {
                 <th className="text-left py-3 px-4">Total Amount</th>
                 <th className="text-left py-3 px-4">Commission</th>
                 <th className="text-left py-3 px-4">Status</th>
+                <th className="text-left py-3 px-4">Check-in</th>
+                <th className="text-left py-3 px-4">Check-out</th>
               </tr>
             </thead>
             <tbody>
-              {bookings.filter(b => b.status === 'Booked' || b.status === 'Completed').map(booking => {
-                const agent = agents.find(a => a.id === booking.agentId);
-                return (
-                  <tr key={booking.id} className="border-b">
-                    <td className="py-3 px-4">#{booking.id}</td>
-                    <td className="py-3 px-4">{agent?.name}</td>
-                    <td className="py-3 px-4">{booking.totalAmount}</td>
-                    <td className="py-3 px-4">¢{(booking.commission ?? booking.commissionAmount ?? 0)}</td>
-                    <td className="py-3 px-4">
-                      < StatusBadge status={booking.status || booking.booking_status} />
-                    </td>
-                    <td className="py-3 px-4">{new Date(booking.checkIn || booking.check_in).toLocaleDateString()}</td>
-                    <td className="py-3 px-4">{new Date(booking.checkOut || booking.check_out).toLocaleDateString()}</td>
-                  </tr>
-                );
-              })}
+              {filteredBookings
+                .filter(b => b.status === 'Booked' || b.status === 'Completed')
+                .map(booking => {
+                  const agent = agents.find(a => a.id === booking.agentId);
+                  return (
+                    <tr key={booking.id} className="border-b">
+                      <td className="py-3 px-4">#{booking.id}</td>
+                      <td className="py-3 px-4">{agent?.name || 'N/A'}</td>
+                      <td className="py-3 px-4">¢{parseFloat(booking.totalAmount || 0).toLocaleString()}</td>
+                      <td className="py-3 px-4">¢{parseFloat(booking.commission ?? booking.commissionAmount ?? 0).toLocaleString()}</td>
+                      <td className="py-3 px-4">
+                        <StatusBadge status={booking.status || booking.booking_status} />
+                      </td>
+                      <td className="py-3 px-4">{new Date(booking.checkIn || booking.check_in).toLocaleDateString()}</td>
+                      <td className="py-3 px-4">{new Date(booking.checkOut || booking.check_out).toLocaleDateString()}</td>
+                    </tr>
+                  );
+                })}
             </tbody>
           </table>
+          {filteredBookings.filter(b => b.status === 'Booked' || b.status === 'Completed').length === 0 && (
+            <div className="text-center py-8 text-gray-500">
+              No bookings found for the selected period
+            </div>
+          )}
         </div>
       </div>
     </div>
