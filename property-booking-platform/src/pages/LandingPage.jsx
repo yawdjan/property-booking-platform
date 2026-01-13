@@ -220,7 +220,7 @@ function Footer() {
     <footer className="bg-gray-900 text-gray-300 pt-20 pb-10 static bottom-0 w-full">
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12">
         <div>
-          <img src="/logo.png" alt="Omarey Logo" className="md:hidden h-16 w-36 mt-4" />
+          <img src="/logo.png" alt="Omarey Logo" className="md:hidden h-16 w-36 mt-4 mb-8 mx-auto" />
           <h3 className="text-white text-xl font-semibold mb-4">Omarey</h3>
           <p className="text-gray-400 leading-relaxed">
             All-in-one platform to manage bookings, payments, clients, and
