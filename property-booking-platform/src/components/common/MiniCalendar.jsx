@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { bookingsAPI } from '../../services/api';
+import { useApp } from '../../context/AppContext';
 
 export default function MiniCalendar({ propertyId }) {
     const [availableDates, setAvailableDates] = useState([]);
     const [currentMonth, setCurrentMonth] = useState(new Date());
     const [bookings, setBookings] = useState([]);
     const [loading, setLoading] = useState(false);
+    const { currentUser } = useApp();
 
     const loadBookings = async () => {
         try {
@@ -96,7 +98,7 @@ export default function MiniCalendar({ propertyId }) {
         booked: 'bg-red-300 text-red-900 font-semibold',
         pending: 'bg-yellow-200 text-yellow-900 font-semibold',
         cancelled: 'bg-red-100 text-red-500 line-through',
-        completed: 'bg-amber-300 text-amber-800 font-semibold'
+        completed: 'bg-green-300 text-green-800 font-semibold'
     };
 
     const getDaysInMonth = () => {
@@ -119,12 +121,36 @@ export default function MiniCalendar({ propertyId }) {
             const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
             const status = getBookingStatus(dateStr, availableDates.some(d => d === dateStr));
 
-            days.push({
-                day,
-                dateStr,
-                status
-            });
+            const dayObj = {
+            day,
+            dateStr,
+            status
+            };
 
+            // Add agentId for non-available statuses
+            if (status !== 'available' && status !== 'past-available') {
+            const booking = bookings.find(b => {
+                const checkinDate = new Date(b.checkinDate || b.checkIn || b.checkin);
+                const checkoutDate = new Date(b.checkoutDate || b.checkOut || b.checkout);
+                checkinDate.setHours(0, 0, 0, 0);
+                checkoutDate.setHours(0, 0, 0, 0);
+                const dateToCheck = new Date(dateStr);
+                dateToCheck.setHours(0, 0, 0, 0);
+                
+                const isSameDayBooking = checkinDate.getTime() === checkoutDate.getTime();
+                const isInRange = isSameDayBooking
+                ? dateToCheck.getTime() === checkinDate.getTime()
+                : dateToCheck >= checkinDate && dateToCheck < checkoutDate;
+                
+                return isInRange && b.propertyId === propertyId;
+            });
+            
+            if (booking?.agentId) {
+                dayObj.agentId = booking.agentId;
+            }
+            }
+
+            days.push(dayObj);
         }
         return days;
     };
@@ -185,7 +211,7 @@ export default function MiniCalendar({ propertyId }) {
                             <div
                                 key={index}
                                 className={`aspect-square flex flex-col items-center justify-center text-sm rounded
-                                ${!day ? 'invisible' : statusStyles[day.status]}`}
+                                ${!day || (day.agentId !== currentUser.id && day.status === 'completed' ) ? 'invisible' : statusStyles[day.status]}`}
                                 title={day?.status}
                             >
 
@@ -195,7 +221,7 @@ export default function MiniCalendar({ propertyId }) {
                                     <span className="text-xs">✓</span>
                                 )}
 
-                                {['booked', 'pending', 'cancelled'].includes(day?.status) && (
+                                {['booked', 'pending', 'cancelled'].includes(day?.status) && (day.agentId !== currentUser.id && day.status === 'completed' ) && (
                                     <span className="text-xs capitalize">
                                         {day.status}
                                     </span>
@@ -219,7 +245,7 @@ export default function MiniCalendar({ propertyId }) {
                             <span className="text-sm text-gray-700">Past</span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <div className="w-4 h-4 bg-amber-100 border border-amber-300 rounded"></div>
+                            <div className="w-4 h-4 bg-green-100 border border-green-300 rounded"></div>
                             <span className="text-sm text-gray-700">Completed</span>
                         </div>
                     </div>

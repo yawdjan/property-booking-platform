@@ -54,7 +54,7 @@ export default function AgentDashboard({ setActiveTab }) {
 
       <div className="grid md:grid-cols-3 gap-6 mb-8">
         <StatCard
-          title="Total Bookings"
+          title="Total Completed Bookings"
           value={agentBookings.length}
           icon={Calendar}
           color="blue"

@@ -139,7 +139,7 @@ export default function LandingPage({ defaultTab = 'home' }) {
               {links.map(link => (
                 <button
                   key={link.id}
-                  className="block w-full text-left text-white px-4 py-3 hover:bg-white/10 rounded-lg transition-colors"
+                  className="block w-full text-left text-secondary-500 px-4 py-3 hover:bg-white/10 rounded-lg transition-colors"
                   onClick={() => {
                     handleTabChange(link.id);
                     setMobileMenuOpen(false);
@@ -153,7 +153,7 @@ export default function LandingPage({ defaultTab = 'home' }) {
                   navigate('/login');
                   setMobileMenuOpen(false);
                 }}
-                className="block w-full text-left text-white px-4 py-3 hover:bg-white/10 rounded-lg transition-colors"
+                className="block w-full text-left text-secondary-500 px-4 py-3 hover:bg-white/10 rounded-lg transition-colors"
               >
                 Login
               </button>
@@ -220,12 +220,13 @@ function Footer() {
     <footer className="bg-gray-900 text-gray-300 pt-20 pb-10 static bottom-0 w-full">
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12">
         <div>
+          <img src="/logo.png" alt="Omarey Logo" className="md:hidden h-16 w-36 mt-4" />
           <h3 className="text-white text-xl font-semibold mb-4">Omarey</h3>
           <p className="text-gray-400 leading-relaxed">
             All-in-one platform to manage bookings, payments, clients, and
             properties with ease.
           </p>
-          <img src="/logo.png" alt="Omarey Logo" className="h-16 w-36 mt-4" />
+          <img src="/logo.png" alt="Omarey Logo" className="hidden md:flex h-16 w-36 mt-4" />
         </div>
 
         <div>
