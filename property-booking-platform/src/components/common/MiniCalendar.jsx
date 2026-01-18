@@ -217,7 +217,7 @@ export default function MiniCalendar({ propertyId }) {
 
                                 <span>{day?.day}</span>
 
-                                {day?.status === 'completed' && (
+                                {day?.status === 'completed' && (day.agentId === currentUser.id) && (
                                     <span className="text-xs">✓</span>
                                 )}
 

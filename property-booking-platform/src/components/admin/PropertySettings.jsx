@@ -160,7 +160,7 @@ export default function PropertySettings() {
         commissionRate: parseFloat(formData.commissionRate),
         maxGuests: parseInt(formData.maxGuests) || 1,
         bedrooms: parseInt(formData.bedrooms) || 1,
-        bathrooms: parseInt(formData.bathrooms) || 1,
+        bathrooms: parseFloat(formData.bathrooms).toFixed(1) || 1,
         images: formData.images,
         amenities: formData.amenities.filter(am => am.trim() !== '')
       };
