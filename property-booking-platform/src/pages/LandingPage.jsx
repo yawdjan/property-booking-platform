@@ -119,7 +119,7 @@ export default function LandingPage({ defaultTab = 'home' }) {
 
             {/* Mobile Hamburger Button */}
             <button
-              className="md:hidden text-white p-2"
+              className="md:hidden text-blue-950 p-2"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Toggle menu"
             >
@@ -139,7 +139,7 @@ export default function LandingPage({ defaultTab = 'home' }) {
               {links.map(link => (
                 <button
                   key={link.id}
-                  className="block w-full text-left text-secondary-500 px-4 py-3 hover:bg-white/10 rounded-lg transition-colors"
+                  className="block w-full text-left text-blue-950 px-4 py-3 hover:bg-white/10 rounded-lg transition-colors"
                   onClick={() => {
                     handleTabChange(link.id);
                     setMobileMenuOpen(false);
@@ -153,7 +153,7 @@ export default function LandingPage({ defaultTab = 'home' }) {
                   navigate('/login');
                   setMobileMenuOpen(false);
                 }}
-                className="block w-full text-left text-secondary-500 px-4 py-3 hover:bg-white/10 rounded-lg transition-colors"
+                className="block w-full text-left text-blue-950 px-4 py-3 hover:bg-white/10 rounded-lg transition-colors"
               >
                 Login
               </button>
@@ -162,7 +162,7 @@ export default function LandingPage({ defaultTab = 'home' }) {
                   navigate('/register');
                   setMobileMenuOpen(false);
                 }}
-                className="px-8 py-4 bg-gradient-to-r from-secondary-500 to-accent-500 text-white rounded-full hover:from-secondary-600 hover:to-accent-600 transition-all shadow-lg hover:shadow-xl font-semibold">
+                className="px-8 py-4 bg-gradient-to-r from-blue-950 to-accent-500 text-white rounded-full hover:from-secondary-600 hover:to-accent-600 transition-all shadow-lg hover:shadow-xl font-semibold">
                 Sign Up
               </button>
             </div>
@@ -220,13 +220,13 @@ function Footer() {
     <footer className="bg-gray-900 text-gray-300 pt-20 pb-10 static bottom-0 w-full">
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12">
         <div>
-          <img src="/logo.png" alt="Omarey Logo" className="md:hidden h-16 w-36 mt-4 mb-8 mx-auto" />
+          <img src="/lgowhite.png" alt="Omarey Logo" className="md:hidden h-16 w-36 mt-4 mb-8 mx-auto" />
           <h3 className="text-white text-xl font-semibold mb-4">Omarey</h3>
           <p className="text-gray-400 leading-relaxed">
             All-in-one platform to manage bookings, payments, clients, and
             properties with ease.
           </p>
-          <img src="/logo.png" alt="Omarey Logo" className="hidden md:flex h-16 w-36 mt-4" />
+          <img src="/lgowhite.png" alt="Omarey Logo" className="hidden md:flex h-16 w-36 mt-4" />
         </div>
 
         <div>
