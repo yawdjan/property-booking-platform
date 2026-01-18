@@ -49,7 +49,7 @@ const Property = sequelize.define('Property', {
     defaultValue: 1
   },
   bathrooms: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.DECIMAL(10, 2),
     defaultValue: 1
   },
   status: {

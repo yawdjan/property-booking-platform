@@ -382,17 +382,17 @@ export default function PayoutManagement() {
                                                 <p className="text-sm font-medium text-amber-950">
                                                     {request.agent?.name || 'Unknown Agent'}
                                                 </p>
-                                                <p className="text-xs text-amber-600">
+                                                <p className="text-xs text-amber-900">
                                                     {request.agent?.email || '-'}
                                                 </p>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">
                                             <div>
-                                                <p className="text-sm font-bold text-secondary-500">
+                                                <p className="text-sm font-bold text-amber-900">
                                                     ¢{parseFloat(request.requestedAmount).toFixed(2)}
                                                 </p>
-                                                <p className="text-xs text-amber-600">
+                                                <p className="text-xs text-amber-900">
                                                     {new Date(request.requestDate).toLocaleDateString()}
                                                 </p>
                                             </div>
@@ -400,11 +400,11 @@ export default function PayoutManagement() {
                                         <td className="px-6 py-4">
                                             <div>
                                                 {request.approvedAmount && (
-                                                    <p className="text-sm font-bold text-secondary-500">
+                                                    <p className="text-sm font-bold text-amber-900">
                                                         ¢{parseFloat(request.approvedAmount).toFixed(2)}
                                                     </p>
                                                 )}
-                                                <p className="text-xs text-amber-600">
+                                                <p className="text-xs text-amber-900">
                                                     {request.processedDate ? new Date(request.processedDate).toLocaleDateString() : '-'}
                                                 </p>
                                             </div>
@@ -416,7 +416,7 @@ export default function PayoutManagement() {
                                                 {request.status.charAt(0).toUpperCase() + request.status.slice(1)}
                                             </span>
                                         </td>
-                                        <td className="px-6 py-4 text-sm text-amber-700 max-w-xs">
+                                        <td className="px-6 py-4 text-sm text-amber-900 max-w-xs">
                                             {request.adminNote || '-'}
                                         </td>
                                     </tr>

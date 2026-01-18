@@ -289,6 +289,7 @@ export default function FinancialReports() {
                 <th className="text-left py-3 px-4">Status</th>
                 <th className="text-left py-3 px-4">Check-in</th>
                 <th className="text-left py-3 px-4">Check-out</th>
+                <th className="text-left py-3 px-4">No of Nights</th>
               </tr>
             </thead>
             <tbody>
@@ -307,6 +308,7 @@ export default function FinancialReports() {
                       </td>
                       <td className="py-3 px-4">{new Date(booking.checkIn || booking.check_in).toLocaleDateString()}</td>
                       <td className="py-3 px-4">{new Date(booking.checkOut || booking.check_out).toLocaleDateString()}</td>
+                      <td className="py-3 px-4">{booking.numberOfNights || booking.number_of_nights}</td>
                     </tr>
                   );
                 })}

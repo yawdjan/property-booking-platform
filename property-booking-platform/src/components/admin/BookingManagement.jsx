@@ -26,8 +26,15 @@ export default function BookingManagement() {
         agentsAPI.getAll()
       ]);
       
+      // Filter out bookings with 'Available' status
+      const filteredBookings = (bookingsRes.data || bookingsRes || []).filter(
+        booking => (booking.status || booking.booking_status) !== 'Available'
+      );
+      
+      setBookings(filteredBookings);
+      
       // Handle different response structures
-      setBookings(bookingsRes.data || bookingsRes || []);
+      // setBookings(bookingsRes.data || bookingsRes || []);
       setProperties(propertiesRes.data || propertiesRes || []);
       setAgents(agentsRes.data || agentsRes || []);
       

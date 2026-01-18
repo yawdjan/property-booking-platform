@@ -40,7 +40,7 @@ export const cancelExpiredPendingBookings = async () => {
     for (const booking of expiredBookings) {
       try {
         await booking.update({
-          status: 'Cancelled',
+          status: 'Available',
           cancelledAt: new Date(),
           cancelledBy: null, // System-initiated cancellation
         });

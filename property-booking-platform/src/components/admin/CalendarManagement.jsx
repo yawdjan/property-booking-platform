@@ -189,10 +189,10 @@ export default function CalendarManagement() {
               const statusStyles = {
                 available: 'bg-white hover:bg-blue-50 border-gray-200 cursor-pointer',
                 'past-available': 'bg-gray-50 border-gray-200 cursor-not-allowed opacity-60',
-                booked: 'bg-green-100 border-green-300 text-green-800 cursor-not-allowed',
-                pending: 'bg-yellow-100 border-yellow-300 text-yellow-800 cursor-not-allowed',
+                booked: 'bg-amber-100 border-amber-300 text-amber-800 cursor-not-allowed',
+                pending: 'bg-red-100 border-red-300 text-red-800 cursor-not-allowed',
                 cancelled: 'bg-red-100 border-red-300 text-red-800 cursor-not-allowed',
-                completed: 'bg-amber-100 border-amber-300 text-amber-800 cursor-not-allowed'
+                completed: 'bg-green-100 border-green-300 text-green-800 cursor-not-allowed'
               };
 
               const bookingForDate = bookings.find(b => {
@@ -231,7 +231,7 @@ export default function CalendarManagement() {
                     </span>
                   )}
 
-                  {bookingForDate && agentName && (status !== 'cancelled' && status !== 'past-available' && status === 'available') && (
+                  {bookingForDate && agentName && (status !== 'cancelled' && status !== 'past-available' && status !== 'available' && status === 'completed' && status === 'pending' && status === 'booked') && (
                     <span className="text-xs mt-0.5 text-gray-600">{agentName}</span>
                   )}
                 </div>
@@ -247,20 +247,16 @@ export default function CalendarManagement() {
             <span className="text-sm text-gray-700">Available</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 bg-green-100 border border-green-300 rounded"></div>
+            <div className="w-4 h-4 bg-amber-100 border border-amber-300 rounded"></div>
             <span className="text-sm text-gray-700">Booked</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 bg-yellow-100 border border-yellow-300 rounded"></div>
+            <div className="w-4 h-4 bg-red-100 border border-red-300 rounded"></div>
             <span className="text-sm text-gray-700">Pending Payment</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 bg-amber-100 border border-amber-300 rounded"></div>
+            <div className="w-4 h-4 bg-green-100 border border-green-300 rounded"></div>
             <span className="text-sm text-gray-700">Completed</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 bg-red-100 border border-red-300 rounded"></div>
-            <span className="text-sm text-gray-700">Cancelled</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 bg-gray-50 border border-gray-200 rounded"></div>

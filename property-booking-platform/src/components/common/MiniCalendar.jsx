@@ -211,7 +211,7 @@ export default function MiniCalendar({ propertyId }) {
                             <div
                                 key={index}
                                 className={`aspect-square flex flex-col items-center justify-center text-sm rounded
-                                ${!day || (day.agentId !== currentUser.id && day.status === 'completed' ) ? 'invisible' : statusStyles[day.status]}`}
+                                ${!day || (day.agentId !== currentUser.id && day.status === 'completed' ) ? statusStyles['past-available'] : statusStyles[day.status]}`}
                                 title={day?.status}
                             >
 
