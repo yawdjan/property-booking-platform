@@ -287,21 +287,21 @@ export default function PayoutManagement() {
                                                 <p className="text-sm font-medium text-amber-950">
                                                     {request.agent?.name || 'Unknown Agent'}
                                                 </p>
-                                                <p className="text-xs text-amber-600">
+                                                <p className="text-xs text-amber-900">
                                                     {request.agent?.email || '-'}
                                                 </p>
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4 text-sm font-bold text-secondary-500">
+                                        <td className="px-6 py-4 text-sm font-bold text-amber-900">
                                             ¢{parseFloat(request.requestedAmount).toFixed(2)}
                                         </td>
-                                        <td className="px-6 py-4 text-sm font-semibold text-amber-800">
+                                        <td className="px-6 py-4 text-sm font-semibold text-amber-900">
                                             ¢{parseFloat(availableBalance(request.agentId) || 0).toFixed(2)}
                                         </td>
-                                        <td className="px-6 py-4 text-sm text-amber-700 max-w-xs truncate">
+                                        <td className="px-6 py-4 text-sm text-amber-900 max-w-xs truncate">
                                             {request.description || '-'}
                                         </td>
-                                        <td className="px-6 py-4 text-sm text-amber-700">
+                                        <td className="px-6 py-4 text-sm text-amber-900">
                                             {new Date(request.requestDate).toLocaleDateString()}
                                         </td>
                                         <td className="px-6 py-4">
@@ -311,7 +311,7 @@ export default function PayoutManagement() {
                                                         setSelectedRequest(request);
                                                         setActionType('approve');
                                                     }}
-                                                    className="p-2 bg-blue-100 text-secondary-500 rounded-lg hover:bg-blue-200 transition-colors"
+                                                    className="p-2 bg-blue-100 text-amber-900 rounded-lg hover:bg-blue-200 transition-colors"
                                                     title="Approve"
                                                 >
                                                     <CheckCircle className="w-5 h-5" />
@@ -322,7 +322,7 @@ export default function PayoutManagement() {
                                                         setActionType('modify');
                                                         setModifiedAmount(request.requestedAmount.toString());
                                                     }}
-                                                    className="p-2 bg-primary-50 text-amber-700 rounded-lg hover:bg-amber-200 transition-colors"
+                                                    className="p-2 bg-primary-50 text-amber-900 rounded-lg hover:bg-amber-200 transition-colors"
                                                     title="Modify Amount"
                                                 >
                                                     <Edit2 className="w-5 h-5" />

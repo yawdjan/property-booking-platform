@@ -546,7 +546,7 @@ export default function BookingCalendar() {
 
             <button
               onClick={generatePaymentLink}
-              disabled={!checkIn || !checkOut || !clientEmail}
+              disabled={!checkIn || !checkOut || !clientEmail || checkIn === checkOut || dateConflict}
               className="w-full px-4 py-3 bg-primary-400 text-white rounded-lg hover:bg-secondary-500 disabled:bg-gray-300 disabled:cursor-not-allowed"
             >
               Generate Payment Link
