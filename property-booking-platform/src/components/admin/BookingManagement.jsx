@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Eye } from 'lucide-react';
+import { Copy, Eye, Trash2 } from 'lucide-react';
 import { bookingsAPI, propertiesAPI, agentsAPI } from '../../services/api';
 import StatusBadge from '../common/Statusbage';
 
@@ -43,6 +43,26 @@ export default function BookingManagement() {
       setError('Failed to load bookings: ' + err.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const copyPaymentLink = (booking) => {
+    const url = `${window.location.origin}/pay/${booking.id}`;
+    navigator.clipboard.writeText(url);
+    alert("Payment link copied to clipboard!");
+  };
+
+  const handleDelete = async (bookingId) => {
+    if (!window.confirm('Are you sure you want to delete this booking?')) {
+      return;
+    }
+
+    try {
+      await bookingsAPI.cancel(bookingId);
+      // Refresh the bookings list
+      await loadData();
+    } catch (err) {
+      setError('Failed to delete booking: ' + err.message);
     }
   };
 
@@ -143,12 +163,29 @@ export default function BookingManagement() {
                   ¢{Number(booking.total || booking.totalAmount || 0).toFixed(2)}
                   </td>
                   <td className="py-4 px-6">
-                    <button 
-                      className="p-2 text-primary-400 hover:bg-blue-50 rounded"
-                      title="View Details"
-                    >
-                      <Eye className="w-4 h-4" />
-                    </button>
+                    <div className="flex gap-2">
+                        {/* Copy Payment Link - Show only for Pending Payment */}
+                        {booking.status === 'Pending Payment' && (
+                          <button
+                            onClick={() => copyPaymentLink(booking)}
+                            className="p-2 text-primary-400 hover:bg-blue-50 rounded"
+                            title="Copy payment link"
+                          >
+                            <Copy className="w-4 h-4" />
+                          </button>
+                        )}
+
+                        {/* Delete - Hide for Cancelled status */}
+                        {booking.status !== 'Cancelled' && (
+                          <button
+                            onClick={() => handleDelete(booking.id)}
+                            className="p-2 text-red-600 hover:bg-red-50 rounded"
+                            title="Delete booking"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        )}
+                      </div>
                   </td>
                 </tr>
               );

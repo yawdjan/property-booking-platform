@@ -77,7 +77,7 @@ export default function MyBookings() {
                 <th className="text-left py-4 px-6">Check-out</th>
                 <th className="text-left py-4 px-6">Status</th>
                 <th className="text-left py-4 px-6">Amount</th>
-                <th className="text-left py-4 px-6">Actions</th>
+                {/* <th className="text-left py-4 px-6">Actions</th> */}
               </tr>
             </thead>
             <tbody>
@@ -93,31 +93,6 @@ export default function MyBookings() {
                       < StatusBadge status={booking.status} size="sm" />
                     </td>
                     <td className="py-4 px-6">¢{booking.totalAmount}</td>
-                    <td className="py-4 px-6">
-                      <div className="flex gap-2">
-                        {/* Copy Payment Link - Show only for Pending Payment */}
-                        {booking.status === 'Pending Payment' && (
-                          <button
-                            onClick={() => copyPaymentLink(booking)}
-                            className="p-2 text-primary-400 hover:bg-blue-50 rounded"
-                            title="Copy payment link"
-                          >
-                            <Copy className="w-4 h-4" />
-                          </button>
-                        )}
-
-                        {/* Delete - Hide for Cancelled status */}
-                        {booking.status !== 'Cancelled' && (
-                          <button
-                            onClick={() => handleDelete(booking.id)}
-                            className="p-2 text-red-600 hover:bg-red-50 rounded"
-                            title="Delete booking"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        )}
-                      </div>
-                    </td>
                   </tr>
                 );
               })}

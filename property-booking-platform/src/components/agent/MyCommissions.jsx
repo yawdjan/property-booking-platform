@@ -224,7 +224,7 @@ export default function MyCommissions() {
                     <label className="block text-sm font-semibold text-amber-900 mb-2">
                       Available Balance
                     </label>
-                    <p className="text-3xl font-bold text-secondary-500">${pendingPayout}</p>
+                    <p className="text-3xl font-bold text-secondary-500">${pendingPayout.toFixed(2)}</p>
                   </div>
 
                   <div>

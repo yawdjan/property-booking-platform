@@ -25,7 +25,7 @@ router.get('/public/:id', getBookingPublic); // Public route to get booking by p
 router.get('/unavailable-ranges/:propertyId', protect, unavailableBookingRanges);
 router.get('/unavailable-dates/:propertyId', protect, unavailableBookingDates);
 router.post('/', protect, authorize('agent'), checkAgentActive, createBooking);
-router.post('/:id/cancel', protect, cancelBooking);
+router.post('/:id/cancel', protect, authorize('admin'), cancelBooking);
 router.post('/confirm-payment', confirmPayment); // Called by Payment Backend
 router.post('/update-expired', protect, updateExpiredBookings); // New route to update expired bookings
 router.put('/:id', protect, updateBooking);
