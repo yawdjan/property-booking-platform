@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
-import { Copy, Trash2 } from 'lucide-react';
+import { Copy } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { bookingsAPI, propertiesAPI } from '../../services/api.js';
 import StatusBadge from '../common/Statusbage.jsx';
@@ -36,21 +36,7 @@ export default function MyBookings() {
     navigator.clipboard.writeText(url);
     alert("Payment link copied to clipboard!");
   };
-
-  const handleDelete = async (bookingId) => {
-    if (!window.confirm('Are you sure you want to delete this booking?')) {
-      return;
-    }
-
-    try {
-      await bookingsAPI.cancel(bookingId);
-      // Refresh the bookings list
-      await loadData();
-    } catch (err) {
-      setError('Failed to delete booking: ' + err.message);
-    }
-  };
-
+  
   if (loading) return <div className="flex justify-center items-center h-64">Loading...</div>;
   if (error) return <div className="text-red-600 p-4 bg-red-50 rounded-lg">{error}</div>;
 

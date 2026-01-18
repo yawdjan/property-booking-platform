@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Copy, Eye, Trash2 } from 'lucide-react';
+import { Copy, Trash2 } from 'lucide-react';
 import { bookingsAPI, propertiesAPI, agentsAPI } from '../../services/api';
 import StatusBadge from '../common/Statusbage';
 

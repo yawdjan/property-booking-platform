@@ -95,7 +95,7 @@ export default function MiniCalendar({ propertyId }) {
     const statusStyles = {
         available: 'hover:bg-gray-100',
         'past-available': 'bg-gray-100 text-gray-400',
-        booked: 'bg-red-300 text-red-900 font-semibold',
+        booked: 'bg-cyan-300 text-cyan-900 font-semibold',
         pending: 'bg-yellow-200 text-yellow-900 font-semibold',
         cancelled: 'bg-red-100 text-red-500 line-through',
         completed: 'bg-green-300 text-green-800 font-semibold'
@@ -221,6 +221,10 @@ export default function MiniCalendar({ propertyId }) {
                                     <span className="text-xs">✓</span>
                                 )}
 
+                                {day?.status && (day.agentId === currentUser.id) && (
+                                    <span className="text-xs">{day.status}</span>
+                                )}
+
                                 {['booked', 'pending', 'cancelled'].includes(day?.status) && (day.agentId !== currentUser.id && day.status === 'completed' ) && (
                                     <span className="text-xs capitalize">
                                         {day.status}
@@ -237,7 +241,7 @@ export default function MiniCalendar({ propertyId }) {
                             <span className="text-sm text-gray-700">Pending</span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <div className="w-4 h-4 bg-red-100 border border-red-300 rounded"></div>
+                            <div className="w-4 h-4 bg-cyan-100 border border-cyan-300 rounded"></div>
                             <span className="text-sm text-gray-700">Booked</span>
                         </div>
                         <div className="flex items-center gap-2">
