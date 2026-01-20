@@ -232,7 +232,7 @@ export default function PayoutManagement() {
                     <p className="text-3xl font-bold">¢{stats.totalCommissions.toFixed(2)}</p>
                 </div>
 
-                <div className="bg-gradient-to-br from-primary-400 to-secondary-500 rounded-2xl p-6 text-white">
+                <div className="bg-gradient-to-br from-amber-600 to-amber-700 rounded-2xl p-6 text-white">
                     <div className="flex items-center gap-3 mb-2">
                         <DollarSign className="w-8 h-8" />
                         <span className="text-sm opacity-90">Pending Amount</span>

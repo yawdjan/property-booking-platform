@@ -40,7 +40,7 @@ export default function AgentDashboard({ setActiveTab }) {
   if (loading) return <div>Loading...</div>;
   if (error) return <div className="text-red-600">{error}</div>;
 
-  const agentBookings = bookings.filter(b => b.agentId === currentUser.id);
+  const agentBookings = bookings.filter(b => b.agentId === currentUser.id && b.status === 'Completed');
   const totalEarnings = agentBookings
     .filter(b => b.status === 'Completed'  )
     .reduce((sum, b) => sum + parseFloat(b.commissionAmount || 0), 0);
