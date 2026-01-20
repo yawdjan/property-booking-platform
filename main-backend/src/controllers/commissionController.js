@@ -478,3 +478,47 @@ export const getCommissionStats = async (req, res) => {
     res.status(500).json({ success: false, message: 'Error fetching statistics' });
   }
 };
+
+export const notePaid = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { isPaid } = req.body;
+
+        // Find the payout request
+        const payout = await PayoutRequest.findByPk(id);
+
+        if (!payout) {
+            return res.status(404).json({
+                success: false,
+                message: 'Payout request not found'
+            });
+        }
+
+        // Only allow updating paid status for approved/completed payouts
+        if (payout.status !== 'approved' && payout.status !== 'completed') {
+            return res.status(400).json({
+                success: false,
+                message: 'Can only mark approved/completed payouts as paid'
+            });
+        }
+
+        // Update the isPaid status
+        await payout.update({
+            isPaid: isPaid,
+            paidDate: isPaid ? new Date() : null
+        });
+
+        res.json({
+            success: true,
+            message: isPaid ? 'Payout marked as paid' : 'Payout marked as unpaid',
+            data: payout
+        });
+    } catch (error) {
+        console.error('Error updating payout paid status:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error updating payout paid status',
+            error: error.message
+        });
+    }
+};

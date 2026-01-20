@@ -209,7 +209,19 @@ export const commissionsAPI = {
     apiClient.put(`/commissions/admin/payouts/${id}/modify`, { modifiedAmount, admin_note: adminNote }),
   
   getComissionStats: () =>
-    apiClient.get('/commissions/admin/stats')
+    apiClient.get('/commissions/admin/stats'),
+
+  togglePaidStatus: (payoutId, isPaid) => {
+        try {
+            const response = apiClient.put(`/commissions/admin/payouts/${payoutId}/paid-status`, {
+                isPaid
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Error toggling paid status:', error);
+            throw error;
+        }
+    }
 };
 
 // Calendar APIs

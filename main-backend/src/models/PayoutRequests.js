@@ -59,6 +59,15 @@ const PayoutRequest = sequelize.define('PayoutRequest', {
   paymentReference: {
     type: DataTypes.STRING,
     allowNull: true
+  },
+  isPaid: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+    allowNull: false
+  },
+  paidDate: {
+    type: DataTypes.DATE,
+    allowNull: true
   }
 }, {
   timestamps: true,

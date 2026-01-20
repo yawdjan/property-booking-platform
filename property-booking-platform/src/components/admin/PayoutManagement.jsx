@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
-import { DollarSign, CheckCircle, XCircle, Clock, Edit2, RefreshCw, Users, ChevronsUpIcon, ChevronDownIcon } from 'lucide-react';
+import { DollarSign, CheckCircle, XCircle, Clock, Edit2, RefreshCw, ChevronDown, ChevronUp, Users } from 'lucide-react';
 import { bookingsAPI, commissionsAPI } from '../../services/api';
 
 export default function PayoutManagement() {
@@ -18,16 +18,14 @@ export default function PayoutManagement() {
         paidCommissions: 0,
         pendingPayoutRequests: 0
     });
-    // Collapsible sections state - Agent Summary expanded by default
+
+    // Collapsible sections state - all minimized by default
     const [expandedSections, setExpandedSections] = useState({
-        agentSummary: true,
+        agentSummary: false,
         pendingRequests: false,
         approvedPayouts: false,
         requestHistory: false
     });
-
-    // Track which approved payouts have been marked as paid
-    const [paidCheckmarks, setPaidCheckmarks] = useState({});
 
     // Fetch payout requests and stats on component mount
     useEffect(() => {
@@ -186,11 +184,18 @@ export default function PayoutManagement() {
         }));
     };
 
-    const togglePaidCheckmark = (payoutId) => {
-        setPaidCheckmarks(prev => ({
-            ...prev,
-            [payoutId]: !prev[payoutId]
-        }));
+    const togglePaidCheckmark = async (payoutId, currentStatus) => {
+        try {
+            const response = await commissionsAPI.togglePaidStatus(payoutId, !currentStatus);
+            
+            if (response.success) {
+                // Refresh the payout requests to get updated data
+                await fetchPayoutRequests();
+            }
+        } catch (error) {
+            console.error('Error updating paid status:', error);
+            alert(error.response?.data?.message || 'Error updating paid status');
+        }
     };
 
     // Get unique agents from bookings and payout requests
@@ -324,9 +329,9 @@ export default function PayoutManagement() {
                         <h2 className="text-base sm:text-lg lg:text-xl font-bold text-amber-950">Agent Summary</h2>
                     </div>
                     {expandedSections.agentSummary ? (
-                        <ChevronsUpIcon className="w-4 h-4 sm:w-5 sm:h-5 text-amber-950" />
+                        <ChevronUp className="w-4 h-4 sm:w-5 sm:h-5 text-amber-950" />
                     ) : (
-                        <ChevronDownIcon className="w-4 h-4 sm:w-5 sm:h-5 text-amber-950" />
+                        <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5 text-amber-950" />
                     )}
                 </button>
                 {expandedSections.agentSummary && (
@@ -379,9 +384,9 @@ export default function PayoutManagement() {
                 >
                     <h2 className="text-base sm:text-lg lg:text-xl font-bold text-amber-950">Pending Requests</h2>
                     {expandedSections.pendingRequests ? (
-                        <ChevronsUpIcon className="w-4 h-4 sm:w-5 sm:h-5 text-amber-950" />
+                        <ChevronUp className="w-4 h-4 sm:w-5 sm:h-5 text-amber-950" />
                     ) : (
-                        <ChevronDownIcon className="w-4 h-4 sm:w-5 sm:h-5 text-amber-950" />
+                        <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5 text-amber-950" />
                     )}
                 </button>
                 {expandedSections.pendingRequests && (
@@ -485,9 +490,9 @@ export default function PayoutManagement() {
                 >
                     <h2 className="text-sm sm:text-lg lg:text-xl font-bold text-amber-950">Approved Payouts - Payment Confirmation</h2>
                     {expandedSections.approvedPayouts ? (
-                        <ChevronsUpIcon className="w-4 h-4 sm:w-5 sm:h-5 text-amber-950" />
+                        <ChevronUp className="w-4 h-4 sm:w-5 sm:h-5 text-amber-950" />
                     ) : (
-                        <ChevronDownIcon className="w-4 h-4 sm:w-5 sm:h-5 text-amber-950" />
+                        <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5 text-amber-950" />
                     )}
                 </button>
                 {expandedSections.approvedPayouts && (
@@ -512,7 +517,7 @@ export default function PayoutManagement() {
                                     </tr>
                                 ) : (
                                     approvedRequests.map((request) => (
-                                        <tr key={request.id} className={`hover:bg-gray-50 transition-colors ${paidCheckmarks[request.id] ? 'bg-green-50' : ''}`}>
+                                        <tr key={request.id} className={`hover:bg-gray-50 transition-colors ${request.isPaid ? 'bg-green-50' : ''}`}>
                                             <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium text-amber-950">
                                                 PR-{request.id.slice(0, 8)}
                                             </td>
@@ -536,16 +541,23 @@ export default function PayoutManagement() {
                                                 {request.adminNote || '-'}
                                             </td>
                                             <td className="px-3 sm:px-6 py-3 sm:py-4">
-                                                <label className="flex items-center gap-2 cursor-pointer">
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={paidCheckmarks[request.id] || false}
-                                                        onChange={() => togglePaidCheckmark(request.id)}
-                                                        className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 rounded focus:ring-2 focus:ring-green-500"
-                                                    />
-                                                    <span className="text-xs sm:text-sm text-amber-900">
-                                                        {paidCheckmarks[request.id] ? 'Paid ✓' : 'Mark as Paid'}
-                                                    </span>
+                                                <label className="flex flex-col gap-1">
+                                                    <div className="flex items-center gap-2 cursor-pointer">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={request.isPaid || false}
+                                                            onChange={() => togglePaidCheckmark(request.id, request.isPaid)}
+                                                            className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 rounded focus:ring-2 focus:ring-green-500"
+                                                        />
+                                                        <span className="text-xs sm:text-sm text-amber-900">
+                                                            {request.isPaid ? 'Paid ✓' : 'Mark as Paid'}
+                                                        </span>
+                                                    </div>
+                                                    {request.isPaid && request.paidDate && (
+                                                        <span className="text-xs text-green-600 ml-6">
+                                                            {new Date(request.paidDate).toLocaleDateString()}
+                                                        </span>
+                                                    )}
                                                 </label>
                                             </td>
                                         </tr>
@@ -565,9 +577,9 @@ export default function PayoutManagement() {
                 >
                     <h2 className="text-xl font-bold text-amber-950">Request History</h2>
                     {expandedSections.requestHistory ? (
-                        <ChevronsUpIcon className="w-5 h-5 text-amber-950" />
+                        <ChevronUp className="w-5 h-5 text-amber-950" />
                     ) : (
-                        <ChevronDownIcon className="w-5 h-5 text-amber-950" />
+                        <ChevronDown className="w-5 h-5 text-amber-950" />
                     )}
                 </button>
                 {expandedSections.requestHistory && (
