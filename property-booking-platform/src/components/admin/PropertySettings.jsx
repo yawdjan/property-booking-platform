@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
-import { DollarSign, CheckCircle, XCircle, Clock, Edit2, RefreshCw, ChevronDown, ChevronUp, Users } from 'lucide-react';
+import { DollarSign, CheckCircle, XCircle, Clock, Edit2, RefreshCw, Users, ChevronsUpIcon, ChevronDownIcon } from 'lucide-react';
 import { bookingsAPI, commissionsAPI } from '../../services/api';
 
 export default function PayoutManagement() {
@@ -18,14 +18,6 @@ export default function PayoutManagement() {
         paidCommissions: 0,
         pendingPayoutRequests: 0
     });
-    const [expandedTables, setExpandedTables] = useState({
-        agents: false,
-        pending: false,
-        approved: false,
-        history: false
-    });
-    const [paidPayouts, setPaidPayouts] = useState({});
-
     // Collapsible sections state - Agent Summary expanded by default
     const [expandedSections, setExpandedSections] = useState({
         agentSummary: true,
@@ -332,9 +324,9 @@ export default function PayoutManagement() {
                         <h2 className="text-base sm:text-lg lg:text-xl font-bold text-amber-950">Agent Summary</h2>
                     </div>
                     {expandedSections.agentSummary ? (
-                        <ChevronUp className="w-4 h-4 sm:w-5 sm:h-5 text-amber-950" />
+                        <ChevronsUpIcon className="w-4 h-4 sm:w-5 sm:h-5 text-amber-950" />
                     ) : (
-                        <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5 text-amber-950" />
+                        <ChevronDownIcon className="w-4 h-4 sm:w-5 sm:h-5 text-amber-950" />
                     )}
                 </button>
                 {expandedSections.agentSummary && (
@@ -387,9 +379,9 @@ export default function PayoutManagement() {
                 >
                     <h2 className="text-base sm:text-lg lg:text-xl font-bold text-amber-950">Pending Requests</h2>
                     {expandedSections.pendingRequests ? (
-                        <ChevronUp className="w-4 h-4 sm:w-5 sm:h-5 text-amber-950" />
+                        <ChevronsUpIcon className="w-4 h-4 sm:w-5 sm:h-5 text-amber-950" />
                     ) : (
-                        <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5 text-amber-950" />
+                        <ChevronDownIcon className="w-4 h-4 sm:w-5 sm:h-5 text-amber-950" />
                     )}
                 </button>
                 {expandedSections.pendingRequests && (
@@ -493,9 +485,9 @@ export default function PayoutManagement() {
                 >
                     <h2 className="text-sm sm:text-lg lg:text-xl font-bold text-amber-950">Approved Payouts - Payment Confirmation</h2>
                     {expandedSections.approvedPayouts ? (
-                        <ChevronUp className="w-4 h-4 sm:w-5 sm:h-5 text-amber-950" />
+                        <ChevronsUpIcon className="w-4 h-4 sm:w-5 sm:h-5 text-amber-950" />
                     ) : (
-                        <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5 text-amber-950" />
+                        <ChevronDownIcon className="w-4 h-4 sm:w-5 sm:h-5 text-amber-950" />
                     )}
                 </button>
                 {expandedSections.approvedPayouts && (
@@ -573,9 +565,9 @@ export default function PayoutManagement() {
                 >
                     <h2 className="text-xl font-bold text-amber-950">Request History</h2>
                     {expandedSections.requestHistory ? (
-                        <ChevronUp className="w-5 h-5 text-amber-950" />
+                        <ChevronsUpIcon className="w-5 h-5 text-amber-950" />
                     ) : (
-                        <ChevronDown className="w-5 h-5 text-amber-950" />
+                        <ChevronDownIcon className="w-5 h-5 text-amber-950" />
                     )}
                 </button>
                 {expandedSections.requestHistory && (
