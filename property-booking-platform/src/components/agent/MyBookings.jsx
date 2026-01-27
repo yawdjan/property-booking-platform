@@ -61,6 +61,7 @@ export default function MyBookings() {
                 <th className="text-left py-4 px-6">Client Email</th>
                 <th className="text-left py-4 px-6">Check-in</th>
                 <th className="text-left py-4 px-6">Check-out</th>
+                <th className="text-left py-4 px-6">No of Nights</th>
                 <th className="text-left py-4 px-6">Status</th>
                 <th className="text-left py-4 px-6">Amount</th>
                 <th className="text-left py-4 px-6">Actions</th>
@@ -75,6 +76,7 @@ export default function MyBookings() {
                     <td className="py-4 px-6">{booking.clientEmail}</td>
                     <td className="py-4 px-6">{booking.checkIn}</td>
                     <td className="py-4 px-6">{booking.checkOut}</td>
+                    <td className="py-4 px-6">{booking.numberOfNights || booking.number_of_nights}</td>
                     <td className="py-4 px-6">
                       < StatusBadge status={booking.status} size="sm" />
                     </td>

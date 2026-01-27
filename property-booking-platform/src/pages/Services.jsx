@@ -124,7 +124,7 @@ export default function Services() {
             <div className="max-w-7xl mx-auto px-4 py-20">
                 <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 border-2 border-primary-100">
                     <div className="text-center mb-8">
-                        <p className="text-secondary-500 text-2xl font-bold mb-2 uppercase tracking-wide">Welcome To Omarey</p>
+                        <p className="text-black text-2xl font-bold mb-2 uppercase tracking-wide">Welcome To Omarey</p>
                         <h2 className="text-4xl md:text-5xl font-bold text-amber-950 mb-6">A Dynamic Ecosystem</h2>
                     </div>
                     
@@ -184,12 +184,12 @@ export default function Services() {
                         >
                             <div className={`p-8 bg-gradient-to-br ${service.gradient}`}>
                                 <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                    <div className="text-amber-700">
+                                    <div className="text-black">
                                         {service.icon}
                                     </div>
                                 </div>
-                                <h3 className="text-3xl font-bold text-amber-800 mb-3">{service.title}</h3>
-                                <p className="text-amber-900 text-lg leading-relaxed">
+                                <h3 className="text-3xl font-bold text-black mb-3">{service.title}</h3>
+                                <p className="text-black text-lg leading-relaxed">
                                     {service.description}
                                 </p>
                             </div>
@@ -207,7 +207,7 @@ export default function Services() {
                                         </li>
                                     ))}
                                 </ul>
-                                <button className={`w-full py-3 rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 bg-gradient-to-r ${service.gradient} text-amber-900`}>
+                                <button className={`w-full py-3 rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 bg-gradient-to-r ${service.gradient} text-black`}>
                                     Learn More
                                     <ArrowRight className="w-5 h-5" />
                                 </button>
@@ -271,9 +271,9 @@ export default function Services() {
                 
                 <div className="max-w-7xl mx-auto relative z-1">
                     <div className="text-center mb-12">
-                        <p className="text-amber-900 font-bold mb-2 uppercase tracking-wide">Our Commitment</p>
-                        <h2 className="text-4xl md:text-5xl font-bold text-amber-800 mb-4">Why Choose Omarey</h2>
-                        <p className="text-xl text-amber-900 max-w-2xl mx-auto">
+                        <p className="text-black font-bold mb-2 uppercase tracking-wide">Our Commitment</p>
+                        <h2 className="text-4xl md:text-5xl font-bold text-black mb-4">Why Choose Omarey</h2>
+                        <p className="text-xl text-black max-w-2xl mx-auto">
                             Built on the pillars of trust, quality, efficiency, and growth
                         </p>
                     </div>
@@ -285,12 +285,12 @@ export default function Services() {
                                 className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border-2 border-white/20 hover:bg-white/20 transition-all duration-300 group"
                             >
                                 <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                    <div className="text-amber-700">
+                                    <div className="text-black">
                                         {benefit.icon}
                                     </div>
                                 </div>
-                                <h3 className="text-xl font-bold text-amber-900 mb-3">{benefit.title}</h3>
-                                <p className="text-amber-900 leading-relaxed">{benefit.description}</p>
+                                <h3 className="text-xl font-bold text-black mb-3">{benefit.title}</h3>
+                                <p className="text-black leading-relaxed">{benefit.description}</p>
                             </div>
                         ))}
                     </div>
@@ -299,28 +299,28 @@ export default function Services() {
 
             {/* CTA Section */}
             <div className="max-w-7xl mx-auto px-4 py-20">
-                <div className="relative overflow-hidden bg-gradient-to-br from-secondary-500 to-primary-400 rounded-3xl shadow-2xl p-12 text-center text-white">
+                <div className="relative overflow-hidden bg-gradient-to-br from-secondary-500 to-primary-400 rounded-3xl shadow-2xl p-12 text-center text-black">
                     {/* Decorative Elements */}
                     <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
                     <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary-600/30 rounded-full blur-3xl"></div>
                     
                     <div className="relative z-1">
-                        <h2 className="text-4xl text-amber-800 md:text-5xl font-bold mb-4">Ready to Get Started?</h2>
-                        <p className="text-xl text-amber-900 mb-8 max-w-2xl mx-auto">
+                        <h2 className="text-4xl text-black md:text-5xl font-bold mb-4">Ready to Get Started?</h2>
+                        <p className="text-xl text-black mb-8 max-w-2xl mx-auto">
                             Join our ecosystem today and experience the future of short-let property management
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
                             <button 
                                 onClick={() => window.location.href = 'mailto:support@omarey.com?subject=List My Property'}
-                                className="px-10 py-5 bg-white text-secondary-800 rounded-full font-bold text-lg hover:bg-blue-50 transition-all shadow-xl hover:shadow-2xl transform hover:scale-105 flex items-center justify-center gap-2"
+                                className="px-10 py-5 bg-white text-black rounded-full font-bold text-lg hover:bg-blue-50 transition-all shadow-xl hover:shadow-2xl transform hover:scale-105 flex items-center justify-center gap-2"
                             >
                                 <Home className="w-5 h-5" />
                                 Email Us To List Your Property
                             </button>
-                            <div className='hidden sm:flex items-center text-amber-900 text-2xl font-light px-4'>or</div>
+                            <div className='hidden sm:flex items-center text-black text-2xl font-light px-4'>or</div>
                             <button  
                                 onClick={() => navigate('/register')}
-                                className="px-10 py-5 bg-gradient-to-r from-amber-600 to-amber-500 text-white rounded-full font-bold text-lg hover:from-amber-700 hover:to-amber-600 transition-all shadow-xl hover:shadow-2xl transform hover:scale-105 flex items-center justify-center gap-2"
+                                className="px-10 py-5 bg-gradient-to-r from-amber-600 to-amber-500 text-black rounded-full font-bold text-lg hover:from-amber-700 hover:to-amber-600 transition-all shadow-xl hover:shadow-2xl transform hover:scale-105 flex items-center justify-center gap-2"
                             >
                                 <Users className="w-5 h-5" />
                                 Become an Agent
@@ -328,7 +328,7 @@ export default function Services() {
                         </div>
                         
                         {/* Trust Indicators */}
-                        <div className="mt-12 flex flex-wrap items-center justify-center gap-8 text-sm text-amber-900">
+                        <div className="mt-12 flex flex-wrap items-center justify-center gap-8 text-sm text-black">
                             <div className="flex items-center gap-2">
                                 <CheckCircle className="w-5 h-5" />
                                 <span>100+ Properties</span>

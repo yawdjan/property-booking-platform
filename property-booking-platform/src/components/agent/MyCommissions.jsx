@@ -250,10 +250,12 @@ export default function MyCommissions() {
                     <textarea
                       value={requestDescription}
                       onChange={(e) => setRequestDescription(e.target.value)}
-                      placeholder="Enter mobile money number, service provider and name as appears on your account. (required)/n Add a note about this payout request... (optional)"
+                      placeholder={`Enter mobile money number, service provider and name as appears on your account.(required)
+                        Add a note about this payout request...(optional)`}
                       rows={3}
                       className="w-full px-4 py-3 border-2 border-amber-300 rounded-lg focus:border-primary-400 outline-none resize-none"
                     />
+
                   </div>
 
                   <div className="flex gap-3 pt-4">
