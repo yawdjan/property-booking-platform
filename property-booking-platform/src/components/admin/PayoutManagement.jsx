@@ -186,25 +186,21 @@ export default function PayoutManagement() {
 
     const togglePaidCheckmark = async (payoutId, currentStatus) => {
         try {
-            const { data } = await commissionsAPI.togglePaidStatus(
+            const response = await commissionsAPI.togglePaidStatus(
                 payoutId,
                 !currentStatus
             );
 
-            if (!data?.success) {
-                throw new Error(data?.message || 'Failed to update status');
+            if (response?.success || response?.ok) {
+                await fetchPayoutRequests();
             }
-
-            await fetchPayoutRequests();
         } catch (error) {
             console.error('Error updating paid status:', error);
-
-            const message =
+            alert(
                 error?.response?.data?.message ||
                 error?.message ||
-                'Error updating paid status';
-
-            alert(message);
+                'Error updating paid status'
+            );
         }
     };
 
