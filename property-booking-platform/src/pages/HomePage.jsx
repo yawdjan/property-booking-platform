@@ -1,11 +1,12 @@
 import React from 'react';
 import { Calendar, DollarSign, Users, TrendingUp } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function HomePage() {
     return (
         <div className="relative">
             {firstContent()}
-            {thirdContent()}
+            {ThirdContent()}
         </div>
     );
 };
@@ -123,7 +124,9 @@ function firstContent() {
     );
 }
 
-function thirdContent() {
+function ThirdContent() {
+    const navigate = useNavigate();
+
     return (
         <div className="min-h-screen w-full overflow-hidden bg-gradient-to-br from-gray-50 to-orange-50">
             <div className="min-h-screen w-full grid grid-cols-1 md:grid-cols-2">
@@ -148,11 +151,9 @@ function thirdContent() {
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4">
-                            <button className="px-8 py-4 bg-gradient-to-r from-secondary-500 to-accent-500 text-white rounded-xl font-semibold text-lg hover:from-secondary-600 hover:to-accent-600 transition-all shadow-lg hover:shadow-xl">
+                            <button className="px-8 py-4 bg-gradient-to-r from-secondary-500 to-accent-500 text-white rounded-xl font-semibold text-lg hover:from-secondary-600 hover:to-accent-600 transition-all shadow-lg hover:shadow-xl"
+                             onClick={() => navigate('/register')}>
                                 Get Started
-                            </button>
-                            <button className="px-8 py-4 bg-white border-2 border-primary-400 text-primary-400 rounded-xl font-semibold text-lg hover:bg-primary-50 transition-all">
-                                See Demo
                             </button>
                         </div>
                     </div>

@@ -185,6 +185,7 @@ export default function MyCommissions() {
                     <th className="px-6 py-3 text-left text-sm font-semibold text-amber-900">Amount</th>
                     <th className="px-6 py-3 text-left text-sm font-semibold text-amber-900">Earned Date</th>
                     <th className="px-6 py-3 text-left text-sm font-semibold text-amber-900">Status</th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-amber-900">Note</th>
                     <th className="px-6 py-3 text-left text-sm font-semibold text-amber-900">Last Updated At</th>
                   </tr>
                 </thead>
@@ -201,6 +202,7 @@ export default function MyCommissions() {
                             {c.status.charAt(0).toUpperCase() + c.status.slice(1)}
                           </span>
                         </td>
+                        <td className="px-6 py-4 text-sm font-bold text-secondary-500">${c.notes}</td>
                         <td className="px-6 py-4 text-sm text-amber-700">
                           {c.updatedAt ? new Date(c.updatedAt).toLocaleDateString() : '-'}
                         </td>
@@ -248,7 +250,7 @@ export default function MyCommissions() {
                     <textarea
                       value={requestDescription}
                       onChange={(e) => setRequestDescription(e.target.value)}
-                      placeholder="Add a note about this payout request..."
+                      placeholder="Enter mobile money number, service provider and name as appears on your account. (required)/n Add a note about this payout request... (optional)"
                       rows={3}
                       className="w-full px-4 py-3 border-2 border-amber-300 rounded-lg focus:border-primary-400 outline-none resize-none"
                     />

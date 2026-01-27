@@ -262,7 +262,7 @@ export default function PropertySettings() {
                   <p>
                     <span className="font-medium">Guests:</span> {property.maxGuests} | 
                     <span className="font-medium"> Beds:</span> {property.bedrooms} | 
-                    <span className="font-medium"> Baths:</span> {property.bathrooms}
+                    <span className="font-medium"> Baths:</span> {property.bathrooms.toFixed(1)}
                   </p>
                 </div>
                 <div className="flex gap-2">

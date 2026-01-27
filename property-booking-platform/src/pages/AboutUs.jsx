@@ -13,29 +13,29 @@ export default function AboutUs() {
         {
             title: 'Our Story',
             subtitle: 'How It All Began',
-            body: 'Our platform was born from a simple observation: the process for agents to discover and book exceptional short-let properties was fragmented, and property owners struggled to gain consistent, high-quality exposure. We bridge this gap through innovation and dedication.',
-            image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=1200&q=80",
+            body: 'Our platform was born from a simple observation. The process for agents to discover and book exceptional short-let properties was fragmented, and property owners struggled to gain consistent, high-quality exposure. We bridge this gap through innovation and dedication.',
+            image: "https://images.ctfassets.net/x715brg11yrw/6rBmPGxiR7omj2YN8C1YbD/bb1b52cbfae6d3079e02ad62765c93ce/Modern_living_room_with_clean_lines_and_grey_sofa_set.jpg?w=1440&fm=webp&q=80",
             imageAlt: "Team collaboration"
         },
         {
             title: 'Our Mission',
             subtitle: 'Empowering Success',
             body: "At Omarey, our mission is to empower success on both sides of the transaction through technology, trust, and a shared commitment to excellence. Join us in building the future of short-let rentals.",
-            image: "https://images.unsplash.com/photo-1556761175-b413da4baf72?w=1200&q=80",
+            image: "https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTA4L3Jhd3BpeGVsb2ZmaWNlMTJfcGhvdG9fb2ZfYV9iZWRyb29tX2lzX2luX3RoZV9hdXR1bW5fbWluaW1hbGlzdF9mN2Q4NTc1MC1iYjAzLTRkMDUtYjYwYy1hNzlmZTA5MzExOWJfMS5qcGc.jpg",
             imageAlt: "Strategic planning"
         },
         {
             title: 'Our Team',
             subtitle: 'The People Behind Omarey',
             body: 'A diverse group of product people, engineers, and hospitality professionals who care about building practical software. We value clarity, performance, and great user experience in everything we create.',
-            image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&q=80",
+            image: "https://img.freepik.com/free-photo/colleagues-team-working-company-paperwork-doig-teamwork-analyze-documents-online-research-information-planning-corporate-presentation-with-data-charts-job-collaboration_482257-49375.jpg?t=st=1769513382~exp=1769516982~hmac=37109112bc7a5768709db4dddebf48ae0beba2f78b71551426d6d55442a4352e&w=2000",
             imageAlt: "Team meeting"
         },
         {
             title: 'Thank You',
             subtitle: 'Join Our Journey',
             body: 'Thanks for choosing Omarey. We are committed to continuously improving the platform and supporting your goals in property management. Together, we\'re building something special.',
-            image: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1200&q=80",
+            image: "https://img.freepik.com/premium-photo/team-young-african-people-office-table-with-laptops_219728-4522.jpg",
             imageAlt: "Success celebration"
         },
     ];
@@ -201,7 +201,7 @@ export default function AboutUs() {
                                         `}
                                     >
                                         {/* Subtitle */}
-                                        <p className="text-blue-200 font-bold mb-3 uppercase tracking-wide text-sm md:text-base">
+                                        <p className="text-amber-700 font-bold mb-3 uppercase tracking-wide text-2xl md:text-base">
                                             {s.subtitle}
                                         </p>
 
@@ -211,7 +211,7 @@ export default function AboutUs() {
                                         </h1>
 
                                         {/* Body */}
-                                        <p className="text-lg md:text-xl lg:text-2xl text-blue-50 leading-relaxed drop-shadow-lg">
+                                        <p className="text-lg md:text-xl lg:text-2xl text-amber-900 leading-relaxed drop-shadow-lg">
                                             {s.body}
                                         </p>
 

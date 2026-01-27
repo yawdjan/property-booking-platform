@@ -212,6 +212,7 @@ export default function CalendarManagement() {
               });
 
               const agentName = bookingForDate?.agentName || bookingForDate?.agent?.name || bookingForDate?.agentNameFull || '';
+              const validStatuses = ['completed', 'pending', 'booked'];
 
               return (
                 <div
@@ -231,9 +232,12 @@ export default function CalendarManagement() {
                     </span>
                   )}
 
-                  {bookingForDate && agentName && (status !== 'cancelled' && status !== 'past-available' && status !== 'available' && status === 'completed' && status === 'pending' && status === 'booked') && (
-                    <span className="text-xs mt-0.5 text-gray-600">{agentName}</span>
-                  )}
+                  {bookingForDate &&
+                    agentName &&
+                    validStatuses.includes(status) && (
+                      <span className="text-xs mt-0.5 text-gray-600">{agentName}</span>
+                    )}
+
                 </div>
               );
             })}

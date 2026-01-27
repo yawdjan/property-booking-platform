@@ -239,7 +239,7 @@ export default function BookingCalendar() {
             >
               {properties.map(prop => (
                 <option key={prop.id} value={prop.id}>
-                  {prop.name} - ${prop.nightlyRate}/night
+                  {prop.name} - ¢ß{prop.nightlyRate}/night
                 </option>
               ))}
             </select>
@@ -487,8 +487,8 @@ export default function BookingCalendar() {
 
           <div className="space-y-2 text-sm">
             <p><span className="font-medium">Address:</span> {selectedProperty.address}</p>
-            <p><span className="font-medium">Nightly Rate:</span> ${selectedProperty.nightlyRate}</p>
-            <p><span className="font-medium">Cleaning Fee:</span> ${selectedProperty.cleaningFee}</p>
+            <p><span className="font-medium">Nightly Rate:</span> ¢{selectedProperty.nightlyRate}</p>
+            <p><span className="font-medium">Cleaning Fee:</span> ¢{selectedProperty.cleaningFee}</p>
           </div>
           {/* Mini Calendar */}
           <div className="mt-6">

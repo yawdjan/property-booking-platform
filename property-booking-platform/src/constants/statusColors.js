@@ -1,9 +1,9 @@
 export const STATUS_COLORS = {
   'Booked': {
-    bg: 'bg-green-100',
-    text: 'text-green-800',
-    border: 'border-green-300',
-    dot: 'bg-green-500'
+    bg: 'bg-cyan-100',
+    text: 'text-cyan-800',
+    border: 'border-cyan-300',
+    dot: 'bg-cyan-500'
   },
   'Pending Payment': {
     bg: 'bg-yellow-100',
@@ -18,10 +18,10 @@ export const STATUS_COLORS = {
     dot: 'bg-red-500'
   },
   'Completed': {
-    bg: 'bg-amber-100',
-    text: 'text-amber-800',
-    border: 'border-amber-300',
-    dot: 'bg-amber-500'
+    bg: 'bg-green-100',
+    text: 'text-green-800',
+    border: 'border-green-300',
+    dot: 'bg-green-500'
   }
 };
 

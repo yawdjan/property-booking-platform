@@ -112,9 +112,9 @@ export default function Services() {
                 <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary-400/20 rounded-full blur-3xl"></div>
                 
                 <div className="max-w-7xl mx-auto text-center relative z-1">
-                    <p className="text-blue-200 font-bold mb-4 uppercase tracking-wide text-sm">What We Offer</p>
+                    <p className="text-amber-50 text-2xl font-bold mb-4 uppercase tracking-wide">What We Offer</p>
                     <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-white">Our Services</h1>
-                    <p className="text-xl md:text-2xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
+                    <p className="text-xl md:text-2xl text-amber-50 max-w-3xl mx-auto leading-relaxed">
                         Empowering property owners and booking agents through technology, trust, and excellence
                     </p>
                 </div>
@@ -124,18 +124,20 @@ export default function Services() {
             <div className="max-w-7xl mx-auto px-4 py-20">
                 <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 border-2 border-primary-100">
                     <div className="text-center mb-8">
-                        <p className="text-secondary-500 font-bold mb-2 uppercase tracking-wide">Welcome To Omarey</p>
+                        <p className="text-secondary-500 text-2xl font-bold mb-2 uppercase tracking-wide">Welcome To Omarey</p>
                         <h2 className="text-4xl md:text-5xl font-bold text-amber-950 mb-6">A Dynamic Ecosystem</h2>
                     </div>
                     
                     <div className="prose prose-lg max-w-none text-amber-900 leading-relaxed space-y-6">
-                        <p className="text-xl">
-                            To our <span className="font-bold text-secondary-500">Users</span>, we are more than just a booking portal—we are a dynamic ecosystem designed for two key players: discerning property owners and ambitious booking agents.
+                        <p className="text-xl text-center">
+                            To our <span className="font-bold text-secondary-700">Users</span>, we are more than just a booking portal, we are a dynamic ecosystem 
+                            designed for two key players (discerning property owners and ambitious booking 
+                            agents).
                         </p>
                         
                         <div className="grid md:grid-cols-2 gap-8 my-8">
                             <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl border-2 border-blue-100">
-                                <div className="w-12 h-12 bg-gradient-to-br from-secondary-500 to-accent-500 rounded-xl flex items-center justify-center mb-4">
+                                <div className="w-12 h-12 bg-gradient-to-br from-secondary-700 to-accent-500 rounded-xl flex items-center justify-center mb-4">
                                     <Home className="w-6 h-6 text-white" />
                                 </div>
                                 <h3 className="font-bold text-xl text-amber-950 mb-3">For Property Owners</h3>
@@ -156,7 +158,9 @@ export default function Services() {
                         </div>
                         
                         <p className="text-lg text-center italic text-amber-700 bg-primary-50 p-6 rounded-2xl border-2 border-primary-100">
-                            Our platform was born from a simple observation: the process for agents to discover and book exceptional short-let properties was fragmented, and property owners struggled to gain consistent, high-quality exposure. We bridge this gap.
+                            Our platform was born from a simple observation. The process for agents to discover 
+                            and book exceptional short-let properties was fragmented, and property owners 
+                            struggled to gain consistent, high-quality exposure. We bridge this gap.
                         </p>
                     </div>
                 </div>
@@ -180,12 +184,12 @@ export default function Services() {
                         >
                             <div className={`p-8 bg-gradient-to-br ${service.gradient}`}>
                                 <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                    <div className="text-white">
+                                    <div className="text-amber-700">
                                         {service.icon}
                                     </div>
                                 </div>
-                                <h3 className="text-3xl font-bold text-white mb-3">{service.title}</h3>
-                                <p className="text-blue-50 text-lg leading-relaxed">
+                                <h3 className="text-3xl font-bold text-amber-800 mb-3">{service.title}</h3>
+                                <p className="text-amber-900 text-lg leading-relaxed">
                                     {service.description}
                                 </p>
                             </div>
@@ -203,7 +207,7 @@ export default function Services() {
                                         </li>
                                     ))}
                                 </ul>
-                                <button className={`w-full py-3 rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 bg-gradient-to-r ${service.gradient} text-white`}>
+                                <button className={`w-full py-3 rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 bg-gradient-to-r ${service.gradient} text-amber-900`}>
                                     Learn More
                                     <ArrowRight className="w-5 h-5" />
                                 </button>
@@ -267,9 +271,9 @@ export default function Services() {
                 
                 <div className="max-w-7xl mx-auto relative z-1">
                     <div className="text-center mb-12">
-                        <p className="text-blue-200 font-bold mb-2 uppercase tracking-wide">Our Commitment</p>
-                        <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Why Choose Omarey</h2>
-                        <p className="text-xl text-blue-100 max-w-2xl mx-auto">
+                        <p className="text-amber-900 font-bold mb-2 uppercase tracking-wide">Our Commitment</p>
+                        <h2 className="text-4xl md:text-5xl font-bold text-amber-800 mb-4">Why Choose Omarey</h2>
+                        <p className="text-xl text-amber-900 max-w-2xl mx-auto">
                             Built on the pillars of trust, quality, efficiency, and growth
                         </p>
                     </div>
@@ -281,12 +285,12 @@ export default function Services() {
                                 className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border-2 border-white/20 hover:bg-white/20 transition-all duration-300 group"
                             >
                                 <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                    <div className="text-white">
+                                    <div className="text-amber-700">
                                         {benefit.icon}
                                     </div>
                                 </div>
-                                <h3 className="text-xl font-bold text-white mb-3">{benefit.title}</h3>
-                                <p className="text-blue-100 leading-relaxed">{benefit.description}</p>
+                                <h3 className="text-xl font-bold text-amber-900 mb-3">{benefit.title}</h3>
+                                <p className="text-amber-900 leading-relaxed">{benefit.description}</p>
                             </div>
                         ))}
                     </div>
@@ -301,19 +305,19 @@ export default function Services() {
                     <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary-600/30 rounded-full blur-3xl"></div>
                     
                     <div className="relative z-1">
-                        <h2 className="text-4xl md:text-5xl font-bold mb-4">Ready to Get Started?</h2>
-                        <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+                        <h2 className="text-4xl text-amber-800 md:text-5xl font-bold mb-4">Ready to Get Started?</h2>
+                        <p className="text-xl text-amber-900 mb-8 max-w-2xl mx-auto">
                             Join our ecosystem today and experience the future of short-let property management
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
                             <button 
                                 onClick={() => window.location.href = 'mailto:support@omarey.com?subject=List My Property'}
-                                className="px-10 py-5 bg-white text-secondary-500 rounded-full font-bold text-lg hover:bg-blue-50 transition-all shadow-xl hover:shadow-2xl transform hover:scale-105 flex items-center justify-center gap-2"
+                                className="px-10 py-5 bg-white text-secondary-800 rounded-full font-bold text-lg hover:bg-blue-50 transition-all shadow-xl hover:shadow-2xl transform hover:scale-105 flex items-center justify-center gap-2"
                             >
                                 <Home className="w-5 h-5" />
                                 Email Us To List Your Property
                             </button>
-                            <div className='hidden sm:flex items-center text-blue-100 text-2xl font-light px-4'>or</div>
+                            <div className='hidden sm:flex items-center text-amber-900 text-2xl font-light px-4'>or</div>
                             <button  
                                 onClick={() => navigate('/register')}
                                 className="px-10 py-5 bg-gradient-to-r from-amber-600 to-amber-500 text-white rounded-full font-bold text-lg hover:from-amber-700 hover:to-amber-600 transition-all shadow-xl hover:shadow-2xl transform hover:scale-105 flex items-center justify-center gap-2"
@@ -324,7 +328,7 @@ export default function Services() {
                         </div>
                         
                         {/* Trust Indicators */}
-                        <div className="mt-12 flex flex-wrap items-center justify-center gap-8 text-sm text-blue-100">
+                        <div className="mt-12 flex flex-wrap items-center justify-center gap-8 text-sm text-amber-900">
                             <div className="flex items-center gap-2">
                                 <CheckCircle className="w-5 h-5" />
                                 <span>100+ Properties</span>
