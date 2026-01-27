@@ -146,7 +146,7 @@ export default function PropertySettings() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
 
     setSaving(true);
@@ -209,7 +209,7 @@ export default function PropertySettings() {
     <div>
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">Property Management</h2>
-        <button 
+        <button
           onClick={openAddModal}
           className="flex items-center gap-2 px-4 py-2 bg-primary-400 text-white rounded-lg hover:bg-secondary-500"
         >
@@ -227,7 +227,7 @@ export default function PropertySettings() {
       {properties.length === 0 ? (
         <div className="bg-white rounded-lg shadow p-12 text-center">
           <p className="text-gray-500 text-lg mb-4">No properties yet</p>
-          <button 
+          <button
             onClick={openAddModal}
             className="px-6 py-3 bg-primary-400 text-white rounded-lg hover:bg-secondary-500"
           >
@@ -239,9 +239,9 @@ export default function PropertySettings() {
           {properties.map(property => (
             <div key={property.id} className="bg-white rounded-lg shadow overflow-hidden">
               {property.images && property.images.length > 0 && property.images[0] ? (
-                <img 
-                  src={property.images[0]} 
-                  alt={property.name} 
+                <img
+                  src={property.images[0]}
+                  alt={property.name}
                   className="w-full h-48 object-cover"
                   onError={(e) => {
                     e.target.src = 'https://via.placeholder.com/400x300?text=No+Image';
@@ -260,20 +260,21 @@ export default function PropertySettings() {
                   <p><span className="font-medium">Cleaning Fee:</span> ${property.cleaningFee}</p>
                   <p><span className="font-medium">Commission:</span> {property.commissionRate}%</p>
                   <p>
-                    <span className="font-medium">Guests:</span> {property.maxGuests} | 
-                    <span className="font-medium"> Beds:</span> {property.bedrooms} | 
-                    <span className="font-medium"> Baths:</span> {property.bathrooms.toFixed(1)}
+                    <span className="font-medium">Guests:</span> {property.maxGuests} |
+                    <span className="font-medium"> Beds:</span> {property.bedrooms} |
+                    <span className="font-medium"> Baths:</span> {" "}
+                    {Number(property.bathrooms).toFixed(1)}
                   </p>
                 </div>
                 <div className="flex gap-2">
-                  <button 
+                  <button
                     onClick={() => openEditModal(property)}
                     className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-primary-400 text-white rounded-lg hover:bg-secondary-500"
                   >
                     <Edit2 className="w-4 h-4" />
                     Edit
                   </button>
-                  <button 
+                  <button
                     onClick={() => handleDelete(property.id)}
                     className="flex items-center justify-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
                   >

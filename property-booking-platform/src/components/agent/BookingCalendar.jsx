@@ -239,7 +239,7 @@ export default function BookingCalendar() {
             >
               {properties.map(prop => (
                 <option key={prop.id} value={prop.id}>
-                  {prop.name} - ¢ß{prop.nightlyRate}/night
+                  {prop.name} - ¢{prop.nightlyRate}/night
                 </option>
               ))}
             </select>

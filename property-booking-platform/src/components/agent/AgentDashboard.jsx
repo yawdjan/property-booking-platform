@@ -40,7 +40,7 @@ export default function AgentDashboard({ setActiveTab }) {
   if (loading) return <div>Loading...</div>;
   if (error) return <div className="text-red-600">{error}</div>;
 
-  const agentBookings = bookings.filter(b => b.agentId === currentUser.id && b.status === 'Completed');
+  const agentBookings = bookings.filter(b => b.agentId === currentUser.id);
   const totalEarnings = agentBookings
     .filter(b => b.status === 'Completed'  )
     .reduce((sum, b) => sum + parseFloat(b.commissionAmount || 0), 0);
@@ -55,7 +55,7 @@ export default function AgentDashboard({ setActiveTab }) {
       <div className="grid md:grid-cols-3 gap-6 mb-8">
         <StatCard
           title="Total Completed Bookings"
-          value={agentBookings.length}
+          value={(agentBookings ?? []).filter(b => b.status === 'Completed').length}
           icon={Calendar}
           color="blue"
         />

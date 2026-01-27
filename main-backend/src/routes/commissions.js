@@ -28,8 +28,8 @@ router.get('/admin/payouts', protect, authorize('admin'), getAllPayoutRequests);
 router.post('/admin/payouts/:id/approve', protect, authorize('admin'), approvePayoutRequest);
 router.post('/admin/payouts/:id/deny', protect, authorize('admin'), denyPayoutRequest);
 router.put('/admin/payouts/:id/modify', protect, authorize('admin'), modifyPayoutRequest);
-router.put('/admin/payouts/:id/modify', protect, authorize('admin'), notePaid);
-router.post('/admin/payouts/:id/paid-status', protect, authorize('admin'), approveModifiedPayout);
+router.post('/admin/payouts/:id/approve-modified', protect, authorize('admin'), approveModifiedPayout);
+router.put('/admin/payouts/:id/paid-status', protect, authorize('admin'), notePaid);
 router.get('/admin/stats', protect, authorize('admin'), getCommissionStats);
 
 export default router;
