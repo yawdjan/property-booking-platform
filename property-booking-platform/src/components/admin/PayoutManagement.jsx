@@ -186,24 +186,13 @@ export default function PayoutManagement() {
 
     const togglePaidCheckmark = async (payoutId, currentStatus) => {
         try {
-            const response = await commissionsAPI.togglePaidStatus(
-                payoutId,
-                !currentStatus
-            );
-
-            if (response?.success || response?.ok) {
-                await fetchPayoutRequests();
-            }
+            await commissionsAPI.togglePaidStatus(payoutId, !currentStatus);
+            await fetchPayoutRequests();
         } catch (error) {
             console.error('Error updating paid status:', error);
-            alert(
-                error?.response?.data?.message ||
-                error?.message ||
-                'Error updating paid status'
-            );
+            alert(error.response?.data?.message || 'Error updating paid status');
         }
     };
-
 
     // Get unique agents from bookings and payout requests
     const getAgentSummary = () => {
