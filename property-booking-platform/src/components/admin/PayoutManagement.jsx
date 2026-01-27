@@ -550,7 +550,7 @@ export default function PayoutManagement() {
                                                             className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 rounded focus:ring-2 focus:ring-green-500"
                                                         />
                                                         <span className="text-xs sm:text-sm text-amber-900">
-                                                            {request.isPaid ? 'Paid ✓' : 'Mark as Paid'}
+                                                            {request.isPaid ? 'Paid ✓' : ''}
                                                         </span>
                                                     </div>
                                                     {request.isPaid && request.paidDate && (
