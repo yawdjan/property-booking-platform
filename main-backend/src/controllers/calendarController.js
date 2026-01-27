@@ -85,7 +85,7 @@ export const blockDates = async (req, res) => {
       totalAmount: 0,
       commissionRate: 0,
       commissionAmount: 0,
-      status: 'Booked'
+      status: 'Cancelled'
     }));
 
     await Booking.bulkCreate(blockedBookings);
