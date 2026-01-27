@@ -379,7 +379,7 @@ export default function CalendarManagement() {
                       </span>
                     )}
 
-                    {!isSelected && bookingForDate && validStatuses.includes(status) && (
+                    {!isSelected && (status === 'cancelled' || status === 'Cancelled') && (
                       <span className="text-xs mt-0.5 text-gray-600 truncate max-w-full px-1">
                         {status}
                       </span>
