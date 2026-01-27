@@ -202,7 +202,7 @@ export default function MyCommissions() {
                             {c.status.charAt(0).toUpperCase() + c.status.slice(1)}
                           </span>
                         </td>
-                        <td className="px-6 py-4 text-sm font-bold text-secondary-500">${c.notes}</td>
+                        <td className="px-6 py-4 text-sm font-bold text-secondary-500">{c.adminNote}</td>
                         <td className="px-6 py-4 text-sm text-amber-700">
                           {c.updatedAt ? new Date(c.updatedAt).toLocaleDateString() : '-'}
                         </td>
