@@ -216,7 +216,7 @@ export const commissionsAPI = {
             const response = apiClient.put(`/commissions/admin/payouts/${payoutId}/paid-status`, {
                 isPaid
             });
-            return response.data;
+            return response;
         } catch (error) {
             console.error('Error toggling paid status:', error);
             throw error;
