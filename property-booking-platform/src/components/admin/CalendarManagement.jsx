@@ -346,7 +346,7 @@ export default function CalendarManagement() {
                 });
 
                 const agentName = bookingForDate?.agentName || bookingForDate?.agent?.name || bookingForDate?.agentNameFull || '';
-                const validStatuses = ['completed', 'pending', 'booked'];
+                const validStatuses = ['completed', 'pending', 'booked', 'cancelled'];
 
                 return (
                   <div
@@ -401,6 +401,10 @@ export default function CalendarManagement() {
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 bg-red-100 border border-red-300 rounded"></div>
               <span className="text-sm text-gray-700">Pending Payment</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 bg-red-100 border border-red-300 rounded"></div>
+              <span className="text-sm text-gray-700">Cancelled/Blocked</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 bg-green-100 border border-green-300 rounded"></div>

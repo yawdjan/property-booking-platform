@@ -188,7 +188,7 @@ export default function PayoutManagement() {
         try {
             const response = await commissionsAPI.togglePaidStatus(payoutId, !currentStatus);
             
-            if (response.success) {
+            if (response.success || response.ok) {
                 // Refresh the payout requests to get updated data
                 await fetchPayoutRequests();
             }
