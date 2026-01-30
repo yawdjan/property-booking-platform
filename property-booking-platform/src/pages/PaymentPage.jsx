@@ -209,23 +209,23 @@ export default function PaymentPage() {
                     <div className="space-y-3 text-sm">
                       <div className="flex justify-between items-center py-2">
                         <span className="text-gray-600">
-                          ${Number(booking.nightlyRate).toFixed(2)} × {booking.numberOfNights} nights
+                          ¢{Number(booking.nightlyRate).toFixed(2)} × {booking.numberOfNights} nights
                         </span>
                         <span className="font-semibold text-gray-900">
-                          ${(Number(booking.nightlyRate) * booking.numberOfNights).toFixed(2)}
+                          ¢{(Number(booking.nightlyRate) * booking.numberOfNights).toFixed(2)}
                         </span>
                       </div>
                       <div className="flex justify-between items-center py-2">
                         <span className="text-gray-600">Cleaning fee</span>
                         <span className="font-semibold text-gray-900">
-                          ${Number(booking.cleaningFee).toFixed(2)}
+                          ¢{Number(booking.cleaningFee).toFixed(2)}
                         </span>
                       </div>
                       <div className="border-t border-gray-300 pt-3 mt-3">
                         <div className="flex justify-between items-center">
                           <span className="text-gray-900 font-bold text-base">Total</span>
                           <span className="text-2xl font-bold bg-gradient-to-r from-primary-400 to-indigo-600 bg-clip-text text-transparent">
-                            ${Number(booking.totalAmount).toFixed(2)}
+                            ¢{Number(booking.totalAmount).toFixed(2)}
                           </span>
                         </div>
                       </div>

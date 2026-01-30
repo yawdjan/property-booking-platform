@@ -124,15 +124,15 @@ export default function MyCommissions() {
       <div className="grid md:grid-cols-3 gap-6 mb-8">
         <div className="bg-white rounded-lg shadow p-6">
           <h3 className="text-sm text-gray-600 mb-2">Total Earned</h3>
-          <p className="text-3xl font-bold text-primary-400">${totalEarned.toLocaleString()}</p>
+          <p className="text-3xl font-bold text-amber-800">¢{totalEarned.toLocaleString()}</p>
         </div>
         <div className="bg-white rounded-lg shadow p-6">
           <h3 className="text-sm text-gray-600 mb-2">Paid Out</h3>
-          <p className="text-3xl font-bold text-primary-400">${paid.toLocaleString()}</p>
+          <p className="text-3xl font-bold text-amber-800">¢{paid.toLocaleString()}</p>
         </div>
         <div className="bg-white rounded-lg shadow p-6">
           <h3 className="text-sm text-gray-600 mb-2">Pending Payout</h3>
-          <p className="text-3xl font-bold text-orange-600">${pendingPayout.toLocaleString()}</p>
+          <p className="text-3xl font-bold text-orange-600">¢{pendingPayout.toLocaleString()}</p>
         </div>
       </div>
 
@@ -160,9 +160,9 @@ export default function MyCommissions() {
                   <tr key={booking.id} className="border-b">
                     <td className="py-3 px-4">#{booking.id}</td>
                     <td className="py-3 px-4">{property?.name}</td>
-                    <td className="py-3 px-4">${booking.totalAmount}</td>
+                    <td className="py-3 px-4">¢{booking.totalAmount}</td>
                     <td className="py-3 px-4">{booking.commissionRate}%</td>
-                    <td className="py-3 px-4 font-semibold">${booking.commissionAmount}</td>
+                    <td className="py-3 px-4 font-semibold">¢{booking.commissionAmount}</td>
                     <td className="py-3 px-4">
                       < StatusBadge status={booking.status} size="sm" />
                     </td>
@@ -194,16 +194,16 @@ export default function MyCommissions() {
                     return (
                       <tr key={c.id} className="hover:bg-gray-50 transition-colors">
                         <td className="px-6 py-4 text-sm font-medium text-amber-950">#{c.id}</td>
-                        <td className="px-6 py-4 text-sm font-bold text-secondary-500">${c.requestedAmount}</td>
-                        <td className="px-6 py-4 text-sm text-amber-700">{new Date(c.createdAt).toLocaleDateString()}</td>
+                        <td className="px-6 py-4 text-sm font-bold text-amber-900">¢{c.requestedAmount}</td>
+                        <td className="px-6 py-4 text-sm text-amber-900">{new Date(c.createdAt).toLocaleDateString()}</td>
                         <td className="px-6 py-4">
                           <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(c.status)}`}>
                             {getStatusIcon(c.status)}
                             {c.status.charAt(0).toUpperCase() + c.status.slice(1)}
                           </span>
                         </td>
-                        <td className="px-6 py-4 text-sm font-bold text-secondary-500">{c.adminNote}</td>
-                        <td className="px-6 py-4 text-sm text-amber-700">
+                        <td className="px-6 py-4 text-sm font-bold text-amber-900">{c.adminNote}</td>
+                        <td className="px-6 py-4 text-sm text-amber-900">
                           {c.updatedAt ? new Date(c.updatedAt).toLocaleDateString() : '-'}
                         </td>
                       </tr>
@@ -226,7 +226,7 @@ export default function MyCommissions() {
                     <label className="block text-sm font-semibold text-amber-900 mb-2">
                       Available Balance
                     </label>
-                    <p className="text-3xl font-bold text-secondary-500">${pendingPayout.toFixed(2)}</p>
+                    <p className="text-3xl font-bold text-secondary-500">¢{pendingPayout.toFixed(2)}</p>
                   </div>
 
                   <div>

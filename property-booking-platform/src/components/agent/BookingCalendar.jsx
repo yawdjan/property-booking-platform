@@ -489,6 +489,12 @@ export default function BookingCalendar() {
             <p><span className="font-medium">Address:</span> {selectedProperty.address}</p>
             <p><span className="font-medium">Nightly Rate:</span> ¢{selectedProperty.nightlyRate}</p>
             <p><span className="font-medium">Cleaning Fee:</span> ¢{selectedProperty.cleaningFee}</p>
+            <p>
+              <span className="font-medium">Guests:</span> {selectedProperty.maxGuests} |
+              <span className="font-medium"> Beds:</span> {selectedProperty.bedrooms} |
+              <span className="font-medium"> Baths:</span> {" "}
+              {Number(selectedProperty.bathrooms).toFixed(1)}
+            </p>
           </div>
           {/* Mini Calendar */}
           <div className="mt-6">
@@ -537,9 +543,9 @@ export default function BookingCalendar() {
             {checkIn && checkOut && (
               <div className="p-4 bg-blue-50 rounded-lg">
                 <p className="text-sm text-gray-600 mb-2">Booking Summary</p>
-                <p className="text-lg font-semibold">Total: ${calculateTotal().toFixed(2)}</p>
+                <p className="text-lg font-semibold">Total: ¢{calculateTotal().toFixed(2)}</p>
                 <p className="text-sm text-gray-600 mt-1">
-                  {calculateNights(checkIn, checkOut)} nights × ${selectedProperty.nightlyRate} + ${parseFloat(selectedProperty.cleaningFee)} cleaning fee
+                  {calculateNights(checkIn, checkOut)} nights × ¢{selectedProperty.nightlyRate} + ¢{parseFloat(selectedProperty.cleaningFee)} cleaning fee
                 </p>
               </div>
             )}

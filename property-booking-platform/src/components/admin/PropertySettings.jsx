@@ -256,8 +256,8 @@ export default function PropertySettings() {
                 <h3 className="text-xl font-semibold mb-2">{property.name}</h3>
                 <p className="text-sm text-gray-600 mb-4">{property.address}</p>
                 <div className="space-y-2 text-sm mb-4">
-                  <p><span className="font-medium">Nightly Rate:</span> ${property.nightlyRate}</p>
-                  <p><span className="font-medium">Cleaning Fee:</span> ${property.cleaningFee}</p>
+                  <p><span className="font-medium">Nightly Rate:</span> ¢{property.nightlyRate}</p>
+                  <p><span className="font-medium">Cleaning Fee:</span> ¢{property.cleaningFee}</p>
                   <p><span className="font-medium">Commission:</span> {property.commissionRate}%</p>
                   <p>
                     <span className="font-medium">Guests:</span> {property.maxGuests} |
@@ -339,7 +339,7 @@ export default function PropertySettings() {
               {/* Pricing */}
               <div className="grid md:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-sm font-medium mb-1">Nightly Rate ($) *</label>
+                  <label className="block text-sm font-medium mb-1">Nightly Rate (¢) *</label>
                   <input
                     type="number"
                     name="nightlyRate"
@@ -350,7 +350,7 @@ export default function PropertySettings() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Cleaning Fee ($)</label>
+                  <label className="block text-sm font-medium mb-1">Cleaning Fee (¢) *</label>
                   <input
                     type="number"
                     name="cleaningFee"
