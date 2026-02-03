@@ -498,11 +498,14 @@ export default function BookingCalendar() {
               </p>
             </div>
             <div className="space-y-2 text-sm">
-              {selectedProperty.amenities.map(amenity => (
-                <p key={amenity.id} className="py-2 px-6 text-sm text-gray-600">{amenity.name}</p>
+              {selectedProperty.amenities.map((amenity, index) => (
+                <p key={index} className="py-2 px-6 text-sm text-gray-600">
+                  {amenity}
+                </p>
               ))}
             </div>
           </div>
+
           {/* Mini Calendar */}
           <div className="mt-6">
             <h4 className="text-sm font-medium mb-2">Availability Calendar</h4>
