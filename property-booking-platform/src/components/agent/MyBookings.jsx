@@ -36,7 +36,7 @@ export default function MyBookings() {
     navigator.clipboard.writeText(url);
     alert("Payment link copied to clipboard!");
   };
-
+  
   if (loading) return <div className="flex justify-center items-center h-64">Loading...</div>;
   if (error) return <div className="text-red-600 p-4 bg-red-50 rounded-lg">{error}</div>;
 
@@ -71,38 +71,31 @@ export default function MyBookings() {
               {agentBookings.map(booking => {
                 const property = properties.find(p => p.id === booking.propertyId);
                 return (
-                  <div key={booking.id} className="border-b hover:bg-gray-50">
-                    <tr>
-                      <td className="py-4 px-6">{property?.name || 'N/A'}</td>
-                      <td className="py-4 px-6">{booking.clientEmail}</td>
-                      <td className="py-4 px-6">{booking.checkIn}</td>
-                      <td className="py-4 px-6">{booking.checkOut}</td>
-                      <td className="py-4 px-6">{booking.numberOfNights || booking.number_of_nights}</td>
-                      <td className="py-4 px-6">
-                        < StatusBadge status={booking.status} size="sm" />
-                      </td>
-                      <td className="py-4 px-6">¢{booking.totalAmount}</td>
-                      <td className="py-4 px-6">
-                        <div className="flex gap-2">
-                          {/* Copy Payment Link - Show only for Pending Payment */}
-                          {booking.status === 'Pending Payment' && (
-                            <button
-                              onClick={() => copyPaymentLink(booking)}
-                              className="p-2 text-primary-400 hover:bg-blue-50 rounded"
-                              title="Copy payment link"
-                            >
-                              <Copy className="w-4 h-4" />
-                            </button>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      { booking.amenities.map(amenity => (
-                        <td key={amenity.id} className="py-2 px-6 text-sm text-gray-600">{amenity.name}</td>
-                      ))}
-                    </tr>
-                  </div>
+                  <tr key={booking.id} className="border-b hover:bg-gray-50">
+                    <td className="py-4 px-6">{property?.name || 'N/A'}</td>
+                    <td className="py-4 px-6">{booking.clientEmail}</td>
+                    <td className="py-4 px-6">{booking.checkIn}</td>
+                    <td className="py-4 px-6">{booking.checkOut}</td>
+                    <td className="py-4 px-6">{booking.numberOfNights || booking.number_of_nights}</td>
+                    <td className="py-4 px-6">
+                      < StatusBadge status={booking.status} size="sm" />
+                    </td>
+                    <td className="py-4 px-6">¢{booking.totalAmount}</td>
+                    <td className="py-4 px-6">
+                      <div className="flex gap-2">
+                        {/* Copy Payment Link - Show only for Pending Payment */}
+                        {booking.status === 'Pending Payment' && (
+                          <button
+                            onClick={() => copyPaymentLink(booking)}
+                            className="p-2 text-primary-400 hover:bg-blue-50 rounded"
+                            title="Copy payment link"
+                          >
+                            <Copy className="w-4 h-4" />
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
                 );
               })}
             </tbody>
