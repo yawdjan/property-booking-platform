@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, MapPin, Users, Bed, Bath, DollarSign, Filter, Home } from 'lucide-react';
+import { Search, MapPin, Users, Bed, Bath, Filter, Home } from 'lucide-react';
 import { propertiesAPI } from '../services/api';
 
 export default function PropertyListings() {
@@ -268,7 +268,7 @@ export default function PropertyListings() {
                   )}
                   <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full">
                     <p className="text-amber-950 font-bold flex items-center gap-1">
-                      <DollarSign className="w-4 h-4" />
+                      ¢
                       {parseFloat(property.nightlyRate).toFixed(0)}/night
                     </p>
                   </div>
