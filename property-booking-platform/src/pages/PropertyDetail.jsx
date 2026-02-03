@@ -228,7 +228,7 @@ export default function PropertyDetail() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Bath className="w-5 h-5 text-amber-600" />
-                  <span className="font-semibold">{property.bathrooms} Bathrooms</span>
+                  <span className="font-semibold">{property.bathrooms.toFixed(1)} Bathrooms</span>
                 </div>
               </div>
             </div>

@@ -156,12 +156,21 @@ export default function PayoutManagement() {
     };
 
     const availableBalance = (agentId) => {
-        return bookingsRequests.filter(r => r.agentId === agentId)
+        const a =  bookingsRequests.filter(r => r.agentId === agentId)
             .filter(r => r.status === "Completed")
             .reduce(
                 (sum, c) => sum + parseFloat(c.commissionAmount || 0),
                 0
             );
+
+        const b =  payoutRequests.filter(r => r.agentId === agentId)
+            .filter(r => r.status === "approved" || r.status === "completed")
+            .reduce(
+                (sum, c) => sum + parseFloat(c.approvedAmount || c.requestedAmount || 0),
+                0
+            );
+
+        return a - b;
     };
 
     const getStatusColor = (status) => {
@@ -364,7 +373,7 @@ export default function PayoutManagement() {
                                             <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-semibold text-amber-900">
                                                 {agent.totalBookings}
                                             </td>
-                                            <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-bold text-secondary-500">
+                                            <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-bold text-amber-800">
                                                 ¢{agent.availableBalance.toFixed(2)}
                                             </td>
                                         </tr>
@@ -531,7 +540,7 @@ export default function PayoutManagement() {
                                                     </p>
                                                 </div>
                                             </td>
-                                            <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-bold text-secondary-500">
+                                            <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-bold text-amber-800">
                                                 ¢{parseFloat(request.approvedAmount || request.requestedAmount).toFixed(2)}
                                             </td>
                                             <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-amber-900">

@@ -131,7 +131,7 @@ export default function MyCommissions() {
           <p className="text-3xl font-bold text-amber-800">¢{paid.toLocaleString()}</p>
         </div>
         <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-sm text-gray-600 mb-2">Pending Payout</h3>
+          <h3 className="text-sm text-gray-600 mb-2">Available Balance</h3>
           <p className="text-3xl font-bold text-orange-600">¢{pendingPayout.toLocaleString()}</p>
         </div>
       </div>
@@ -251,7 +251,7 @@ export default function MyCommissions() {
                       value={requestDescription}
                       onChange={(e) => setRequestDescription(e.target.value)}
                       placeholder={`Enter mobile money number, service provider and name as appears on your account.(required)
-                        Add a note about this payout request...(optional)`}
+Add a note about this payout request...(optional)`}
                       rows={3}
                       className="w-full px-4 py-3 border-2 border-amber-300 rounded-lg focus:border-primary-400 outline-none resize-none"
                     />
