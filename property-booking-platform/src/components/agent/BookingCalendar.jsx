@@ -485,21 +485,23 @@ export default function BookingCalendar() {
             </>
           )}
 
-          <div className="space-y-2 text-sm">
-            <p><span className="font-medium">Address:</span> {selectedProperty.address}</p>
-            <p><span className="font-medium">Nightly Rate:</span> ¢{selectedProperty.nightlyRate}</p>
-            <p><span className="font-medium">Cleaning Fee:</span> ¢{selectedProperty.cleaningFee}</p>
-            <p>
-              <span className="font-medium">Guests:</span> {selectedProperty.maxGuests} |
-              <span className="font-medium"> Beds:</span> {selectedProperty.bedrooms} |
-              <span className="font-medium"> Baths:</span> {" "}
-              {Number(selectedProperty.bathrooms).toFixed(1)}
-            </p>
-          </div>
-          <div className="space-y-2 text-sm">
-            {selectedProperty.amenities.map(amenity => (
-              <p key={amenity.id} className="py-2 px-6 text-sm text-gray-600">{amenity.name}</p>
-            ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2 text-sm">
+              <p><span className="font-medium">Address:</span> {selectedProperty.address}</p>
+              <p><span className="font-medium">Nightly Rate:</span> ¢{selectedProperty.nightlyRate}</p>
+              <p><span className="font-medium">Cleaning Fee:</span> ¢{selectedProperty.cleaningFee}</p>
+              <p>
+                <span className="font-medium">Guests:</span> {selectedProperty.maxGuests} |
+                <span className="font-medium"> Beds:</span> {selectedProperty.bedrooms} |
+                <span className="font-medium"> Baths:</span> {" "}
+                {Number(selectedProperty.bathrooms).toFixed(1)}
+              </p>
+            </div>
+            <div className="space-y-2 text-sm">
+              {selectedProperty.amenities.map(amenity => (
+                <p key={amenity.id} className="py-2 px-6 text-sm text-gray-600">{amenity.name}</p>
+              ))}
+            </div>
           </div>
           {/* Mini Calendar */}
           <div className="mt-6">
