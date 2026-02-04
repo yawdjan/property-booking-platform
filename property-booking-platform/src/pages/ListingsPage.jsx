@@ -303,7 +303,7 @@ export default function PropertyListings() {
                     </div>
                     <div className="flex items-center gap-1">
                       <Bath className="w-4 h-4 text-amber-600" />
-                      <span>{property.bathrooms} baths</span>
+                      <span>{parseFloat(property.bathrooms).toFixed(1)} baths</span>
                     </div>
                   </div>
 
